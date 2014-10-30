@@ -111,8 +111,6 @@ GET DATA  /TYPE=TXT
     Z97_My_supervisor_made_sure_that_our_supervision_sessions_were_k A.
 CACHE.
 
- *  RECODE Z01_I_am_between ('18-25 years old' = 1)('26-33 years old' = 2)('34-41 years old' = 3)('42 and above'=4)('Missing Value' = 999) INTO Z01_I_am_between.
-
 /* Create the Variable Labels, which is shown under 'Variable View' > 'Labels'
 
 VARIABLE LABELS
@@ -214,15 +212,14 @@ VARIABLE LABELS
   Z96_My_supervision_sessions_were_disorganised   Z96_My_supervision_sessions_were_disorganised
   Z97_My_supervisor_made_sure_that_our_supervision_sessions_were_k   Z97_My_supervisor_made_sure_that_our_supervision_sessions_were_k.
 
- * Manually adjust the following
+ * Add the following Values to Variables
 
 VALUE LABELS
 Z01_I_am_between
 '18-25 years old' 1
 '26-33 years old' 2
 '34-41 years old' 3
-'42 and above' 4
-'Missing Value' 999.
+'42 and above' 4.
 
 VALUE LABELS
 Z02_I_have_been_employed_at_MHA_for
@@ -230,15 +227,13 @@ Z02_I_have_been_employed_at_MHA_for
 '3-5 years' 2
 '5-7 years' 3
 '8- 10 years' 4
-'>10 years' 5
-'Missing Value' 999.
+'>10 years' 5.
 
 VALUE LABELS
 Z03_I_have_other_employment_outside_MHA Z04_I_work_outside_of_MHA_in_a_clinicaltherapeutic_capacity
 'No' 1
 'Yes (Part-Time)' 2
-'Yes (Full-Time)' 3
-'Missing Value' 999.
+'Yes (Full-Time)' 3.
 
 VALUE LABELS
 Z05_I_am_happy to Z34_I_am_happy_that_I_chose_to_do_this_work
@@ -246,8 +241,7 @@ Z05_I_am_happy to Z34_I_am_happy_that_I_chose_to_do_this_work
 'Rarely' 2
 'Sometimes' 3
 'Often' 4
-'Very Often' 5
-'Missing Value' 999.
+'Very Often' 5.
 
 VALUE LABELS
 Z35_I_am_fairly_compensated to Z40_I_have_opportunities_for_professional_development
@@ -255,41 +249,37 @@ Z35_I_am_fairly_compensated to Z40_I_have_opportunities_for_professional_develop
 'Disagree' 2
 'Neither Agree Nor Disagree' 3
 'Agree' 4
-'Strongly Agree' 5
-'Missing Value' 999.
+'Strongly Agree' 5.
 
 VALUE LABELS
 Z42_My_supervisor_was_approachable to Z59_My_supervisor_made_sure_that_our_supervision_sessions_were_k
 'Strongly Disagree' 1
 'Disagree' 2
 'Slightly Disagree' 3
-'Neight Agree Nor Disagree' 4
+'Neither Agree Nor Disagree' 4
 'Slightly Agree' 5
 'Agree' 6
-'Strongly Agree' 7
-'Missing Value' 999.
+'Strongly Agree' 7.
 
 VALUE LABELS
 Z61_My_supervisor_was_approachable to Z78_My_supervisor_made_sure_that_our_supervision_sessions_were_k
 'Strongly Disagree' 1
 'Disagree' 2
 'Slightly Disagree' 3
-'Neight Agree Nor Disagree' 4
+'Neither Agree Nor Disagree' 4
 'Slightly Agree' 5
 'Agree' 6
-'Strongly Agree' 7
-'Missing Value' 999.
+'Strongly Agree' 7.
 
 VALUE LABELS
 Z80_My_supervisor_was_approachable to Z97_My_supervisor_made_sure_that_our_supervision_sessions_were_k
 'Strongly Disagree' 1
 'Disagree' 2
 'Slightly Disagree' 3
-'Neight Agree Nor Disagree' 4
+'Neither Agree Nor Disagree' 4
 'Slightly Agree' 5
 'Agree' 6
-'Strongly Agree' 7
-'Missing Value' 999.
+'Strongly Agree' 7.
 
 VALUE LABELS
 Z41_I_receive_individual_clinical_supervision_with Z60_I_receive_individual_clinical_supervision_with Z79_I_receive_group_clinical_supervision_with
@@ -304,13 +294,65 @@ Z41_I_receive_individual_clinical_supervision_with Z60_I_receive_individual_clin
 'Spiderman' 9
 'I do not receive clinical supervision (Skip to Next Page)' 10
 'I do not receive any additional individual clinical supervision (Skip to Next Page)' 11
-'I do not receive group clinical supervision (Skip to Next Page)' 12
-'Missing Value' 999.
+'I do not receive group clinical supervision (Skip to Next Page)' 12.
 
  * Specify Missing Values if we want
-
- * MISSING VALUES
+* MISSING VALUES
 Z01_I_am_between to  Z97_My_supervisor_made_sure_that_our_supervision_sessions_were_k (999).
+
+EXECUTE.
+
+ * Reassign values of questions 1, 4, 15, 17, and 29 from the ProQOL directions
+
+* Question 1
+
+VALUE LABELS
+Z05_I_am_happy
+'Never' 5
+'Rarely' 4
+'Sometimes' 3
+'Often' 2
+'Very Often' 1.
+
+* Question 4
+
+VALUE LABELS
+Z08_I_feel_connected_to_others
+'Never' 5
+'Rarely' 4
+'Sometimes' 3
+'Often' 2
+'Very Often' 1.
+
+* Question 15
+
+VALUE LABELS
+Z19_I_have_beliefs_that_sustain_me
+'Never' 5
+'Rarely' 4
+'Sometimes' 3
+'Often' 2
+'Very Often' 1.
+
+* Question 17
+
+VALUE LABELS
+Z21_I_am_the_person_I_always_wanted_to_be
+'Never' 5
+'Rarely' 4
+'Sometimes' 3
+'Often' 2
+'Very Often' 1.
+
+* Question 29
+
+VALUE LABELS
+Z33_I_am_a_very_caring_person
+'Never' 5
+'Rarely' 4
+'Sometimes' 3
+'Often' 2
+'Very Often' 1.
 
 EXECUTE.
 
