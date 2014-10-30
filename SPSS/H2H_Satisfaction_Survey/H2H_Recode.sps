@@ -303,7 +303,8 @@ Z41_I_receive_individual_clinical_supervision_with Z60_I_receive_individual_clin
 'Robin' 8
 'Spiderman' 9
 'I do not receive clinical supervision (Skip to Next Page)' 10
-'I do not receive group clinical supervision (Skip to Next Page)' 11
+'I do not receive any additional individual clinical supervision (Skip to Next Page)' 11
+'I do not receive group clinical supervision (Skip to Next Page)' 12
 'Missing Value' 999.
 
  * Specify Missing Values if we want
