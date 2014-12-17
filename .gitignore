@@ -4,3 +4,13 @@ D3 Template/.DS_Store
 SPSS/.DS_Store
 
 .DS_Store
+
+*.aux
+
+*.fdb_latexmk
+
+*.log
+
+*.gz
+
+Notes/LaTeX_Basics.pdf

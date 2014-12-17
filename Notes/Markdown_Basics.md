@@ -78,6 +78,8 @@ Here's how to put a code block
     
     print "Hello World"
 
+<!-- This is a comment; the below might not render -->
+
 
 \begin{align} 
 \dot{x} & = \sigma(y-x) \\ \dot{y} & = \rho x - y - xz \\ \dot{z} & = -\beta z + xy 
