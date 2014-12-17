@@ -354,6 +354,20 @@ Z33_I_am_a_very_caring_person
 2 'Often'
 1 'Very Often'.
 
+* SUM for Compassion Satisfaction
+
+COMPUTE compsat = SUM(Z07_I_get_satisfaction_from_being_able_to_help_people, Z10_I_feel_invigorated_after_working_with_those_I_help, Z16_I_like_my_work_as_a_counselor, 
+Z20_I_am_pleased_with_how_I_am_able_to_keep_up_with_counseling_t, Z22_My_work_makes_me_feel_satisfied, Z24_I_have_happy_thoughts_and_feelings_about_those_I_help_and_ho,
+Z26_I_believe_I_can_make_a_difference_through_my_work, Z28_I_am_proud_of_what_I_can_do_to_help, Z31_I_have_thoughts_that_I_am_a_success_as_a_counselor)
+
+* Add the Value Labels
+
+VALUE LABELS
+compsat
+(0 thru 22) = 'Low'
+(23 thru 41) = 'Average'
+(42 thru 1000) = 'High'.
+
 EXECUTE.
 
 DATASET NAME DataSet1 WINDOW=FRONT.
