@@ -77,3 +77,9 @@ Here's how to put a code block
     import pandas
     
     print "Hello World"
+
+
+\begin{align} 
+\dot{x} & = \sigma(y-x) \\ \dot{y} & = \rho x - y - xz \\ \dot{z} & = -\beta z + xy 
+\end{align}
+
