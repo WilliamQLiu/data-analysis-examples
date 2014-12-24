@@ -1,0 +1,327 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"question",
+				"QuestionsSerializer	class"
+			],
+			[
+				"serializer",
+				"serializer_class"
+			],
+			[
+				"Questions",
+				"Questions	class"
+			],
+			[
+				"IsAuthe",
+				"IsAuthenticatedOrReadOnly	class"
+			],
+			[
+				"Que",
+				"QueueMetricsSerializer	class"
+			],
+			[
+				"Ca",
+				"iCarolSerializer	class"
+			],
+			[
+				"Quest",
+				"Questions	class"
+			],
+			[
+				"Hyperlinked",
+				"HyperlinkedModelSerializer	class"
+			],
+			[
+				"permiss",
+				"permission_classes"
+			],
+			[
+				"IsAu",
+				"IsAuthenticatedOrReadOnly"
+			],
+			[
+				"Is",
+				"IsAuthenticatedOrReadOnly	class"
+			],
+			[
+				"ugettext",
+				"ugettext_lazy	statement"
+			],
+			[
+				"Token",
+				"TokenAuthentication	class"
+			],
+			[
+				"CallTrace",
+				"CallTraceAttemptsSerializer	class"
+			],
+			[
+				"render_to",
+				"render_to_string	function"
+			],
+			[
+				"register",
+				"register_button	statement"
+			],
+			[
+				"sign",
+				"sign_in_button	statement"
+			],
+			[
+				"find_element",
+				"find_element_by_name	function"
+			],
+			[
+				"data",
+				"datasite"
+			]
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 58.0,
+		"selected_items":
+		[
+			[
+				"Package Control: install",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: remove",
+				"Package Control: Remove Package"
+			]
+		],
+		"width": 400.0
+	},
+	"console":
+	{
+		"height": 126.0,
+		"history":
+		[
+			"import urllib.request,os,hashlib; h = '7183a2d3e96f11eeadd761d777e62404' + 'e330c659d4bb41d3bdf022e94cab3cd0'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://sublime.wbond.net/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/C/Users/wliu/Documents/GitHub/data-analysis-examples"
+	],
+	"file_history":
+	[
+		"/C/Users/wliu/Documents/GitHub/data-analysis-examples/Notes/LaTeX_Math.tex",
+		"/C/Users/wliu/Documents/GitHub/MHAAPI/api/dohmh/views.py",
+		"/C/Users/wliu/Documents/GitHub/MHAAPI/api/api/settings.py",
+		"/C/Users/wliu/Documents/GitHub/MHAAPI/api/dohmh/serializers.py",
+		"/C/Users/wliu/Documents/GitHub/MHAAPI/api/api/urls.py",
+		"/C/Users/wliu/Desktop/queuemetrics.json",
+		"/C/Users/wliu/Documents/GitHub/MHAAPI/api/dohmh/models.py",
+		"/C/Users/wliu/Documents/GitHub/MHAAPI/api/lifeline/views.py",
+		"/C/Users/wliu/Documents/GitHub/MHAAPI/api/lifeline/serializers.py",
+		"/C/Users/wliu/Documents/GitHub/MHAAPI/api/lifeline/models.py",
+		"/C/Users/wliu/Documents/GitHub/MHAAPI/api/inspected_models.py",
+		"/C/Users/wliu/Documents/GitHub/MHAAPI/api/api/wsgi.py",
+		"/C/Users/wliu/Documents/GitHub/MHAAPI/api/dohmh/__init__.py",
+		"/C/Users/wliu/Documents/GitHub/MHAAPI/api/manage.py",
+		"/C/Users/wliu/Documents/GitHub/MHAAPI/lifelineapi/lifeline/serializers.py",
+		"/C/Users/wliu/Documents/GitHub/MHAAPI/lifelineapi/lifeline/views.py",
+		"/C/Users/wliu/Documents/GitHub/MHAAPI/README.md",
+		"/C/Users/wliu/Documents/GitHub/MHAAPI/lifelineapi/lifelineapi/urls.py",
+		"/C/Users/wliu/Documents/GitHub/MHAAPI/lifelineapi/lifeline/models.py",
+		"/C/Users/wliu/Documents/GitHub/MHAPython/iCarol/ETL/ETLiCarol.py",
+		"/C/Users/wliu/Documents/GitHub/MHAAPI/lifelineapi/models.py",
+		"/C/Users/wliu/Documents/GitHub/MHAAPI/requirements.txt",
+		"/C/Users/wliu/Desktop/Archive/lifelinecalls_small.csv",
+		"/C/Users/wliu/Documents/GitHub/MHAPython/QueueMetrics/queuemetricstransform.py",
+		"/C/Users/wliu/Documents/GitHub/MHAPython/iCarol/Chats/chatsimport.py",
+		"/C/Program Files/Sublime Text 3/changelog.txt",
+		"/C/Users/wliu/Desktop/fields_onhand",
+		"/C/Users/wliu/Documents/GitHub/MHAPython/iCarol/ETL/write_csv_db.py",
+		"/C/Users/wliu/Documents/GitHub/MHAPython/SQL/quick_write_csv.py",
+		"/C/Users/wliu/AppData/Roaming/Sublime Text 3/Packages/Default/Preferences.sublime-settings",
+		"/C/Users/wliu/AppData/Roaming/Sublime Text 3/Packages/User/Preferences.sublime-settings",
+		"/C/Users/wliu/Documents/GitHub/pandas/test_multi.sh",
+		"/C/Users/wliu/Desktop/Ubuntu Updates",
+		"/C/Users/wliu/Documents/GitHub/MHAPython/SQL/quick_write_data.py",
+		"/C/Users/wliu/Desktop/timesheet",
+		"/C/Users/wliu/Documents/GitHub/MHADjango/datasite/timesheets/views.py",
+		"/C/Users/wliu/Documents/GitHub/MHADjango/datasite/templates/base.html",
+		"/C/Users/wliu/Documents/GitHub/MHADjango/datasite/dataentry/settings.py",
+		"/C/Users/wliu/Documents/GitHub/MHADjango/datasite/dataentry/urls.py",
+		"/C/Users/wliu/Documents/GitHub/MHADjango/datasite/timesheets/tests.py",
+		"/C/Users/wliu/Documents/GitHub/MHADjango/datasite/functional_tests.py",
+		"/C/Users/wliu/Documents/GitHub/MHADjango/source/index.rst",
+		"/C/Users/wliu/Documents/GitHub/MHADjango/requirements.txt",
+		"/C/Users/wliu/Desktop/LifelineCrisisChatsMay2014.csv",
+		"/C/Users/wliu/Documents/GitHub/MHADjango/datasite/timesheets/models.py",
+		"/C/Users/wliu/Documents/GitHub/MHADjango/datasite/timesheets/admin.py",
+		"/C/Users/wliu/Documents/GitHub/MHADjango/datasite/dataentry/wsgi.py",
+		"/C/Users/wliu/Documents/GitHub/MHADjango/datasite/db.sqlite3",
+		"/C/Users/wliu/Documents/GitHub/MHADjango/datasite/manage.py",
+		"/C/Users/wliu/Documents/GitHub/MHADjango/datasite/dataentry/settings/local_pc_will.py",
+		"/C/Users/wliu/Documents/GitHub/MHADjango/datasite/timesheets/migrations/__init__.py",
+		"/C/Users/wliu/Documents/GitHub/MHADjango/datasite/dataentry/__init__.py",
+		"/C/Users/wliu/Documents/GitHub/MHADjango/datasite/dataentry/mysettings/local_pc_will.py",
+		"/C/Python27/Lib/site-packages/django/conf/__init__.py",
+		"/C/Users/wliu/Documents/GitHub/MHADjango/datasite/dataentry/settings/base.py",
+		"/C/Users/wliu/Documents/GitHub/MHADjango/datasite/dataentry/settings/local_will_pc.py",
+		"/C/Users/wliu/AppData/Roaming/Sublime Text 3/Packages/User/Package Control.sublime-settings"
+	],
+	"find":
+	{
+		"height": 36.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"TimeFilter",
+			"django",
+			"TimeFilter",
+			"filter_class",
+			"get",
+			"managed",
+			"calls",
+			"from",
+			"NFL Caller is",
+			"NFL Caller Information - NFL Caller is:",
+			"raise",
+			"mylist",
+			"tab",
+			"	",
+			"Error",
+			"nginx",
+			"sql",
+			"mssql",
+			"chown",
+			"settings",
+			"theme"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"    "
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 23.0
+	},
+	"input":
+	{
+		"height": 33.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 208.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"project": "data-analysis.sublime-project",
+	"replace":
+	{
+		"height": 64.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 189.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
