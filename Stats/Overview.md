@@ -41,4 +41,10 @@ Different levels of measurement are used to categorize and quantify variables.  
     - __Ratio__ - Two or more possibilites, there is a logical order that you can measure, there are equal intervals, and there is a true zero point (e.g. the weight of an object cannot weigh less than 0) 
 
 ### Validity and Reliability
-
+* __Measurement Error__ - the discrepancy between the numbers we use to represent the thing we're measuring and the actual value of measuring it directly (e.g. I measure my height with a ruler, but might be off a bit)
+* __Validity__ - whether an instrument actually measures what it sets out to measure (e.g. does a scale actually measure my weight?)
+* __Reliability__ - whether an instrument can be interpreted consistently across different situations.  The easiest method is through _test-retest reliability_, which tests the same group of people twice (e.g. if I weighed myself within minutes of each other, would I get the same result?)
+* __Criterion Validity__ - measure of how well one variable or set of variables predicts an outcome based on information from other variables
+* __Concurrent Validity__ - 
+* __Predictive Validity__ - 
+* __Content Validity__ - 
