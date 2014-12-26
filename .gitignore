@@ -14,3 +14,5 @@ SPSS/.DS_Store
 *.gz
 
 Notes/LaTeX_Basics.pdf
+.Rproj.user
+R/.Rhistory
