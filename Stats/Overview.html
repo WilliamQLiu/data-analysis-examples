@@ -1016,7 +1016,7 @@ body .markdown-body
 }
 </style><title>Overview</title></head><body><article class="markdown-body"><h1 id="overview"><a name="user-content-overview" href="#overview" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Overview</h1>
 <h2 id="background"><a name="user-content-background" href="#background" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Background</h2>
-<p>Welcome!  This is a short onboarding course for new data analysts.  I&rsquo;ll cover the basics of data preparation, data analysis, and machine learning.  No other knowledge is necessary other than a very minimum familiarity with Excel.</p>
+<p>Welcome!  This is a short onboarding course for new data analysts.  I&rsquo;ll cover the basics of data preparation, data analysis, data visualization, and machine learning.  No other knowledge is necessary other than a very minimum familiarity with Excel.</p>
 <ul>
 <li><strong>Data Preparation</strong><ul>
 <li>Extraction</li>
@@ -1029,28 +1029,41 @@ body .markdown-body
 <li>Inferential Statistics</li>
 </ul>
 </li>
+<li><strong>Data Visualization</strong><ul>
+<li>Types of Charts</li>
+<li>R&rsquo;s ggplot</li>
+<li>Python&rsquo;s matplotlib</li>
+<li>D3.js</li>
+</ul>
+</li>
 <li><strong>Machine Learning</strong><ul>
 <li>Numpy</li>
 <li>Scipy</li>
 <li>Scikit-Learn</li>
 </ul>
 </li>
-<li><strong>Data Visualization</strong><ul>
-<li>Tableau</li>
-<li>D3.js</li>
-</ul>
-</li>
 </ul>
 <h2 id="data-analysis"><a name="user-content-data-analysis" href="#data-analysis" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Data Analysis</h2>
-<p>There can be two types of data:</p>
-<ul>
-<li><strong>Qualitative</strong> - deals with observations (unmeasurables like colors, smells)</li>
-<li><strong>Quantitative</strong> - deals with numbers (measurables like length, age)</li>
-</ul>
-<p><strong>Variables</strong><br />
-Data is made up of variables.  Variables can be any type of value (like an observation or number).  <code>y = 10</code> says that the variable &lsquo;<em>y</em>&lsquo; has the value of &lsquo;<em>10</em>&lsquo;.  There&rsquo;s two types of variables:</p>
+<h3 id="variables"><a name="user-content-variables" href="#variables" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Variables</h3>
+<p>Data is made up of variables.  Variables can have any value (like a category or number).  <code>y = 10</code> says that the variable &lsquo;<em>y</em>&lsquo; has the value of &lsquo;<em>10</em>&lsquo;.  There are two types of variables:</p>
 <ul>
 <li><strong>Independent Variable</strong> - the outcome; the variable&rsquo;s value does not depend on any other variable (e.g. <em>Has Lung Cancer</em>, <em>Test Score</em>)</li>
 <li><strong>Dependent Variable</strong> - the predictor(s); the variable(s) that we think are an effect because the value depends on the independent variables (e.g. <em>Cigarettes Per Day</em>, <em>Time Spent Studying</em>)</li>
-<li><strong>Example</strong>: <em>Time Spent Studying</em> causes a change in <em>Test Score</em>.  <em>Test Score</em> can&rsquo;t cause a change in <em>Time Spent Studying</em>.  <em>Test Score</em> (independent variable) depends on <em>Time Spent Studying</em> (dependent variable)</li>
-</ul></article></body></html>
+<li><strong>Example</strong>: &lsquo;<em>Time Spent Studying</em>&lsquo; causes a change in &lsquo;<em>Test Score</em>&lsquo;.  &lsquo;<em>Test Score</em>&lsquo; can&rsquo;t cause a change in &lsquo;<em>Time Spent Studying</em>&lsquo;.  &lsquo;<em>Test Score</em>&lsquo; (independent variable) depends on &lsquo;<em>Time Spent Studying</em>&lsquo; (dependent variable)</li>
+</ul>
+<h3 id="levels-of-measurement"><a name="user-content-levels-of-measurement" href="#levels-of-measurement" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Levels of Measurement</h3>
+<p>Different levels of measurement are used to categorize and quantify variables.  Variables can be categorized &lsquo;<em>categorical</em>&lsquo; or &lsquo;<em>continuous</em>&lsquo; as well as quantified at different levels, each with more useful/detailed measurements.</p>
+<ul>
+<li><strong>Categorical (aka Qualitative)</strong> - Deals with unmeasurables/can&rsquo;t do arithmetic with it (e.g. &lsquo;<em>species</em>&lsquo; could have values of &lsquo;<em>human</em>&lsquo;, &lsquo;<em>cat</em>&lsquo;, or &lsquo;<em>dog</em>&lsquo;).  Your choices are discrete (as in you can be a human or a cat, but not both).  Categoricals are further categorized as:<ul>
+<li><strong>Dichotomous (aka Binary)</strong> - Two distinct possibilities (e.g. pregnant or not pregnant)</li>
+<li><strong>Nominal</strong> - Two or more possibilities (e.g. human, cat, dog) </li>
+<li><strong>Ordinal</strong> - Two or more possibilities and there is a logical order (e.g. first, second).  You know which is bigger or smaller, but not by how much (e.g. you know who won race, but not how close race was)</li>
+</ul>
+</li>
+<li><strong>Continuous (aka Quantitative)</strong> - Deals with numbers (e.g. &lsquo;<em>length</em>&lsquo;, &lsquo;<em>age</em>&lsquo;).  Continuous are further categorized as:<ul>
+<li><strong>Interval</strong> - Two or more possibilities, there is a logical order that you can measure (i.e. numbers that you can do arithmetic with), and there are equal intervals (e.g. Fahrenheit measurement of 40 to 50 degrees is the same difference as 50 to 60 degrees)</li>
+<li><strong>Ratio</strong> - Two or more possibilites, there is a logical order that you can measure, there are equal intervals, and there is a true zero point (e.g. the weight of an object cannot weigh less than 0) </li>
+</ul>
+</li>
+</ul>
+<h3 id="validity-and-reliability"><a name="user-content-validity-and-reliability" href="#validity-and-reliability" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Validity and Reliability</h3></article></body></html>
