@@ -83,15 +83,31 @@
 	},
 	"buffers":
 	[
+		{
+			"file": "Notes/Markdown_Basics.md",
+			"settings":
+			{
+				"buffer_size": 1985,
+				"line_ending": "Windows"
+			}
+		}
 	],
 	"build_system": "",
 	"command_palette":
 	{
-		"height": 58.0,
+		"height": 60.0,
 		"selected_items":
 		[
 			[
+				"Package Control: disable",
+				"Package Control: Disable Package"
+			],
+			[
 				"Package Control: install",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: install ",
 				"Package Control: Install Package"
 			],
 			[
@@ -99,7 +115,7 @@
 				"Package Control: Remove Package"
 			]
 		],
-		"width": 400.0
+		"width": 498.0
 	},
 	"console":
 	{
@@ -123,10 +139,16 @@
 	},
 	"expanded_folders":
 	[
-		"/C/Users/wliu/Documents/GitHub/data-analysis-examples"
+		"/C/Users/wliu/Documents/GitHub/data-analysis-examples",
+		"/C/Users/wliu/Documents/GitHub/data-analysis-examples/Notes",
+		"/C/Users/wliu/Documents/GitHub/data-analysis-examples/Python",
+		"/C/Users/wliu/Documents/GitHub/data-analysis-examples/Python/LifelineChat",
+		"/C/Users/wliu/Documents/GitHub/data-analysis-examples/Python/LifelineChat/code"
 	],
 	"file_history":
 	[
+		"/C/Users/wliu/AppData/Roaming/Sublime Text 3/Packages/User/LaTeXTools.sublime-settings",
+		"/C/Users/wliu/Documents/GitHub/data-analysis-examples/Notes/LaTeX_Basics.tex",
 		"/C/Users/wliu/Dropbox/Amazon/stuff",
 		"/C/Users/wliu/Documents/GitHub/data-analysis-examples/Notes/LaTeX_Math.tex",
 		"/C/Users/wliu/Documents/GitHub/MHAAPI/api/dohmh/views.py",
@@ -241,8 +263,142 @@
 	"groups":
 	[
 		{
+			"selected": 0,
 			"sheets":
 			[
+				{
+					"buffer": 0,
+					"file": "Notes/Markdown_Basics.md",
+					"semi_transient": true,
+					"settings":
+					{
+						"buffer_size": 1985,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1985,
+								1985
+							]
+						],
+						"settings":
+						{
+							"codeintel": true,
+							"codeintel_config":
+							{
+								"JavaScript":
+								{
+									"codeintel_max_recursive_dir_depth": 2,
+									"codeintel_scan_files_in_project": false,
+									"javascriptExtraPaths":
+									[
+									]
+								},
+								"PHP":
+								{
+									"codeintel_max_recursive_dir_depth": 5,
+									"codeintel_scan_files_in_project": false,
+									"phpExtraPaths":
+									[
+									]
+								},
+								"Python":
+								{
+									"env":
+									{
+									}
+								}
+							},
+							"codeintel_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_live": true,
+							"codeintel_live_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_max_recursive_dir_depth": 10,
+							"codeintel_scan_exclude_dir":
+							{
+								"JavaScript":
+								[
+									"/build/",
+									"/min/"
+								]
+							},
+							"codeintel_scan_files_in_project": true,
+							"codeintel_selected_catalogs":
+							[
+								"PyWin32",
+								"jQuery",
+								"Rails"
+							],
+							"codeintel_snippets": true,
+							"codeintel_syntax_map":
+							{
+								"Python Django": "Python"
+							},
+							"codeintel_tooltips": "popup",
+							"color_scheme": "Packages/Color Scheme - Default/Monokai.tmTheme",
+							"sublime_auto_complete": true,
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 812.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
 			]
 		}
 	],
