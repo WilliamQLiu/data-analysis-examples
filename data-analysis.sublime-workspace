@@ -84,7 +84,15 @@
 	"buffers":
 	[
 		{
-			"file": "Notes/Markdown_Basics.md",
+			"file": "Stats/Overview.md",
+			"settings":
+			{
+				"buffer_size": 3802,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "Writing/Markdown_Basics.md",
 			"settings":
 			{
 				"buffer_size": 1985,
@@ -95,9 +103,25 @@
 	"build_system": "",
 	"command_palette":
 	{
-		"height": 60.0,
+		"height": 375.0,
 		"selected_items":
 		[
+			[
+				"preview",
+				"Markdown Preview: Preview in Browser"
+			],
+			[
+				"markdown preview",
+				"Markdown Preview: Preview in Browser"
+			],
+			[
+				"markdown",
+				"Markdown Preview: Preview in Browser"
+			],
+			[
+				"Package Control: install package",
+				"Package Control: Install Package"
+			],
 			[
 				"Package Control: disable",
 				"Package Control: Disable Package"
@@ -140,13 +164,17 @@
 	"expanded_folders":
 	[
 		"/C/Users/wliu/Documents/GitHub/data-analysis-examples",
-		"/C/Users/wliu/Documents/GitHub/data-analysis-examples/Notes",
-		"/C/Users/wliu/Documents/GitHub/data-analysis-examples/Python",
 		"/C/Users/wliu/Documents/GitHub/data-analysis-examples/Python/LifelineChat",
-		"/C/Users/wliu/Documents/GitHub/data-analysis-examples/Python/LifelineChat/code"
+		"/C/Users/wliu/Documents/GitHub/data-analysis-examples/Python/LifelineChat/code",
+		"/C/Users/wliu/Documents/GitHub/data-analysis-examples/Stats",
+		"/C/Users/wliu/Documents/GitHub/data-analysis-examples/Writing"
 	],
 	"file_history":
 	[
+		"/C/Users/wliu/Documents/GitHub/data-analysis-examples/SPSS/dsus4data/ProfilePicture.sav",
+		"/C/Users/wliu/Documents/GitHub/data-analysis-examples/SPSS/dsus4data/Chamorro-Premuzic.sav",
+		"/C/Users/wliu/Documents/GitHub/data-analysis-examples/Python/LifelineChat/presentation/GAOutline.key/Metadata/BuildVersionHistory.plist",
+		"/C/Users/wliu/Documents/GitHub/data-analysis-examples/Notes/Markdown_Basics.md",
 		"/C/Users/wliu/AppData/Roaming/Sublime Text 3/Packages/User/LaTeXTools.sublime-settings",
 		"/C/Users/wliu/Documents/GitHub/data-analysis-examples/Notes/LaTeX_Basics.tex",
 		"/C/Users/wliu/Dropbox/Amazon/stuff",
@@ -268,19 +296,19 @@
 			[
 				{
 					"buffer": 0,
-					"file": "Notes/Markdown_Basics.md",
-					"semi_transient": true,
+					"file": "Stats/Overview.md",
+					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1985,
+						"buffer_size": 3802,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1985,
-								1985
+								3802,
+								3802
 							]
 						],
 						"settings":
@@ -388,15 +416,48 @@
 								"Python Django": "Python"
 							},
 							"codeintel_tooltips": "popup",
-							"color_scheme": "Packages/Color Scheme - Default/Monokai.tmTheme",
 							"sublime_auto_complete": true,
-							"syntax": "Packages/Text/Plain text.tmLanguage"
+							"syntax": "Packages/MarkdownEditing/Markdown.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 812.0,
+						"translation.y": 1076.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
+					"type": "text"
+				}
+			]
+		},
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 1,
+					"file": "Writing/Markdown_Basics.md",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1985,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								770,
+								770
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/MarkdownEditing/Markdown.tmLanguage"
+						},
+						"translation.x": -0.0,
+						"translation.y": 513.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
 					"type": "text"
 				}
 			]
@@ -419,11 +480,18 @@
 				0,
 				1,
 				1
+			],
+			[
+				1,
+				0,
+				2,
+				1
 			]
 		],
 		"cols":
 		[
 			0.0,
+			0.5,
 			1.0
 		],
 		"rows":
@@ -440,6 +508,10 @@
 	"output.find_results":
 	{
 		"height": 0.0
+	},
+	"output.markdown":
+	{
+		"height": 102.0
 	},
 	"project": "data-analysis.sublime-project",
 	"replace":
