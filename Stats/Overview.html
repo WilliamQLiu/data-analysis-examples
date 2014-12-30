@@ -1225,15 +1225,26 @@ To test a hypothesis, we can do the following</p>
 </li>
 <li><strong>Type I and Type II errors</strong> - two types of errors that we can make when testing hypothesis.  If we correct for one, the other is affected.<ul>
 <li><strong>Type I error</strong> - occurs when we believe there is an effect in our population, when in fact there isn&rsquo;t.  Using conventional 95% confidence level, the probability is 5% of seeing this error (aka <em>//-level</em>).  This means if we repeated our experiment, we would get this error 5 out of 100 times.<ul>
-<li><strong>Familywise (FWER) or Experimentwise Error Rate (EER)</strong> - the error rate across statistical tests conducted on the same data for <em>Type I errors</em>.  Can be calculated using the following equation (assuming .05 level of significance): <code>familywise error=1=(0.95)^n</code> where <em>n</em> is the number of tests carried out</li>
+<li><strong>Familywise (FWER) or Experimentwise Error Rate (EER)</strong> - the error rate across statistical tests conducted on the same data for <em>Type I errors</em>.  This can be calculated using the following equation (assuming .05 level of significance): <code>familywise error=1=(0.95)^n</code> where <em>n</em> is the number of tests carried out</li>
 <li><strong>Bonferroni correction</strong> - the easiest and most popular way to correct <em>FWER</em>, which fixes familywise error rate, but at the loss of <em>statistic power</em>.  Calculated with <code>insert formula</code></li>
 </ul>
 </li>
 <li><strong>Type II error</strong> - opposite of <em>Type I error</em>, occurs when we believe there is no effect in the population when in fact there is an effect.  The maximum acceptable probability of a <em>Type_II error</em> is 20%<em>(aka //-level)</em>.  This means we miss 1 in 5 genuine effects.<ul>
-<li><strong>Statistical Power</strong> - statistical power is the ability of a test to find an effect; the power of the test is the probability that a given test will find an affect assuming that one exists in the population.  Can be expressed as: <code>1 - // insert formula</code>.  We aim to achieve a power of 80% chance of determining an effect if one exists.</li>
-<li><em>Note</em>: For <em>R</em>, use the package &lsquo;pwr&rsquo; to calculate the necessary power and sample size estimation.</li>
+<li><strong>Statistical Power</strong> - statistical power is the ability of a test to find an effect; the power of the test is the probability that a given test will find an affect assuming that one exists in the population.  Can be expressed as: <code>1 - // insert formula</code>.  Basically, <em>statistical power</em> is linked with the <em>sample size</em>.  We aim to achieve a power of 80% chance of determining an effect if one exists.  </li>
+<li><em>Note</em>: For <em>R</em>, use the package &lsquo;pwr&rsquo; to use power to calculate the necessary sample size.  You can also calculate the power of a test after the experiment, but if you find a non-significant effect, it might be that you didn&rsquo;t have enough power.  If you find a significant effect, then you had enough power.</li>
 </ul>
 </li>
 </ul>
 </li>
+<li><strong>Sample Size and Statistical Significance</strong> - there is a close relationship between <em>sample size</em> and <em>p-value</em>.  The same effect will have different <em>p-values</em> in different sized samples (i.e. small differences can be &lsquo;significant&rsquo; in large samples and large effects might be deemed &lsquo;non-significant&rsquo; in small samples)</li>
+<li><strong>Effect Size and Cohen&rsquo;s d</strong> - significance does not tell us about the importance of an effect.  The solution is to measure the size of the effect, which is a quantitative measure of the strength of a phenomenon.  In order to compare the mean of one sample to another, we calculate <em>Cohen&rsquo;s d</em> as described here: <code>insert formula</code></li>
+<li><strong>Pearson&rsquo;s correlation coefficient (aka r)</strong> - measure of strength of relationship between two variables (thus it&rsquo;s an <em>effect size</em>)<ul>
+<li>r ranges between 0 (no effect) and 1 (a perfect effect)</li>
+<li>r=.10 means a small effect</li>
+<li>r=.30 means a medium effect</li>
+<li>r=.50 means a large effect</li>
+<li><em>Note</em>: r=.6 does not mean it has twice the effect of r=.3</li>
+</ul>
+</li>
+<li><strong>Meta-analysis</strong> - statistical methods for contrasting and combining results from different studies in the hope of identifying patterns among study results (i.e. conducting research about previous research).  Meta-analysis allows to achieve a higher <em>statistical power</em>.  <code>insert formula</code></li>
 </ul></article></body></html>
