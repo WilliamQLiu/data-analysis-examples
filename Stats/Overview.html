@@ -1159,6 +1159,7 @@ To test a hypothesis, we can do the following</p>
 <li><strong>Sum of Squared Errors (aka SS, sum of squares)</strong> - we can&rsquo;t just add up all the deviance (or else the total spread is just zero, which is meaningless) so we square all the values in order to get the total dispersion / total deviance of scores (i.e. gets rid of negatives)</li>
 <li><strong>Variance</strong> - <em>SS</em> works nicely until the number of observations (<em>n</em>) changes, then we&rsquo;ll need to recalculate.  Instead of using total dispersion, we use the average dispersion, which is the <em>variance</em></li>
 <li><strong>Standard Deviation</strong> - Since the <em>variance</em> is still squared, we need to do the square root of the variance, as calculated here: <code>standard deviation = &lt;insert standard deviation formula&gt;</code></li>
+<li><strong>Test Statistic</strong> - the ratio of systematic to unsystematic variance or effect to error (i.e. the signal-to-noise)</li>
 </ul>
 <h3 id="from-frequency-to-probability"><a name="user-content-from-frequency-to-probability" href="#from-frequency-to-probability" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>From Frequency to Probability</h3>
 <p>So what does the frequency tell us?  Instead of thinking of it as as the frequency of values occuring, think of it as how likely a value is to occur (i.e. probability).  For any distribution of scores, we can calculate the probability of obtaining a given value.</p>
@@ -1167,7 +1168,72 @@ To test a hypothesis, we can do the following</p>
 <li>Common distributions include <em>z-distribution</em>, <em>t-distribution</em>, <em>chi-square distribution</em>, <em>F-distribution</em></li>
 <li>We use a normal distribution with a mean of 0 and a standard deviation of 1 (this lets us use tabulated probabilities instead of calculating ourselves)</li>
 <li>To ensure a standard deviation of 1, we calculate the <em>z-scores</em> using: <code>z = &lt;insert z-score equation&gt;</code></li>
-<li>Check tabulated values and you&rsquo;ll get <em>y</em>, the density</li>
+<li>Check tabulated values and you&rsquo;ll get the probability <em>P</em> of a value occurring</li>
+</ul>
+</li>
+</ul>
+<h3 id="populations-and-samples"><a name="user-content-populations-and-samples" href="#populations-and-samples" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Populations and Samples</h3>
+<p>We want to find results that apply to an entire population</p>
+<ul>
+<li><strong>Population</strong> - summation of the same group or species; can be very general or very specific (e.g. humans, cats named Will)</li>
+<li><strong>Sample</strong> - small subset of the population</li>
+<li><strong>Degrees of Freedom</strong> - number of values in the final calculation that are free to vary (e.g. mean is 5 for the values 4, 6, and <blank>.  <blank> must then be 5)</li>
+<li><strong>Sampling Variation</strong> - samples will vary because they contain different members of the population (e.g. grab random samples of people off the street, some samples you&rsquo;ll get a sample/group of people that is smarter, some samples not so much) </li>
+<li><strong>Sampling Distribution (aka finite-sample distribution)</strong> - the distribution of a sample statistic (based on a random sample); this tells us about the behavior of samples from the population</li>
+<li><strong>Standard Error (aka SE)</strong> - a measure of how representative a sample is likely to be of the population.  A large standard error means there is a lot of variability so samples might not be representative of the population.  A small standard error means that most samples are likely to be an accurate reflection of the population</li>
+<li><strong>Central Limit Theorem</strong> - as samples get large (greater than 30), the sampling distribution has a normal distribution and a standard deviation of: <code>insert standard deviation formula</code></li>
+<li><strong>Confidence Intervals (for large samples)</strong> - along with standard error, we can calculate boundaries that we believe the population will fall.  In general, we could calculate confidence intervals using the <em>central limit theorem</em>:<ul>
+<li><code>lower boundary of confidence interval = formula</code></li>
+<li><code>upper boundary of confidence interval = formula</code></li>
+<li>Note: Different for 95% confidence interval (most common) or 99% or 90%</li>
+</ul>
+</li>
+<li><strong>Confidence Intervals (for small samples)</strong> - for smaller samples, we can&rsquo;t calculate boundaries using the <em>central limit theorem</em> because the <em>sampling distribution</em> isn&rsquo;t a <em>normal distribution</em>.  Instead, smaller samples have a <em>t-distribution</em> and would be calculated with:<ul>
+<li><code>lower boundary of confidence interval = formula</code></li>
+<li><code>upper boundary of confidence interval = formula</code></li>
+</ul>
+</li>
+<li><strong>p-value</strong> - the probability of obtaining the observed sample results when the null hypothesis is true.  If the <em>p-value</em> is very small (threshold based on the previously chosen <em>significance level</em>, traditionally 5% or 1%) then the hypothesis must be rejected.<ul>
+<li>p &lt;= 0.01 means very strong presumption against null hypothesis</li>
+<li>0.01 &lt; p &lt;= 0.05 means strong presumption against null hypothesis</li>
+<li>0.05 &lt; p &lt;= 0.1 means low presumption against null hypothesis</li>
+<li>p &gt; 0.1 means no presumption against the null hypothesis</li>
+<li><em>Note</em>: <em>NHST</em> only works if you generate your hypothesis and decide on threshold before collecting the data (otherwise chances of publishing a bad result will increase; as is with 95% confidence level you&rsquo;ll only report 1 bad in 20)</li>
+</ul>
+</li>
+</ul>
+<h3 id="statistical-models"><a name="user-content-statistical-models" href="#statistical-models" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Statistical Models</h3>
+<p>We can predict values of an outcome variable based on some kind of model.</p>
+<ul>
+<li><strong>Model</strong> - Models are made up of <em>variables</em> and <em>parameters</em><ul>
+<li><strong>Variables</strong> - are measured constructs that vary across entities in the sample</li>
+<li><strong>Parameters</strong> - are estimated from the data (rather than being measured) and are (usually) constants.  E.g. the mean and median (which estimate the center of the distribution) and the correlation and regression coefficients (which estimate the relationship between two variables).  We say &lsquo;estimate the parameter&rsquo; or &lsquo;parameter estimates&rsquo; because we&rsquo;re working with a sample, not the entire population.</li>
+</ul>
+</li>
+<li><strong>Outcome</strong> - <code>outcome = model + error</code></li>
+<li><strong>Error (aka deviance)</strong> - Error for an entity is the score predicted by the model subtracted from the observed score for that entity.  <code>error = outcome - model</code></li>
+<li><strong>Null Hypothesis Significance Testing (aka NHST)</strong> - a method of statistical inference used for testing a hypothesis.  A test result is <em>statistically significant</em> if it has been predicted as unlikely to have occurred by chance alone, according to a threshold probability (the significance level)<ul>
+<li><strong>Alternative Hypothesis (aka H1, Ha, experimental hypothesis)</strong> - the hypothesis or prediction that sample observations are influenced by some non-random cause</li>
+<li><strong>Null Hypothesis (H0)</strong> - Opposite of the <em>alternative hypothesis</em>, refers to the default position that there is no relationship between two measured phenomena</li>
+<li><strong>Directional and Nondirectional Hypothesis</strong> - hypothesis can be either <em>directional</em> if it predicts whether an effect is larger or smaller (e.g. if I buy cookies, I&rsquo;ll eat more) or <em>non-directional</em> if it does not predict whether effect is larger or smaller (e.g. if I buy cookies, I&rsquo;ll eat more or less).<ul>
+<li><strong>One-tailed test</strong> -  a statistical model that tests a directional hypothesis</li>
+<li><strong>Two-tailed test</strong> -  a statistical model that tests a non-directional hypothesis</li>
+<li><em>Note</em>: Basically, don&rsquo;t ever do one-tailed tests</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>Type I and Type II errors</strong> - two types of errors that we can make when testing hypothesis.  If we correct for one, the other is affected.<ul>
+<li><strong>Type I error</strong> - occurs when we believe there is an effect in our population, when in fact there isn&rsquo;t.  Using conventional 95% confidence level, the probability is 5% of seeing this error (aka <em>//-level</em>).  This means if we repeated our experiment, we would get this error 5 out of 100 times.<ul>
+<li><strong>Familywise (FWER) or Experimentwise Error Rate (EER)</strong> - the error rate across statistical tests conducted on the same data for <em>Type I errors</em>.  Can be calculated using the following equation (assuming .05 level of significance): <code>familywise error=1=(0.95)^n</code> where <em>n</em> is the number of tests carried out</li>
+<li><strong>Bonferroni correction</strong> - the easiest and most popular way to correct <em>FWER</em>, which fixes familywise error rate, but at the loss of <em>statistic power</em>.  Calculated with <code>insert formula</code></li>
+</ul>
+</li>
+<li><strong>Type II error</strong> - opposite of <em>Type I error</em>, occurs when we believe there is no effect in the population when in fact there is an effect.  The maximum acceptable probability of a <em>Type_II error</em> is 20%<em>(aka //-level)</em>.  This means we miss 1 in 5 genuine effects.<ul>
+<li><strong>Statistical Power</strong> - statistical power is the ability of a test to find an effect; the power of the test is the probability that a given test will find an affect assuming that one exists in the population.  Can be expressed as: <code>1 - // insert formula</code>.  We aim to achieve a power of 80% chance of determining an effect if one exists.</li>
+<li><em>Note</em>: For <em>R</em>, use the package &lsquo;pwr&rsquo; to calculate the necessary power and sample size estimation.</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul></article></body></html>
