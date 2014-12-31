@@ -1,5 +1,7 @@
 # Help: To get help on a function (e.g. factor), type in console: ?factor
 
+install.packages("ggplot2")
+
 library(dplyr)  # How to load libraries
 
 # System Settings

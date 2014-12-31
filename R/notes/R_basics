@@ -1,0 +1,122 @@
+# Overview
+
+## Background
+Notes on R
+
+### Working Directory
+You can set a working directory (e.g. when you try to open up a file, this is the location it looks in)
+
+    getwd()  # Gets the current directory
+    setwd()  # Sets the working directory (your default)
+
+### Load and Save Data
+You can load data using _read.csv()_ and _write.csv()_.  There's also other varations including _write.table()_
+
+    mydata = read.csv(file="C:\\Users\\wliu\\Desktop\\myfile.csv")  # read file
+    mydata = write.csv(my_dataframe, "myfile.csv", sep=",", row.names=FALSE)
+
+### Help
+R has built-in help
+
+    help(myfunction)
+    ?function
+
+### Packages
+R's capabilities can be expanded with _packages_ from _CRAN_(Comprehensive R Archive Network)
+
+    install.packages("ggplot2", dependencies = TRUE)  # installs package 'ggplot2'
+    library(ggplot2)  # only need to install once, then can just reference
+
+Some common packages include:
+    - foreign  # allows you to load data from SPSS and other formats
+    - Rcmdr  # allows data entry, make sure dependencies = TRUE
+    - reshape  # allows to change data from wide to long formats
+    - ggplot2  # for graphing
+
+### Objects and Functions
+R is made up of _objects_ and _functions_.  Here's an example of creating an object (my_people) and assigning multiple names using the concatenate function _c()_ ("Will", "Laura", "Mike", "Roger")
+
+    my_people<-c("Will", "Laura", "Mike", "Roger")  # variable can hold strings
+    my_age<-c(30, 26, 33, 27)  # variable can hold numbers (no quotes)    
+
+### DataFrames
+Dataframes are objects containing variables, like worksheets in Excel.
+
+    family<-data.frame(Name=my_people, Age=my_age)  # dataframe w/ 2 variables
+    family  # display contents of the entire dataframe
+    #  Name  Age
+    #1 Will  30
+    #2 Laura 26
+    #3 Mike  33
+    #4 Roger 27
+    family$Name  # can reference dataframe by variable (e.g. Name)
+    names()  # can list the variables in the dataframe  # Name, Age
+    new_family <- family[2,c("Name")]  # rows, columns
+    # Laura
+
+
+### list(), cbind()
+The list() and cbind() functions can also be used to combine variables (instead of dataframes)
+
+    family<-list(my_people, my_age)  # create two lists
+    # [1] "Will" "Laura" "Mike" Roger"
+    # [2] 30 26 33 27
+    
+    family<-cbind(my_people, my_age)  # paste columns of data together
+    #    my_people, my_age
+    #[1,] "Will", "30"  # Notice cbind() converts from int to string
+    #[2,] "Laura", "26"  # cbind() is good only for combining same data types
+    #[3,] "Mike", "33"
+    #[4,] "Roger", "27" 
+
+
+### Data Formatting (wide and long/molten)
+The _wide format_ formats data so that each row represents data from one entity while each column represents a variable.  There is no discrimination between independent and dependent variables (each should be its own column)
+
+    # Wide Format Example
+    # person, gender, happy_base, happy_6_months, happy_1_year
+    # Will,  Male, 2, 3, 4
+    # Laura, Female, 5, 6, 7
+
+The _long or molten format_ formats data so that scores on different variables (happiness over time) are placed in a single column.
+
+    # Long or Molten Format Example
+    # person, gender, variable, value
+    # Will,  Male, happy_base, 2
+    # Will,  Male, happy_6_months, 3
+    # Will,  Male, happy_1_year, 4
+    # Laura, Female, happy_base, 5
+    # Laura, Female, happy_6_months, 6
+    # Laura, Female, happy_1_year, 7 
+
+To reshape the data between _wide_ and _long_ formats, we can use these functions from the _reshape_ package:
+
+*   __melt() and cast()__
+*   __stack() and unstack()__
+
+### Factor (aka coding variable, grouping variable)
+Factors are variables that take on a limited number of different values (i.e. _categorical variables_) and is helpful in statistical modeling.  Use the functions _factor()_ (says this data is a categorical) and _levels()_ (shows the different categories).
+
+    data = c(1,2,2,3,1,2,3,3,1,2,3,3,1)
+    fdata = factor(data, levels=c(a,b,c), labels=("x","y","z")) # Levels: 1 2 3
+
+    my_months = c("January","February","March",
+              "April","May","June","July","August","September",
+              "October","November","December")
+    ordered_months = factor(my_months,levels=c("January","February","March",
+                            "April","May","June","July","August","September",
+                            "October","November","December"),ordered=TRUE)
+    ordered_months  # Levels: January < February < March < April < May < June < July < August < September < October < November < December
+
+
+### Plotting Graphs with ggplot2
+You can do a quick plot using _qplot()_ (quick and easy) or build a plot layer by layer using _ggplot()_ (for more detailed plots).  Plots are made up of:
+
+* __geoms__ - geometric objects, these are the visual elements of an object (e.g. bars, data points, text).  Each layer of the _geoms__ can accept additional arguments to change that layer's __aes__ (aesthetics).  Some common geoms include:
+    - __geom_bar()__ -creates a layer with bars representing statistical properties
+    - __geom_point()__ - creates a layer showing the data points (e.g. scatterplot)
+    - __geom_line()__ - creates a layer that connects data points with a straight line
+    - __geom_smooth()__ - creates a layer that contains a smoother line
+    - __geom_histogram()__ - creates a layer with a histogram
+
+* __aes__ - aesthetic properties, what the _geoms_ look like (e.g. size, color, shape) and where they're plotted

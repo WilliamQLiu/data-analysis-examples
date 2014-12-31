@@ -1,4 +1,4 @@
-#Overview
+# Overview
 
 ## Background
 Welcome!  This is a short onboarding course for new data analysts.  I'll cover the basics of data preparation, data analysis, data visualization, and machine learning.  No other knowledge is necessary other than a very minimum familiarity with Excel.
@@ -40,6 +40,7 @@ Different levels of measurement are used to categorize and quantify variables.  
     - __Dichotomous (aka Binary)__ - Two distinct possibilities (e.g. pregnant or not pregnant)
     - __Nominal__ - Two or more possibilities (e.g. human, cat, dog) 
     - __Ordinal__ - Two or more possibilities and there is a logical order (e.g. first, second).  You know which is bigger or smaller, but not by how much (e.g. you know who won race, but not how close race was)
+    - _Programming_ - In R, this is 'factor()' and Python's Pandas, this is 'categorical' with an optional order
 * __Continuous (aka Quantitative)__ - Deals with numbers (e.g. '_length_', '_age_').  Continuous are further categorized as:
     - __Interval__ - Two or more possibilities, there is a logical order that you can measure (i.e. numbers that you can do arithmetic with), and there are equal intervals (e.g. Fahrenheit measurement of 40 to 50 degrees is the same difference as 50 to 60 degrees)
     - __Ratio__ - Two or more possibilites, there is a logical order that you can measure, there are equal intervals, and there is a true zero point (e.g. the weight of an object cannot weigh less than 0) 
