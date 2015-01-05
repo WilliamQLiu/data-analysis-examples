@@ -1039,7 +1039,8 @@ library(ggplot2)  # only need to install once, then can just reference</code></p
     - foreign  # allows you to load data from SPSS and other formats<br />
     - Rcmdr  # allows data entry, make sure dependencies = TRUE<br />
     - reshape  # allows to change data from wide to long formats<br />
-    - ggplot2  # for graphing</p>
+    - ggplot2  # for graphing<br />
+    - pastecs  # for basic descriptive statistics of variables; e.g. stat.desc()</p>
 <h3 id="objects-and-functions"><a name="user-content-objects-and-functions" href="#objects-and-functions" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Objects and Functions</h3>
 <p>R is made up of <em>objects</em> and <em>functions</em>.  Here&rsquo;s an example of creating an object (my_people) and assigning multiple names using the concatenate function <em>c()</em> (&ldquo;Will&rdquo;, &ldquo;Laura&rdquo;, &ldquo;Mike&rdquo;, &ldquo;Roger&rdquo;)</p>
 <pre><code>my_people&lt;-c(&ldquo;Will&rdquo;, &ldquo;Laura&rdquo;, &ldquo;Mike&rdquo;, &ldquo;Roger&rdquo;)  # variable can hold strings
@@ -1091,6 +1092,12 @@ family&lt;-cbind(my_people, my_age)  # paste columns of data together
 <li><strong>melt() and cast()</strong></li>
 <li><strong>stack() and unstack()</strong></li>
 </ul>
+<h3 id="filtering-with-by-and-subset"><a name="user-content-filtering-with-by-and-subset" href="#filtering-with-by-and-subset" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Filtering with by() and subset()</h3>
+<p>To separate into different groups, we can use <em>by()</em> and <em>subset()</em>.</p>
+<ul>
+<li><strong>by()</strong> - if you want to split data into different groups, you can use <em>by()</em> with the general form: <code>by(data = dataFrame, INDICES = grouping variable, FUN = a function that you want to apply to the data)</code></li>
+<li><strong>subset()</strong> - if you want to split data into different groups, you can use <em>subset()</em> with the general form: <code>subset(data = dataFrame, mycolumn==myvalue</code></li>
+</ul>
 <h3 id="factor-aka-coding-variable-grouping-variable"><a name="user-content-factor-aka-coding-variable-grouping-variable" href="#factor-aka-coding-variable-grouping-variable" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Factor (aka coding variable, grouping variable)</h3>
 <p>Factors are variables that take on a limited number of different values (i.e. <em>categorical variables</em>) and is helpful in statistical modeling.  Use the functions <em>factor()</em> (says this data is a categorical) and <em>levels()</em> (shows the different categories).</p>
 <pre><code>data = c(1,2,2,3,1,2,3,3,1,2,3,3,1)
@@ -1104,19 +1111,100 @@ ordered_months = factor(my_months,levels=c(&ldquo;January&rdquo;,&rdquo;February
                         &ldquo;October&rdquo;,&rdquo;November&rdquo;,&rdquo;December&rdquo;),ordered=TRUE)
 ordered_months  # Levels: January &lt; February &lt; March &lt; April &lt; May &lt; June &lt; July &lt; August &lt; September &lt; October &lt; November &lt; December</code></pre>
 <h3 id="plotting-graphs-with-ggplot2"><a name="user-content-plotting-graphs-with-ggplot2" href="#plotting-graphs-with-ggplot2" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Plotting Graphs with ggplot2</h3>
-<p>You can do a quick plot using <em>qplot()</em> (quick and easy) or build a plot layer by layer using <em>ggplot()</em> (for more detailed plots).  Plots are made up of:</p>
+<p>You can do a quick plot using <em>qplot()</em> (quick and easy) or build a plot layer by layer using <em>ggplot()</em> (for more detailed plots).  Plots are made up of <code>ggplot(myData, aes()) + geoms() + opts() + theme()</code>.  For full documentation, see: <a href="http://docs.ggplot2.org/">http://docs.ggplot2.org/</a></p>
 <ul>
 <li>
 <p><strong>geoms</strong> - geometric objects, these are the visual elements of an object (e.g. bars, data points, text).  Each layer of the _geoms__ can accept additional arguments to change that layer&rsquo;s <strong>aes</strong> (aesthetics).  Some common geoms include:</p>
 <ul>
-<li><strong>geom_bar()</strong> -creates a layer with bars representing statistical properties</li>
+<li><strong>geom_bar()</strong> - creates a layer with bars representing statistical properties</li>
 <li><strong>geom_point()</strong> - creates a layer showing the data points (e.g. scatterplot)</li>
 <li><strong>geom_line()</strong> - creates a layer that connects data points with a straight line</li>
 <li><strong>geom_smooth()</strong> - creates a layer that contains a smoother line</li>
 <li><strong>geom_histogram()</strong> - creates a layer with a histogram</li>
+<li><em>Note</em>: ggplot has some built-in <em>stats</em> functions (e.g. <em>bin</em> to bin data, <em>boxplot</em> to compute the data for a boxplot, <em>summary</em> to summarize data) that it uses behind the scenes.  You can adjust these properties manually if you&rsquo;d like.  For a full list, look under &lsquo;Statistics&rsquo; in the documentation.</li>
 </ul>
 </li>
 <li>
-<p><strong>aes</strong> - aesthetic properties, what the <em>geoms</em> look like (e.g. size, color, shape) and where they&rsquo;re plotted</p>
+<p><strong>aes</strong> - aesthetic properties, what the <em>geoms</em> look like (e.g. size, color, shape) and where they&rsquo;re plotted.  Examples include:</p>
+<ul>
+<li><strong>colour()</strong> - specify exact colors using RRGGBB system (e.g. #3366FF) for a shade of blue</li>
+<li><strong>alpha()</strong> - specify transparency from 0 (for fully transparent) to 1 (fully opaque)</li>
+<li><strong>linetype()</strong> - specify if line is solid (1), hashed (2), dotted(3), dot and dash (4), long hash (5), dot and long hash (6)</li>
+<li><strong>size()</strong> - specify size in mm (default is 0.5); larger for larger, smaller for smaller</li>
+<li><strong>shape()</strong> - an int between 0 and 25, each specifying a type of shape, e.g. hollow square (0), hollow triangle (1), + sign (2)</li>
+</ul>
 </li>
+<li>
+<p><strong>position</strong> - this is just an argument, but a useful one.  You can make position adjustments on any object (e.g. <em>geom</em> or <em>aes</em>) in a plot with the <code>position = "x"</code> where x can be:</p>
+<ul>
+<li><strong>dodge</strong> - no overlap at the side</li>
+<li><strong>stackfill</strong> - makes objects stack on top of each other (largest objects on bottom, smallest on top) </li>
+<li><strong>fill</strong> - standardizes everything to an equal height (1) and makes objects stack on top of each other to fill the bar</li>
+<li><strong>identity</strong> - no position adjustment</li>
+<li><strong>jitter</strong> - jitter points to avoid overplotting on top of each other</li>
+</ul>
+</li>
+<li>
+<p><strong>facet_grid() and facet_wrap()</strong> - faceting splits plots into subgroups.  </p>
+<ul>
+<li><strong>facet_grid()</strong> - <em>facet grid</em> splits the data by the combination of  variables (e.g. Male Introverts, Female Introverts, Male Extroverts, Female Extroverts).  The general format is <code>+ facet_grid(x ~ y)</code> where <em>x</em> and <em>y</em> are the variables you want to facet</li>
+<li><strong>facet_wrap()</strong> - <em>facet wrap</em> splits the data by a single variable (e.g. Satisfied, Neutral, Not Satisfied). The general format is <code>+ facet_wrap( ~ y, nrow = integer, ncol = integer)</code> where <em>nrow</em> and <em>ncol</em> are optional</li>
+</ul>
+</li>
+<li>
+<p><strong>stat_summary()</strong> - summarizes y values at every unique x.  The general form is: <code>stat_summary(function = x, geom = y)</code></p>
+<ul>
+<li><strong>fun.y = mean</strong> - the mean; usually used with <em>geom = &ldquo;bar&rdquo;</em></li>
+<li><strong>fun.y = median</strong> - the median; usually used with <em>geom = &ldquo;bar&rdquo;</em></li>
+<li><strong>fun.data = mean_cl_normal()</strong> - 95% confidence intervals assuming normality; usually used with <em>geom = &ldquo;errorbar&rdquo;</em> or <em>geom = &ldquo;pointrange&rdquo;</em></li>
+<li><strong>fun.data = median_hilow()</strong> - median and upper and lower quantiles; usually used with <em>geom = &ldquo;pointrange&rdquo;</em></li>
+</ul>
+</li>
+<li>
+<p><strong>ggsave()</strong> - lets you save the graph; E.g. <code>ggsave("mygraph.png", width = 2, height = 2)</code></p>
+</li>
+<li>
+<p><strong>theme() and opts()</strong> - <em>theme()</em> allows you to control the themes of how plots look, default is theme_grey().  <em>opts()</em> allows you to controls pecific parts of the theme (e.g. just the axis.line)</p>
+<ul>
+<li><strong>theme_text()</strong> - font, colour, size of labels</li>
+<li><strong>theme_line()</strong> - colour, size, linetype for grid lines</li>
+<li><strong>theme_segment()</strong> - colour, size, linetype for axis line and axis tick marks</li>
+</ul>
+</li>
+</ul>
+<h3 id="parametric-statistics"><a name="user-content-parametric-statistics" href="#parametric-statistics" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Parametric Statistics</h3>
+<p>A branch of statistics that assumes the data comes from a type of probability distribution and makes inferences about the parameters of the distribution.  The assumptions are:</p>
+<ul>
+<li><strong>normal distribution</strong> - different depending on the test you&rsquo;re using (remember sample size affects how we test for <em>normal distribution</em>).  What we want is a skew = 0 and kurtosis = 0.  We can eye-ball this with &lsquo;stat_function()&rsquo; and &lsquo;Q-Q plot&rsquo;; we can also quantify it with numbers using <ul>
+<li><strong>stat_function()</strong> - draws a function over the current plot layer; for example, using the argument <em>fun = dnorm()</em>, which returns the probability (i.e. the density) for a given value</li>
+<li><strong>Q-Q plot (quantile-quantile plot)</strong> - a <em>quantile</em> is the proportion of cases we find below a certain value; using the <code>stat = "qq"</code> argument in a <em>qplot()</em>, we can plot the cumulative values we have in our data against the cumulative probability of a normal distribution (i.e. data is ranked and sorted).  If data is normally distributed, then the actuals scores will have the same distribution as the score so we&rsquo;ll get a straight diagonal line <br />
+To get more accurate (instead of just eye-balling), we can:</li>
+<li><strong>describe() or stat.desc()</strong> - We can get descriptive summaries of our data with the <em>describe()</em> function of the &lsquo;psych&rsquo; package or <em>stat.desc()</em> function of the &lsquo;pasetcs&rsquo; package.  Again, we&rsquo;re interested in <code>skew = 0</code> and <code>kurtosis = 0</code>, which we can then calculate the <em>z-score</em> (so that we can compare to different samples that used different measures and so that we can see how likely our values of <em>skew</em> and <em>kurtosis</em> are likely to occur).</li>
+<li><strong>z-score skewness calculation</strong> - the z-score for skewness can be calculated using <code>insert formula for z-score skewness</code></li>
+<li><strong>z-score kurtosis calculation</strong> - the z-score for kurtosis can be calculated using <code>insert formula for z-score kurtosis</code></li>
+<li><em>Note:</em> interpretting z-scores depends on the sample size.  Absolute value greater than 1.96 is significant at &lsquo;p &lt; .05&rsquo;, greater than 2.58 at &lsquo;p &lt; .01&rsquo;, greater than 3.29 is significant at &lsquo;p &lt; .001&rsquo;<ul>
+<li><em>small samples (&lt;30)</em> - it&rsquo;s okay to look for values above 1.96</li>
+<li><em>large samples(&gt;30 and &lt;200)</em> - it&rsquo;s okay to look for values above 2.58</li>
+<li><em>very large samples (_200+)</em> - look at the shape&rsquo;s distribution visually and value of the skew and kurtosis statistics instead of calculating their significance (because they are likely to be significant even when skew and kurtosis are not too different than normal)</li>
+</ul>
+</li>
+<li><strong>skew.2SE and kurt.2SE</strong> - <em>stat.desc()</em> gives us <em>skew.2SE.</em> and <em>kurt.2SE</em>, which stands for the <em>skew</em> and <em>kurtosis</em> value divided by 2 standard errors (i.e. instead of values above, we can say if the absolute value greater than 1 is significant at &lsquo;p &lt; 0.5&rsquo;, greater than 1.29 at &lsquo;p &lt; .01&rsquo;, greater than 1.65 is significant at &lsquo;p &lt; .001&rsquo;</li>
+<li><strong>Shapiro-Wilk Test of Normality</strong> - <em>Shapiro-Wilk</em> is a way of looking for normal distribution by checking whether the distribution as a whole deviates from a comparable normal distribution.  This is represented as <em>normtest.W</em> (W) and <em>normtest.p</em> (p-value) through either the <em>stat.desc()</em> or <em>shapiro.test()</em> functions</li>
+</ul>
+</li>
+<li><strong>homogeneity of variance</strong> - variances should be the same throughout the data (i.e. data is tightly packed around the mean).  For example, say we measured the number of hours a person&rsquo;s ear rang after a concert across multiple concerts.<ul>
+<li><strong>homogeneity of variance</strong> - After each concert, the ringing lasts about 5 hours (even if this is sometimes 10-15 hours, 20-25 hours, 40-45 hours)</li>
+<li><strong>heterogeneity of variance</strong> - After each concert, the ringing lasts from 5 to 30 hours (say first concert is 5-10 hours, last concert is 20-50 hours)</li>
+<li><strong>Levene&rsquo;s test (F)</strong> - <em>Levene&rsquo;s test</em> tests that the variances in different groups are equal (i.e. the difference between variances is equal to zero).<ul>
+<li>Test is significant at p &lt;= .05, which we can then conclue that the variances are significantly different (meaning it is not <em>homogeneity of variance</em>)</li>
+<li>Test is non-significant at p &gt; .05, then the variances are roughly equal and it is <em>homogeneity of variance</em></li>
+<li>In <em>R</em>, we can use the <em>leveneTest()</em> function from the <em>car</em> package.  It looks like this general form: <code>leveneTest(outcome variable, grouping variable, center = median/mean)</code> where the outcome variable is what we want to test the variances and the grouping variable is a factor</li>
+<li><em>Note:</em> in large samples, Leven&rsquo;s test can be significant even when group variances are not very different; for this reason, it should be interpreted with the <em>variance ratio</em></li>
+</ul>
+</li>
+<li><strong>Hartley&rsquo;s Fmax (aka variance ratio)</strong> - the ratio of the variances between the group with the biggest variance the group with the smallest variance.  This value should be smaller than the critical values</li>
+</ul>
+</li>
+<li><strong>interval data</strong> - data should be measured at least in the interval level (tested with common sense)</li>
+<li><strong>independence</strong> - different depending on the test you&rsquo;re using</li>
 </ul></article></body></html>
