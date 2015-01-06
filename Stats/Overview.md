@@ -27,7 +27,6 @@ Welcome!  This is a short onboarding course for new data analysts.  I'll cover t
 ### Variables
 Data is made up of variables.  Variables can have any value (like a category or number).  `y = 10` says that the variable '_y_' has the value of '_10_'.  There are two types of variables:
 
-* __N__ - _N_ is the size of the sample and _n_ represents a subsample (e.g. number of cases within a particular group)
 * __Independent Variable__ - the outcome; the variable's value does not depend on any other variable (e.g. _Has Lung Cancer_, _Test Score_)
 * __Dependent Variable__ - the predictor(s); the variable(s) that we think are an effect because the value depends on the independent variables (e.g. _Cigarettes Per Day_, _Time Spent Studying_)
 * __Example__: '_Time Spent Studying_' causes a change in '_Test Score_'.  '_Test Score_' can't cause a change in '_Time Spent Studying_'.  '_Test Score_' (independent variable) depends on '_Time Spent Studying_' (dependent variable)
@@ -43,7 +42,7 @@ Different levels of measurement are used to categorize and quantify variables.  
     - _Programming_ - In R, this is 'factor()' and Python's Pandas, this is 'categorical' with an optional order
 * __Continuous (aka Quantitative)__ - Deals with numbers (e.g. '_length_', '_age_').  Continuous are further categorized as:
     - __Interval__ - Two or more possibilities, there is a logical order that you can measure (i.e. numbers that you can do arithmetic with), and there are equal intervals (e.g. Fahrenheit measurement of 40 to 50 degrees is the same difference as 50 to 60 degrees)
-    - __Ratio__ - Two or more possibilites, there is a logical order that you can measure, there are equal intervals, and there is a true zero point (e.g. the weight of an object cannot weigh less than 0) 
+    - __Ratio__ - Two or more possibilities, there is a logical order that you can measure, there are equal intervals, and there is a true zero point (e.g. the weight of an object cannot weigh less than 0) 
 
 
 ### Reliability
@@ -89,6 +88,7 @@ To test a hypothesis, we can do the following
 ### Frequency Distribution (aka Histogram)
 A count of how many times different values occur.  The two main ways a distribution can deviate from normal is by _skew_ and _kurtosis_
 
+* __N__ - _N_ is the size of the sample and _n_ represents a subsample (e.g. number of cases within a particular group)
 * __skew__ - the symmetry (tall bars are clustered at one end of the scale); _positively skewed_ means clustered at the lower end / left side) while _negatively skewed_ means clustered at the higher end / right side)
 * __kurtosis__ - the pointyness (degree that scores cluster at the end of the distributions/ the _tails_); _positive kurtosis_ has many scores in the tails (aka _leptokurtic distribution_, _has heavy-tailed distribution_) while _negative_kurtosis_ is relatively thin (aka _platykurtic distribution_, _has light tails_)
 * __Normal Distribution__ - a bell-shaped curve (majority of bars lie around the center of the distribution); has values of `skew=0` and `kurtosis=0`

@@ -1040,7 +1040,10 @@ library(ggplot2)  # only need to install once, then can just reference</code></p
     - Rcmdr  # allows data entry, make sure dependencies = TRUE<br />
     - reshape  # allows to change data from wide to long formats<br />
     - ggplot2  # for graphing<br />
-    - pastecs  # for basic descriptive statistics of variables; e.g. stat.desc()</p>
+    - pastecs  # for basic descriptive statistics of variables; e.g. stat.desc()<br />
+    - RODBC  # for conneting to databases (e.g. SQL Server)<br />
+    - WRS  # for robust tests<br />
+    - Hmisc  # for data analysis (e.g. correlations, computing sample size and power)</p>
 <h3 id="objects-and-functions"><a name="user-content-objects-and-functions" href="#objects-and-functions" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Objects and Functions</h3>
 <p>R is made up of <em>objects</em> and <em>functions</em>.  Here&rsquo;s an example of creating an object (my_people) and assigning multiple names using the concatenate function <em>c()</em> (&ldquo;Will&rdquo;, &ldquo;Laura&rdquo;, &ldquo;Mike&rdquo;, &ldquo;Roger&rdquo;)</p>
 <pre><code>my_people&lt;-c(&ldquo;Will&rdquo;, &ldquo;Laura&rdquo;, &ldquo;Mike&rdquo;, &ldquo;Roger&rdquo;)  # variable can hold strings
@@ -1070,6 +1073,17 @@ family&lt;-cbind(my_people, my_age)  # paste columns of data together
 #[2,] &ldquo;Laura&rdquo;, &ldquo;26&rdquo;  # cbind() is good only for combining same data types
 #[3,] &ldquo;Mike&rdquo;, &ldquo;33&rdquo;
 #[4,] &ldquo;Roger&rdquo;, &ldquo;27&rdquo;</code></pre>
+<h3 id="useful-functions"><a name="user-content-useful-functions" href="#useful-functions" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Useful Functions</h3>
+<ul>
+<li><strong>rowMeans()</strong> - mean of a row</li>
+<li><strong>rowSums()</strong> - sum of a row</li>
+<li><strong>sqrt()</strong> - square root</li>
+<li><strong>abs()</strong> - absolute value</li>
+<li><strong>log10()</strong> - base 10 logarithm</li>
+<li><strong>log()</strong> - natural logarithm</li>
+<li><strong>is.na()</strong> - is value missing?</li>
+<li><strong>ifelse()</strong> - ifelse(a conditional argument, what happens if TRUE, what happens if FALSE)</li>
+</ul>
 <h3 id="data-formatting-wide-and-longmolten"><a name="user-content-data-formatting-wide-and-longmolten" href="#data-formatting-wide-and-longmolten" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Data Formatting (wide and long/molten)</h3>
 <p>The <em>wide format</em> formats data so that each row represents data from one entity while each column represents a variable.  There is no discrimination between independent and dependent variables (each should be its own column)</p>
 <pre><code># Wide Format Example
@@ -1111,8 +1125,18 @@ ordered_months = factor(my_months,levels=c(&ldquo;January&rdquo;,&rdquo;February
                         &ldquo;October&rdquo;,&rdquo;November&rdquo;,&rdquo;December&rdquo;),ordered=TRUE)
 ordered_months  # Levels: January &lt; February &lt; March &lt; April &lt; May &lt; June &lt; July &lt; August &lt; September &lt; October &lt; November &lt; December</code></pre>
 <h3 id="plotting-graphs-with-ggplot2"><a name="user-content-plotting-graphs-with-ggplot2" href="#plotting-graphs-with-ggplot2" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Plotting Graphs with ggplot2</h3>
-<p>You can do a quick plot using <em>qplot()</em> (quick and easy) or build a plot layer by layer using <em>ggplot()</em> (for more detailed plots).  Plots are made up of <code>ggplot(myData, aes()) + geoms() + opts() + theme()</code>.  For full documentation, see: <a href="http://docs.ggplot2.org/">http://docs.ggplot2.org/</a></p>
+<p>You can do a quick plot using <em>qplot()</em> (quick and easy) or build a plot layer by layer using <em>ggplot()</em> (for more detailed plots).  Plots are made up of <code>ggplot(myData, aes(variable for x, variable for y)) + geoms() + opts() + theme()</code>.  For full documentation, see: <a href="http://docs.ggplot2.org/">http://docs.ggplot2.org/</a></p>
 <ul>
+<li>
+<p><strong>aes</strong> - aesthetic properties, what the <em>geoms</em> look like (e.g. size, color, shape) and where they&rsquo;re plotted.  Examples include:</p>
+<ul>
+<li><strong>colour()</strong> - specify exact colors using RRGGBB system (e.g. #3366FF) for a shade of blue</li>
+<li><strong>alpha()</strong> - specify transparency from 0 (for fully transparent) to 1 (fully opaque)</li>
+<li><strong>linetype()</strong> - specify if line is solid (1), hashed (2), dotted(3), dot and dash (4), long hash (5), dot and long hash (6)</li>
+<li><strong>size()</strong> - specify size in mm (default is 0.5); larger for larger, smaller for smaller</li>
+<li><strong>shape()</strong> - an int between 0 and 25, each specifying a type of shape, e.g. hollow square (0), hollow triangle (1), + sign (2)</li>
+</ul>
+</li>
 <li>
 <p><strong>geoms</strong> - geometric objects, these are the visual elements of an object (e.g. bars, data points, text).  Each layer of the _geoms__ can accept additional arguments to change that layer&rsquo;s <strong>aes</strong> (aesthetics).  Some common geoms include:</p>
 <ul>
@@ -1122,16 +1146,6 @@ ordered_months  # Levels: January &lt; February &lt; March &lt; April &lt; May &
 <li><strong>geom_smooth()</strong> - creates a layer that contains a smoother line</li>
 <li><strong>geom_histogram()</strong> - creates a layer with a histogram</li>
 <li><em>Note</em>: ggplot has some built-in <em>stats</em> functions (e.g. <em>bin</em> to bin data, <em>boxplot</em> to compute the data for a boxplot, <em>summary</em> to summarize data) that it uses behind the scenes.  You can adjust these properties manually if you&rsquo;d like.  For a full list, look under &lsquo;Statistics&rsquo; in the documentation.</li>
-</ul>
-</li>
-<li>
-<p><strong>aes</strong> - aesthetic properties, what the <em>geoms</em> look like (e.g. size, color, shape) and where they&rsquo;re plotted.  Examples include:</p>
-<ul>
-<li><strong>colour()</strong> - specify exact colors using RRGGBB system (e.g. #3366FF) for a shade of blue</li>
-<li><strong>alpha()</strong> - specify transparency from 0 (for fully transparent) to 1 (fully opaque)</li>
-<li><strong>linetype()</strong> - specify if line is solid (1), hashed (2), dotted(3), dot and dash (4), long hash (5), dot and long hash (6)</li>
-<li><strong>size()</strong> - specify size in mm (default is 0.5); larger for larger, smaller for smaller</li>
-<li><strong>shape()</strong> - an int between 0 and 25, each specifying a type of shape, e.g. hollow square (0), hollow triangle (1), + sign (2)</li>
 </ul>
 </li>
 <li>
@@ -1207,4 +1221,71 @@ To get more accurate (instead of just eye-balling), we can:</li>
 </li>
 <li><strong>interval data</strong> - data should be measured at least in the interval level (tested with common sense)</li>
 <li><strong>independence</strong> - different depending on the test you&rsquo;re using</li>
+</ul>
+<h3 id="data-cleaning-trying-to-make-data-fit-into-a-normal-distribution-and-what-happens-when-you-cant"><a name="user-content-data-cleaning-trying-to-make-data-fit-into-a-normal-distribution-and-what-happens-when-you-cant" href="#data-cleaning-trying-to-make-data-fit-into-a-normal-distribution-and-what-happens-when-you-cant" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Data Cleaning (trying to make data fit into a normal distribution, and what happens when you can&rsquo;t)</h3>
+<p>After checking that the data was entered in correctly, you can do the following:</p>
+<ul>
+<li><strong>Remove the outlier</strong> - delete the case only if you believe this is not representative (e.g. for Age someone puts 200, pregnant male)</li>
+<li><strong>Data transformation</strong> - do trial and error data transformations.  If you&rsquo;re looking at differences between variables you must apply the same transformation to all variables.  Types of transformations include:<ul>
+<li><strong>Log transformation log(Xi)</strong> - taking the logarithm of a set of numbers squashes the right tail of the distribution.  Advantages is this corrects for <em>positive skew</em> and <em>unequal variances</em>.  Disadvantage is that you can&rsquo;t take the log of zero or negative numbers (though you can do log(x +1) to make it positive where 1 is the smallest number to make the value positive.</li>
+<li><strong>Square root transformation</strong> - Taking the square root centers your data (square root affects larger values more than smaller values).  Advantage is it corrects <em>positive skew</em> and <em>unequal variances</em>.  Disadvantage is same as log, no square root of negative numbers</li>
+<li><strong>Reciprocal transformation (1/Xi)</strong> - divide 1 by each score reduces the impact of large scores.  This reverses the score (e.g. a low score of 1 would create 1/1 = 1; a high score of 10 would create 1/10 = 0.1).  The small score becomes the bigger score.  You can avoid score reversal by reversing the scores before the transformation 1/(X highest - Xi).Advantages is this corrects <em>positive skew</em> and <em>unequal variances</em></li>
+<li><strong>Reverse Score transformation</strong> - The above transformations can correct for <em>negative skew</em> by reversing the scores.  To do this, subtract each score from the highest score obtained or the highest score + 1 (depending if you want lowest score to be 0 or 1).  Big scores have become small and small scores have become big.  Make sure to reverse this or interpret the variable as reversed. </li>
+</ul>
+</li>
+<li>
+<p><strong>Change the score</strong> - if transformation fails, consider replacing the score (it&rsquo;s basically the lesser of two evils) with one of the following:</p>
+<ul>
+<li>Change the score to be one unit above the next highest score in the data set</li>
+<li>The mean plus three standard deviations (i.e. this converts back from a z-score)</li>
+<li>The mean plus two standard deviations (instead of three times above)</li>
+</ul>
+</li>
+<li>
+<p><strong>Robust test (robust statistics)</strong> - statistics that are not unduly affected by outliers or other small departures from model assumptions (i.e. if the distribution is not normal, then consider using a <em>robust test</em> instead of a <em>data tranformation</em>).  These tests work using these two concepts <em>trimmed mean</em> and <em>bootstrap</em>:</p>
+<ul>
+<li><strong>trimmed mean</strong> - a mean based on the distribution of scores after you decide that some percentage of scores will be removed from each extreme (i.e. remove say 5%, 10%, or 20% of top and bottom scores before the mean is calculated)<ul>
+<li><strong>M-estimator</strong> - slightly different than <em>trimmed mean</em> in that the <em>M-estimator</em> determines the amount of trimming empiraccly.  Advantage is that we never over or under trim the data.  Disadvantage is sometimes <em>M-estimators</em> don&rsquo;t give an answer.</li>
+</ul>
+</li>
+<li><strong>bootstrap</strong> - <em>bootstrap</em> estimates the properties of the sampling distribution from the sample data.  It treats the sample data as a population from which smaller samples (<em>bootstrap samples</em>) are taken with replacement (i.e. puts the data back before a new sample is taken again).</li>
+<li><em>Note:</em> <em>R</em> has a package called <em>WRS</em> that has these <em>robust tests</em>.</li>
+</ul>
+</li>
+</ul>
+<h3 id="covariance-and-correlation"><a name="user-content-covariance-and-correlation" href="#covariance-and-correlation" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Covariance and Correlation</h3>
+<p>We can see the relationship between variables with <em>covariance</em> and the <em>correlation coefficient</em>.</p>
+<ul>
+<li><strong>variance</strong> - remember that <em>variance</em> of a single variable represents the average amount that the data vary from the mean</li>
+<li><strong>covariance</strong> - <em>covariance</em> is a measure of how one variable changes in relation to another variable.  Positive covariance means if one variable moves in a certain direction (e.g. increases), the other variable also moves in the same direction (e.g. increases).  Negative covariance means if one variable moves in a certain direction (e.g. increases), the other variable moves in the opposite direction (e.g. decreases).<ul>
+<li><strong>deviance</strong> - remember that <em>deviance</em> is the difference in value vertically (i.e. the quality of fit)</li>
+<li><strong>cross-product deviations</strong> - when we multiple the <em>deviation</em> of one variable by the corresponding <em>deviation</em> of another variable</li>
+<li><strong>covariance</strong> - the average sum of combined deviations (i.e. it&rsquo;s the cross-product deviation, but also divided by the number of observations, N-1)</li>
+<li><em>Note:</em> <em>covariance</em> is NOT a good standardized measure of the relationship between two variables because it depends on the scales of measurement (i.e. we can&rsquo;t say whether a covariance is particularly large relative to another data set unless both data sets used the same units).</li>
+<li><strong>standardization</strong> - is the process of being able to compare one study to another using the same unit of measurement (e.g. we can&rsquo;t compare attitude in metres)</li>
+<li><strong>standard deviation</strong> - the unit of measurement that we use for <em>standardization</em>; it is a measure of the average <em>deviation</em> from the mean</li>
+</ul>
+</li>
+<li><strong>correlation coefficient</strong> - this is the standardized covariance; we basically get the standard deviation of the first variable, multiply by the standard deviation of the second variable, and divide by the product of the multiplication.  There&rsquo;s two types of correlations including <em>bivariate</em> and <em>partial</em>:<ul>
+<li><strong>bivariate correlation</strong> - correlation between two variables.  Can be:<ul>
+<li><strong>Pearson product-moment correlation (aka Pearson correlation coefficient)</strong> - a parametric statistic and requires interval data for both variables</li>
+<li><strong>Spearman&rsquo;s rho</strong> - a non-parametric statistic so can be used when data is non-normally distributed data.  This works by first ranking the data, then applying <em>Pearson&rsquo;s equestion</em> to those ranks.  Requires only ordinal data for both variables</li>
+<li><strong>Kendall&rsquo;s tau</strong> - a non-parametric statistic, similar to Spearman&rsquo;s, but better for small samples</li>
+</ul>
+</li>
+<li><strong>partial correlation</strong> - correlation between two variables while &lsquo;controlling&rsquo; the effect of one or more additional variables</li>
+<li><em>Note:</em> values range from -1 (negatively correlated) to +1 (positively correlated)<ul>
+<li>+1 means the two variables are perfectly positively correlated (as one increases, the other increases by a proportional amount)</li>
+<li>0 means no linear relationship (if one variable changes, the other stays the same)</li>
+<li>-1 means the two variables are perfectly negatively correlated (as one increases, the other decreases in a proportional amount)</li>
+<li><strong>correlation matrix</strong> - if you want to get correlation coefficients for more than two variables (a gird of correlation coefficients)</li>
+<li><strong>correlation test</strong> - if you only want a single correlation coefficient</li>
+</ul>
+</li>
+<li><em>R</em> to calculate correlation, we can the <em>Hmisc</em> package, specifically with <em>cor()</em>, <em>cor.test()</em>, and <em>rcorr()</em></li>
+<li><strong>causaulity</strong> - <em>correlation</em> does not give the direction of causality (i.e. correlation does not imply causation)</li>
+<li><strong>third-variable problem (aka tertium quid)</strong> - <em>causality</em> between two variables cannot be assumed because there may be other measured or unmeasured variables affecting the results</li>
+</ul>
+</li>
+<li><strong>coefficient of determination (R^2)</strong> - a measure of the amount of variability in one variable that is shared by the other (i.e. indicates how well data fit a statistical model)</li>
 </ul></article></body></html>

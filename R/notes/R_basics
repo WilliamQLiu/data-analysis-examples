@@ -33,6 +33,9 @@ Some common packages include:
     - reshape  # allows to change data from wide to long formats
     - ggplot2  # for graphing
     - pastecs  # for basic descriptive statistics of variables; e.g. stat.desc()
+    - RODBC  # for conneting to databases (e.g. SQL Server)
+    - WRS  # for robust tests
+    - Hmisc  # for data analysis (e.g. correlations, computing sample size and power)
 
 ### Objects and Functions
 R is made up of _objects_ and _functions_.  Here's an example of creating an object (my_people) and assigning multiple names using the concatenate function _c()_ ("Will", "Laura", "Mike", "Roger")
@@ -70,6 +73,17 @@ The list() and cbind() functions can also be used to combine variables (instead 
     #[3,] "Mike", "33"
     #[4,] "Roger", "27" 
 
+
+### Useful Functions
+
+* __rowMeans()__ - mean of a row
+* __rowSums()__ - sum of a row
+* __sqrt()__ - square root
+* __abs()__ - absolute value
+* __log10()__ - base 10 logarithm
+* __log()__ - natural logarithm
+* __is.na()__ - is value missing?
+* __ifelse()__ - ifelse(a conditional argument, what happens if TRUE, what happens if FALSE)
 
 ### Data Formatting (wide and long/molten)
 The _wide format_ formats data so that each row represents data from one entity while each column represents a variable.  There is no discrimination between independent and dependent variables (each should be its own column)
@@ -118,7 +132,14 @@ Factors are variables that take on a limited number of different values (i.e. _c
 
 
 ### Plotting Graphs with ggplot2
-You can do a quick plot using _qplot()_ (quick and easy) or build a plot layer by layer using _ggplot()_ (for more detailed plots).  Plots are made up of `ggplot(myData, aes()) + geoms() + opts() + theme()`.  For full documentation, see: http://docs.ggplot2.org/
+You can do a quick plot using _qplot()_ (quick and easy) or build a plot layer by layer using _ggplot()_ (for more detailed plots).  Plots are made up of `ggplot(myData, aes(variable for x, variable for y)) + geoms() + opts() + theme()`.  For full documentation, see: http://docs.ggplot2.org/
+
+* __aes__ - aesthetic properties, what the _geoms_ look like (e.g. size, color, shape) and where they're plotted.  Examples include:
+    - __colour()__ - specify exact colors using RRGGBB system (e.g. #3366FF) for a shade of blue
+    - __alpha()__ - specify transparency from 0 (for fully transparent) to 1 (fully opaque)
+    - __linetype()__ - specify if line is solid (1), hashed (2), dotted(3), dot and dash (4), long hash (5), dot and long hash (6)
+    - __size()__ - specify size in mm (default is 0.5); larger for larger, smaller for smaller
+    - __shape()__ - an int between 0 and 25, each specifying a type of shape, e.g. hollow square (0), hollow triangle (1), + sign (2)
 
 * __geoms__ - geometric objects, these are the visual elements of an object (e.g. bars, data points, text).  Each layer of the _geoms__ can accept additional arguments to change that layer's __aes__ (aesthetics).  Some common geoms include:
     - __geom_bar()__ - creates a layer with bars representing statistical properties
@@ -127,13 +148,6 @@ You can do a quick plot using _qplot()_ (quick and easy) or build a plot layer b
     - __geom_smooth()__ - creates a layer that contains a smoother line
     - __geom_histogram()__ - creates a layer with a histogram
     - _Note_: ggplot has some built-in _stats_ functions (e.g. _bin_ to bin data, _boxplot_ to compute the data for a boxplot, _summary_ to summarize data) that it uses behind the scenes.  You can adjust these properties manually if you'd like.  For a full list, look under 'Statistics' in the documentation.
-
-* __aes__ - aesthetic properties, what the _geoms_ look like (e.g. size, color, shape) and where they're plotted.  Examples include:
-    - __colour()__ - specify exact colors using RRGGBB system (e.g. #3366FF) for a shade of blue
-    - __alpha()__ - specify transparency from 0 (for fully transparent) to 1 (fully opaque)
-    - __linetype()__ - specify if line is solid (1), hashed (2), dotted(3), dot and dash (4), long hash (5), dot and long hash (6)
-    - __size()__ - specify size in mm (default is 0.5); larger for larger, smaller for smaller
-    - __shape()__ - an int between 0 and 25, each specifying a type of shape, e.g. hollow square (0), hollow triangle (1), + sign (2)
 
 * __position__ - this is just an argument, but a useful one.  You can make position adjustments on any object (e.g. _geom_ or _aes_) in a plot with the `position = "x"` where x can be:
     - __dodge__ - no overlap at the side
@@ -187,3 +201,51 @@ To get more accurate (instead of just eye-balling), we can:
 * __interval data__ - data should be measured at least in the interval level (tested with common sense)
 * __independence__ - different depending on the test you're using
 
+
+### Data Cleaning (trying to make data fit into a normal distribution, and what happens when you can't)
+After checking that the data was entered in correctly, you can do the following:
+
+* __Remove the outlier__ - delete the case only if you believe this is not representative (e.g. for Age someone puts 200, pregnant male)
+* __Data transformation__ - do trial and error data transformations.  If you're looking at differences between variables you must apply the same transformation to all variables.  Types of transformations include:
+    - __Log transformation log(Xi)__ - taking the logarithm of a set of numbers squashes the right tail of the distribution.  Advantages is this corrects for _positive skew_ and _unequal variances_.  Disadvantage is that you can't take the log of zero or negative numbers (though you can do log(x +1) to make it positive where 1 is the smallest number to make the value positive.
+    - __Square root transformation__ - Taking the square root centers your data (square root affects larger values more than smaller values).  Advantage is it corrects _positive skew_ and _unequal variances_.  Disadvantage is same as log, no square root of negative numbers
+    - __Reciprocal transformation (1/Xi)__ - divide 1 by each score reduces the impact of large scores.  This reverses the score (e.g. a low score of 1 would create 1/1 = 1; a high score of 10 would create 1/10 = 0.1).  The small score becomes the bigger score.  You can avoid score reversal by reversing the scores before the transformation 1/(X highest - Xi).Advantages is this corrects _positive skew_ and _unequal variances_
+    - __Reverse Score transformation__ - The above transformations can correct for _negative skew_ by reversing the scores.  To do this, subtract each score from the highest score obtained or the highest score + 1 (depending if you want lowest score to be 0 or 1).  Big scores have become small and small scores have become big.  Make sure to reverse this or interpret the variable as reversed. 
+* __Change the score__ - if transformation fails, consider replacing the score (it's basically the lesser of two evils) with one of the following:
+    - Change the score to be one unit above the next highest score in the data set
+    - The mean plus three standard deviations (i.e. this converts back from a z-score)
+    - The mean plus two standard deviations (instead of three times above)
+
+* __Robust test (robust statistics)__ - statistics that are not unduly affected by outliers or other small departures from model assumptions (i.e. if the distribution is not normal, then consider using a _robust test_ instead of a _data tranformation_).  These tests work using these two concepts _trimmed mean_ and _bootstrap_:
+    - __trimmed mean__ - a mean based on the distribution of scores after you decide that some percentage of scores will be removed from each extreme (i.e. remove say 5%, 10%, or 20% of top and bottom scores before the mean is calculated)
+        + __M-estimator__ - slightly different than _trimmed mean_ in that the _M-estimator_ determines the amount of trimming empiraccly.  Advantage is that we never over or under trim the data.  Disadvantage is sometimes _M-estimators_ don't give an answer.
+    - __bootstrap__ - _bootstrap_ estimates the properties of the sampling distribution from the sample data.  It treats the sample data as a population from which smaller samples (_bootstrap samples_) are taken with replacement (i.e. puts the data back before a new sample is taken again).
+    - _Note:_ _R_ has a package called _WRS_ that has these _robust tests_.
+
+### Covariance and Correlation
+We can see the relationship between variables with _covariance_ and the _correlation coefficient_.
+
+* __variance__ - remember that _variance_ of a single variable represents the average amount that the data vary from the mean
+* __covariance__ - _covariance_ is a measure of how one variable changes in relation to another variable.  Positive covariance means if one variable moves in a certain direction (e.g. increases), the other variable also moves in the same direction (e.g. increases).  Negative covariance means if one variable moves in a certain direction (e.g. increases), the other variable moves in the opposite direction (e.g. decreases).
+    - __deviance__ - remember that _deviance_ is the difference in value vertically (i.e. the quality of fit)
+    - __cross-product deviations__ - when we multiple the _deviation_ of one variable by the corresponding _deviation_ of another variable
+    - __covariance__ - the average sum of combined deviations (i.e. it's the cross-product deviation, but also divided by the number of observations, N-1)
+    - _Note:_ _covariance_ is NOT a good standardized measure of the relationship between two variables because it depends on the scales of measurement (i.e. we can't say whether a covariance is particularly large relative to another data set unless both data sets used the same units).
+    - __standardization__ - is the process of being able to compare one study to another using the same unit of measurement (e.g. we can't compare attitude in metres)
+    - __standard deviation__ - the unit of measurement that we use for _standardization_; it is a measure of the average _deviation_ from the mean
+* __correlation coefficient__ - this is the standardized covariance; we basically get the standard deviation of the first variable, multiply by the standard deviation of the second variable, and divide by the product of the multiplication.  There's two types of correlations including _bivariate_ and _partial_:
+    - __bivariate correlation__ - correlation between two variables.  Can be:
+        + __Pearson product-moment correlation (aka Pearson correlation coefficient)__ - a parametric statistic and requires interval data for both variables
+        + __Spearman's rho__ - a non-parametric statistic so can be used when data is non-normally distributed data.  This works by first ranking the data, then applying _Pearson's equestion_ to those ranks.  Requires only ordinal data for both variables
+        + __Kendall's tau__ - a non-parametric statistic, similar to Spearman's, but better for small samples
+    - __partial correlation__ - correlation between two variables while 'controlling' the effect of one or more additional variables
+    - _Note:_ values range from -1 (negatively correlated) to +1 (positively correlated)
+        + +1 means the two variables are perfectly positively correlated (as one increases, the other increases by a proportional amount)
+        + 0 means no linear relationship (if one variable changes, the other stays the same)
+        + -1 means the two variables are perfectly negatively correlated (as one increases, the other decreases in a proportional amount)
+        + __correlation matrix__ - if you want to get correlation coefficients for more than two variables (a gird of correlation coefficients)
+        + __correlation test__ - if you only want a single correlation coefficient
+    - _R_ to calculate correlation, we can the _Hmisc_ package, specifically with _cor()_, _cor.test()_, and _rcorr()_
+    - __causaulity__ - _correlation_ does not give the direction of causality (i.e. correlation does not imply causation)
+    - __third-variable problem (aka tertium quid)__ - _causality_ between two variables cannot be assumed because there may be other measured or unmeasured variables affecting the results
+* __coefficient of determination (R^2)__ - a measure of the amount of variability in one variable that is shared by the other (i.e. indicates how well data fit a statistical model)
