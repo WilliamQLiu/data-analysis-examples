@@ -124,7 +124,11 @@ Used in frequency distribution to describe central tendancy
 * __Sum of Squared Errors (aka SS, sum of squares)__ - we can't just add up all the deviance (or else the total spread is just zero, which is meaningless) so we square all the values in order to get the total dispersion / total deviance of scores (i.e. gets rid of negatives)
 * __Variance__ - _SS_ works nicely until the number of observations (_n_) changes, then we'll need to recalculate.  Instead of using total dispersion, we use the average dispersion, which is the _variance_
 * __Standard Deviation__ - Since the _variance_ is still squared, we need to do the square root of the variance, as calculated here: `standard deviation = <insert standard deviation formula>`
-* __Test Statistic__ - the ratio of systematic to unsystematic variance or effect to error (i.e. the signal-to-noise)
+* __Test Statistic__ - the ratio of systematic to unsystematic variance or effect to error (i.e. the signal-to-noise).  Examples include:
+    - _F-test_
+    - _Leven's test_
+    - _Bartlett's test_
+    - _Brown-Forsythe test_
 
 
 ### From Frequency to Probability
