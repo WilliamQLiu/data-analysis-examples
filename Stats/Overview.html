@@ -1047,7 +1047,6 @@ body .markdown-body
 <h3 id="variables"><a name="user-content-variables" href="#variables" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Variables</h3>
 <p>Data is made up of variables.  Variables can have any value (like a category or number).  <code>y = 10</code> says that the variable &lsquo;<em>y</em>&lsquo; has the value of &lsquo;<em>10</em>&lsquo;.  There are two types of variables:</p>
 <ul>
-<li><strong>N</strong> - <em>N</em> is the size of the sample and <em>n</em> represents a subsample (e.g. number of cases within a particular group)</li>
 <li><strong>Independent Variable</strong> - the outcome; the variable&rsquo;s value does not depend on any other variable (e.g. <em>Has Lung Cancer</em>, <em>Test Score</em>)</li>
 <li><strong>Dependent Variable</strong> - the predictor(s); the variable(s) that we think are an effect because the value depends on the independent variables (e.g. <em>Cigarettes Per Day</em>, <em>Time Spent Studying</em>)</li>
 <li><strong>Example</strong>: &lsquo;<em>Time Spent Studying</em>&lsquo; causes a change in &lsquo;<em>Test Score</em>&lsquo;.  &lsquo;<em>Test Score</em>&lsquo; can&rsquo;t cause a change in &lsquo;<em>Time Spent Studying</em>&lsquo;.  &lsquo;<em>Test Score</em>&lsquo; (independent variable) depends on &lsquo;<em>Time Spent Studying</em>&lsquo; (dependent variable)</li>
@@ -1059,11 +1058,12 @@ body .markdown-body
 <li><strong>Dichotomous (aka Binary)</strong> - Two distinct possibilities (e.g. pregnant or not pregnant)</li>
 <li><strong>Nominal</strong> - Two or more possibilities (e.g. human, cat, dog) </li>
 <li><strong>Ordinal</strong> - Two or more possibilities and there is a logical order (e.g. first, second).  You know which is bigger or smaller, but not by how much (e.g. you know who won race, but not how close race was)</li>
+<li><em>Programming</em> - In R, this is &lsquo;factor()&rsquo; and Python&rsquo;s Pandas, this is &lsquo;categorical&rsquo; with an optional order</li>
 </ul>
 </li>
 <li><strong>Continuous (aka Quantitative)</strong> - Deals with numbers (e.g. &lsquo;<em>length</em>&lsquo;, &lsquo;<em>age</em>&lsquo;).  Continuous are further categorized as:<ul>
 <li><strong>Interval</strong> - Two or more possibilities, there is a logical order that you can measure (i.e. numbers that you can do arithmetic with), and there are equal intervals (e.g. Fahrenheit measurement of 40 to 50 degrees is the same difference as 50 to 60 degrees)</li>
-<li><strong>Ratio</strong> - Two or more possibilites, there is a logical order that you can measure, there are equal intervals, and there is a true zero point (e.g. the weight of an object cannot weigh less than 0) </li>
+<li><strong>Ratio</strong> - Two or more possibilities, there is a logical order that you can measure, there are equal intervals, and there is a true zero point (e.g. the weight of an object cannot weigh less than 0) </li>
 </ul>
 </li>
 </ul>
@@ -1119,6 +1119,7 @@ To test a hypothesis, we can do the following</p>
 <h3 id="frequency-distribution-aka-histogram"><a name="user-content-frequency-distribution-aka-histogram" href="#frequency-distribution-aka-histogram" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Frequency Distribution (aka Histogram)</h3>
 <p>A count of how many times different values occur.  The two main ways a distribution can deviate from normal is by <em>skew</em> and <em>kurtosis</em></p>
 <ul>
+<li><strong>N</strong> - <em>N</em> is the size of the sample and <em>n</em> represents a subsample (e.g. number of cases within a particular group)</li>
 <li><strong>skew</strong> - the symmetry (tall bars are clustered at one end of the scale); <em>positively skewed</em> means clustered at the lower end / left side) while <em>negatively skewed</em> means clustered at the higher end / right side)</li>
 <li><strong>kurtosis</strong> - the pointyness (degree that scores cluster at the end of the distributions/ the <em>tails</em>); <em>positive kurtosis</em> has many scores in the tails (aka <em>leptokurtic distribution</em>, <em>has heavy-tailed distribution</em>) while <em>negative_kurtosis</em> is relatively thin (aka <em>platykurtic distribution</em>, <em>has light tails</em>)</li>
 <li><strong>Normal Distribution</strong> - a bell-shaped curve (majority of bars lie around the center of the distribution); has values of <code>skew=0</code> and <code>kurtosis=0</code></li>
@@ -1159,7 +1160,13 @@ To test a hypothesis, we can do the following</p>
 <li><strong>Sum of Squared Errors (aka SS, sum of squares)</strong> - we can&rsquo;t just add up all the deviance (or else the total spread is just zero, which is meaningless) so we square all the values in order to get the total dispersion / total deviance of scores (i.e. gets rid of negatives)</li>
 <li><strong>Variance</strong> - <em>SS</em> works nicely until the number of observations (<em>n</em>) changes, then we&rsquo;ll need to recalculate.  Instead of using total dispersion, we use the average dispersion, which is the <em>variance</em></li>
 <li><strong>Standard Deviation</strong> - Since the <em>variance</em> is still squared, we need to do the square root of the variance, as calculated here: <code>standard deviation = &lt;insert standard deviation formula&gt;</code></li>
-<li><strong>Test Statistic</strong> - the ratio of systematic to unsystematic variance or effect to error (i.e. the signal-to-noise)</li>
+<li><strong>Test Statistic</strong> - the ratio of systematic to unsystematic variance or effect to error (i.e. the signal-to-noise).  Examples include:<ul>
+<li><em>F-test</em></li>
+<li><em>Leven&rsquo;s test</em></li>
+<li><em>Bartlett&rsquo;s test</em></li>
+<li><em>Brown-Forsythe test</em></li>
+</ul>
+</li>
 </ul>
 <h3 id="from-frequency-to-probability"><a name="user-content-from-frequency-to-probability" href="#from-frequency-to-probability" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>From Frequency to Probability</h3>
 <p>So what does the frequency tell us?  Instead of thinking of it as as the frequency of values occuring, think of it as how likely a value is to occur (i.e. probability).  For any distribution of scores, we can calculate the probability of obtaining a given value.</p>

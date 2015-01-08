@@ -1,15 +1,83 @@
 install.packages("ggplot2")
+install.packages("ggthemes")
+install.packages("reshape")
+install.packages("plyr")
 
+library(reshape)
 library(ggplot2)  # for plotting
+library(scales)  # for formatting x and y labels
+library(ggthemes)  # for plotting themes
+library(plyr)
 
-# Load data locally from CSV
+mycolors = c("#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b",
+             "#e377c2", "#7f7f7f", "#bcbd22", "#17becf")
+
+### Load data locally from CSV
 myfile <- read.csv(file="C:\\Users\\wliu\\Documents\\GitHub\\data-analysis-examples\\R\\SAMHSA_Snapshot\\summary.csv", sep=",", header=TRUE, stringsAsFactors=FALSE)
+#View(myfile)  # peak at file, make sure everything is okay
 
-mygraph <- ggplot(myfile, aes(x=Date, y=Lifeline.Calls.Answered..Total.))
+### Reshape the data, first by filtering data we want, renaming, then by melt
+mydata <- myfile[, c(1,2,3,4,5,6,7,8,11,12,13,14)]  # get the columns we want
+View(mydata)
 
-mygraph + geom_bar(stat="identity", fill="green")  # Plot a bar chart
+# Fix this renaming here!!!!
+mydata <- rename(mydata, c("Year", "Quarter", "Date",
+                          "Lifeline_Calls_Answered_Total",
+                          "Lifeline Calls Answered (Non-Veteran)",
+                          "Lifeline Calls Answered (Veteran)",
+                          "Lifeline Calls Answered (Spanish)",
+                          "Lifeline Crisis Chats Accepted (Total)",
+                          "Veterans Chats Accepted",
+                          "White House Letters Received",
+                          "Disaster Distress Hotline Calls Answered",
+                          "Disaster Distress Texts Answered"))
+View(mydata)
+my_clean_data = melt(mydata, id=c("Year", "Quarter", "Date"))  # Melt data so we can 'cast' it into any shape
+my_clean_data$Date <- as.Date(my_clean_data$Date, "%m/%d/%Y")  # Change str to date
+View(my_clean_data)  # peak at file, make sure everything is okay
 
-#mygraph <- mygraph + geom_point()  # Plot each point
+# Plot with these colors
+mygraph <- ggplot(my_clean_data) + geom_line(aes(x=Date, y=value, colour=variable)) +
+  scale_colour_manual(values=c("#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b",
+                               "#e377c2", "#7f7f7f", "#bcbd22"))
 
-# Shows quartiles
-#mygraph + geom_smooth(aes(group=1))
+end_date <- max(my_clean_data$Date)  # get the latest end date to limit what gets plotted
+
+# Formatting for Legend
+mygraph <- mygraph +  xlab("Date") + ylab("Calls/Chats Answered") + ggtitle("Summary by Month") + scale_y_continuous(labels = comma, breaks = c(20000, 40000, 60000, 80000, 100000, 120000, 140000)) + scale_x_date(labels = date_format("%m/%Y"), breaks = "1 month", minor_breaks = "1 month",
+               limits = c(as.Date("2014-1-1"), end_date))
+
+mygraph <- mygraph + theme(plot.title = element_text(size=18, face="bold")) + # title
+  theme(axis.text.x=element_text(angle=50, size=14, vjust=0.5)) +  # x-axis
+  theme(legend.title=element_text(size=14, face="bold")) + scale_color_discrete(name="Program") +
+  guides(colour = guide_legend(override.aes = list(size=7))) # legend appear larger
+#facet_wrap(~Year, nrow=1)  # split graphs by say Year
+
+#mygraph <- mygraph + theme_fivethirtyeight()
+mygraph
+
+### Below is the incorrect way (i.e. Without melting the data)
+#mygraph <- ggplot(data=myfile, aes(x=Date, y=Lifeline.Calls.Answered..Total.)) +
+#    geom_line(color=mycolors[1], size=1, alpha=.5)
+
+#mygraph <- mygraph + geom_line(data=myfile, aes(x=Date, y=Lifeline.Calls.Answered..Non.Veteran.),
+#                               color=mycolors[2], size=1, alpha=.5)
+
+#mygraph <- mygraph + geom_line(data=myfile, aes(x=Date, y=Lifeline.Calls.Answered..Veteran.),
+#                               color=mycolors[3], size=1, alpha=.5)
+
+#mygraph <- mygraph + geom_line(data=myfile, aes(x=Date, y=Lifeline.Crisis.Chats.Accepted..Total.),
+#                               color=mycolors[4], size=1, alpha=.5)
+
+#end_date <- max(myfile$Date)  # get the latest end date to limit what gets plotted
+
+#mygraph <- mygraph +  xlab("Date") + ylab("Calls/Chats Answered") + ggtitle("Summary by Month") +
+#    scale_y_continuous(labels = comma, breaks = c(20000, 40000, 60000, 80000, 100000, 120000, 140000)) +
+#    scale_x_date(labels = date_format("%m/%Y"), breaks = "1 month", minor_breaks = "1 month",
+#                 limits = c(as.Date("2014-1-1"), end_date))
+
+#mygraph <- mygraph + theme_fivethirtyeight()
+
+#mygraph + geom_smooth(aes(group=1))  # Shows quartiles
+
+#mygraph + geom_bar(stat="identity", fill="green")  # Plot a bar chart

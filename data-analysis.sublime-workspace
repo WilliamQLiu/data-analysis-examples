@@ -87,7 +87,7 @@
 			"file": "Stats/Overview.md",
 			"settings":
 			{
-				"buffer_size": 22479,
+				"buffer_size": 22702,
 				"line_ending": "Windows"
 			}
 		}
@@ -160,11 +160,16 @@
 	"expanded_folders":
 	[
 		"/C/Users/wliu/Documents/GitHub/data-analysis-examples",
+		"/C/Users/wliu/Documents/GitHub/data-analysis-examples/R",
+		"/C/Users/wliu/Documents/GitHub/data-analysis-examples/R/notes",
 		"/C/Users/wliu/Documents/GitHub/data-analysis-examples/Stats",
 		"/C/Users/wliu/Documents/GitHub/data-analysis-examples/Writing"
 	],
 	"file_history":
 	[
+		"/C/Users/wliu/Documents/GitHub/data-analysis-examples/Stats/Overview.html",
+		"/C/Users/wliu/Documents/GitHub/data-analysis-examples/Stats/Overview.md",
+		"/C/Users/wliu/Documents/GitHub/data-analysis-examples/R/notes/R_basics",
 		"/C/Users/wliu/Documents/GitHub/Python/PythonBasics/rand_picker.py",
 		"/C/Users/wliu/Desktop/path_file",
 		"/C/Users/wliu/Documents/GitHub/data-analysis-examples/Writing/Markdown_Basics.md",
@@ -249,6 +254,14 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"possi",
+			"side",
+			"one",
+			"third",
+			"confidence interval",
+			"note",
+			"subset",
+			"normal distribution",
 			"deviance",
 			"t",
 			"note",
@@ -305,129 +318,25 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 22479,
+						"buffer_size": 22702,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								16731,
-								16731
+								2049,
+								2049
 							]
 						],
 						"settings":
 						{
-							"codeintel": true,
-							"codeintel_config":
-							{
-								"JavaScript":
-								{
-									"codeintel_max_recursive_dir_depth": 2,
-									"codeintel_scan_files_in_project": false,
-									"javascriptExtraPaths":
-									[
-									]
-								},
-								"PHP":
-								{
-									"codeintel_max_recursive_dir_depth": 5,
-									"codeintel_scan_files_in_project": false,
-									"phpExtraPaths":
-									[
-									]
-								},
-								"Python":
-								{
-									"env":
-									{
-									}
-								}
-							},
-							"codeintel_enabled_languages":
-							[
-								"JavaScript",
-								"Mason",
-								"XBL",
-								"XUL",
-								"RHTML",
-								"SCSS",
-								"Python",
-								"HTML",
-								"Ruby",
-								"Python3",
-								"XML",
-								"Sass",
-								"XSLT",
-								"Django",
-								"HTML5",
-								"Perl",
-								"CSS",
-								"Twig",
-								"Less",
-								"Smarty",
-								"Node.js",
-								"Tcl",
-								"TemplateToolkit",
-								"PHP"
-							],
-							"codeintel_live": true,
-							"codeintel_live_enabled_languages":
-							[
-								"JavaScript",
-								"Mason",
-								"XBL",
-								"XUL",
-								"RHTML",
-								"SCSS",
-								"Python",
-								"HTML",
-								"Ruby",
-								"Python3",
-								"XML",
-								"Sass",
-								"XSLT",
-								"Django",
-								"HTML5",
-								"Perl",
-								"CSS",
-								"Twig",
-								"Less",
-								"Smarty",
-								"Node.js",
-								"Tcl",
-								"TemplateToolkit",
-								"PHP"
-							],
-							"codeintel_max_recursive_dir_depth": 10,
-							"codeintel_scan_exclude_dir":
-							{
-								"JavaScript":
-								[
-									"/build/",
-									"/min/"
-								]
-							},
-							"codeintel_scan_files_in_project": true,
-							"codeintel_selected_catalogs":
-							[
-								"PyWin32",
-								"jQuery",
-								"Rails"
-							],
-							"codeintel_snippets": true,
-							"codeintel_syntax_map":
-							{
-								"Python Django": "Python"
-							},
-							"codeintel_tooltips": "popup",
-							"parser": null,
-							"sublime_auto_complete": true,
 							"syntax": "Packages/MarkdownEditing/Markdown.tmLanguage",
-							"target": "disk"
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 5833.0,
+						"translation.y": 486.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
@@ -438,7 +347,7 @@
 	],
 	"incremental_find":
 	{
-		"height": 23.0
+		"height": 22.0
 	},
 	"input":
 	{
@@ -482,7 +391,7 @@
 	"project": "data-analysis.sublime-project",
 	"replace":
 	{
-		"height": 64.0
+		"height": 40.0
 	},
 	"save_all_on_build": true,
 	"select_file":
