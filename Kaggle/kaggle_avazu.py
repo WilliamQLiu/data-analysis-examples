@@ -1,3 +1,31 @@
+""" Kaggle Avazu CTR
+
+    Dataset: d41d8cd9 is NULL?  - Need confirmation / check
+    * train - 10 days of click-through data, ordered chronologically
+      non-clicks and clicks are subsampled according to different strategies
+    * test - 1 day of ads for testing model predictions
+
+    id: ad identifier
+    click: 0/1 for non-click/click
+    hour: format is YYMMDDHH, so 14091123 means 23:00 on Sept. 11, 2014 UTC.
+    C1 -- anonymized categorical variable
+    banner_pos
+    site_id
+    site_domain
+    site_category
+    app_id
+    app_domain
+    app_category
+    device_id
+    device_ip
+    device_model
+    device_type
+    device_conn_type
+    C14-C21 -- anonymized categorical variables
+
+"""
+
+
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -102,15 +130,15 @@ if __name__ == "__main__":
     dv = DictVectorizer()
     cat_matrix = dv.fit_transform(data.T.to_dict().values())
     cat_matrix = scale(cat_matrix.todense())
-    col_names = dv.get_feature_names()
+    #col_names = dv.get_feature_names()
     #print col_names
 
     ### Plot Correlation Matrix
-    print "Printing Correlation Matrix..."
-    plt_corr_matrix(cat_matrix, col_names)
+    #print "Printing Correlation Matrix..."
+    #plt_corr_matrix(cat_matrix, col_names)
 
     ### Create Train, Test Data
-    X_train, X_test, y_train, y_test = train_test_split(data[['banner_pos', 'C18']], data['click'], test_size=.4, random_state=0)
+    X_train, X_test, y_train, y_test = train_test_split(data[['banner_pos', 'C18']], data['click'], test_size=.6, random_state=0)
 
     ### Create model
     print "Creating model"
