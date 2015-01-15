@@ -29,12 +29,13 @@ myfile <- read.csv(file="C:\\Users\\wliu\\Documents\\GitHub\\data-analysis-examp
 #myfile$GreenwichTime <- as.POSIXct(myfile$DateCreated, format="%Y-%m-%d %H:%M")  # Change str to date  # Minute
 myfile$GreenwichTime <- as.POSIXct(myfile$GreenwichTime, format="%Y-%m-%d %H")  # Change str to date  # Hourly
 
-
-### Remove duplicate CallGuid
+# Remove duplicate CallGuid
 myfile <- myfile[,c("GreenwichTime", "CallGuid")]  # Filter only for CallGuids
 myfile <- myfile[!duplicated(myfile),]  # Remove duplicate CallGuids
 #head(myfile)
 
+# Filter date range
+myfile <- myfile[myfile$GreenwichTime >= as.POSIXct("2014-12-01") & myfile$GreenwichTime <= as.POSIXct("2014-12-15"),]
 
 myfile$counter <- 1  # use column as count
 myfile <- myfile[,c("GreenwichTime", "counter")]
@@ -52,4 +53,9 @@ head(cast_data)
 
 #res = AnomalyDetectionVec(cast_data, max_anoms=.02, direction='both', only_last=FALSE, plot=TRUE)
 res = AnomalyDetectionTs(cast_data, max_anoms=.02, direction='both', plot=TRUE)
-res$plot
+res$plot  # Plot this
+head(res)  # These are the anomalies
+# Example:    timestamp anoms
+# 1 2014-12-25 18:00:00   127
+# 2 2014-12-29 07:00:00    50
+# 3 2014-12-31 00:00:00     1
