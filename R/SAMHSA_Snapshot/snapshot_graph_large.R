@@ -40,7 +40,7 @@ end_date <- max(my_clean_data$Date)  # get the latest end date to limit what get
 
 # Formatting for plot
 mygraph <- mygraph +  xlab("Date") + ylab("Calls Answered") +
-  ggtitle("Summary by Month (CY 2014)") +
+  ggtitle("Summary by Month (NSPL & VCL) - CY 2014") +
   expand_limits(y=0) +  # Force chart to go down to 0
   scale_y_continuous(labels = comma, limits=c(0, 140000), expand=c(0,0),  # expand removes negative area
                      breaks = c(0, 10000, 20000, 30000, 40000, 50000, 60000,
