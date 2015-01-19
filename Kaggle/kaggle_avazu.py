@@ -144,13 +144,13 @@ def store_data(dataset, name):
 
 if __name__ == "__main__":
 
-    ### LOADING DATA
-    # Load files to dataframes
+    ### LOADING DATA - Load files to dataframes and do feature extraction
+    # Note: I selected specific features based on correlation matrix for speed
     print "Loading files into dataframes..."
     train = pd.read_csv(filepath_or_buffer=train_file,
             sep=",", parse_dates=True,
             infer_datetime_format=True,
-            usecols=['click', 'banner_pos', 'C18'],
+            usecols=['click', 'banner_pos', 'C18'],  # Feature Extraction
             dtype={'click':np.int32,
                    'banner_pos':pd.Categorical,
                    'C18':pd.Categorical}
@@ -158,73 +158,106 @@ if __name__ == "__main__":
             #low_memory=False
             )
     test = pd.read_csv(filepath_or_buffer=test_file, sep=",")
-    peak_data(train)  # Look at data types
+    peak_data(train)  # basically print everything about data
 
-    X_data = train[['click', 'banner_pos', 'C18']]
-    Y_data = test[['banner_pos', 'C18']]
+    ### Plot Correlation Matrix
+    #print "Printing Correlation Matrix..."
+    #plt_corr_matrix(train, ['banner_pos', 'C18'])
+
+    ### Defining Training Model
+    print "Training Model"
+    X_data = train[['banner_pos','C18']]  #.values  # May need to one col at a time, 'banner_pos', 'C18'
+    y_data = train['click'].values
+    print X_data
+    print y_data
+    print type(X_data)
+    print type(y_data)
 
     ### PREPROCESSING DATA
-    print "Preprocessing Data with LabelEncoder()"
-    enc = LabelEncoder()
-    X_data.banner_pos = enc.fit_transform(train[['banner_pos']])
-    X_data.C18 = enc.fit_transform(train[['C18']])
+    print "Preprocessing Data with OneHotEncoder()"
+    enc = OneHotEncoder()
+    X_data = enc.fit_transform(train[['banner_pos', 'C18']])
+    print "X_data is: "
+    print X_data
 
-    Y_data.banner_pos = enc.fit_transform(test[['banner_pos']])
-    Y_data.C18 = enc.fit_transform(test[['C18']])
+    #print "Preprocessing Data with LabelEncoder()"
+    #enc = LabelEncoder()
+    #label_encoder = enc.fit(X_data)
+    #X_data = label_encoder.transform(X_data)
+    #X_data.banner_pos = enc.fit_transform(train[['banner_pos']])
+    #X_data.C18 = enc.fit_transform(train[['C18']])
 
-    # Preprocessing, how to handle missing values?
+    #Y_data.banner_pos = enc.fit_transform(test[['banner_pos']])
+    #Y_data.C18 = enc.fit_transform(test[['C18']])
+
+    ### Create Train, Test Data
+    print "Creating Train and Test Data"
+    X_train, X_test, y_train, y_test = train_test_split(X_data, y_data, test_size=.2, random_state=1234)
+    print "X train shape is: ", X_train.shape, "  ", "X test shape is: ", X_test.shape
+    print "y train shape is: ", y_train.shape, "  ", "y test shape is: ", y_test.shape
+
+    print "Showing Training Data"
+    print X_train
+    print y_train
+
+    #print "Showing Test Data"
+    #print X_test
+    #print y_test
 
     ### Preprocess Data with One Hot Encoding and Standardization
     #print "Preprocessing with One-Hot-Encoder"
     #enc = OneHotEncoder()
-    #enc.fit(X_data)
+    #enc.fit(X_train)
     #print enc.n_values_
     #print enc.feature_indices_
 
     print "Checking data after encoder transform"
-    #print X_data
-    #print Y_data
+    print X_train
+    print y_train
     #           click  banner_pos  C18
-    #0             0           0    0  # X_data
-    #4577461                   0    2  # Y_data (doesn't have click col)
+    #0             0           0    0  # X_train
+    #4577461                   0    2  # Y_train (doesn't have click col)
+    print type(X_train)  #<class 'scipy.sparse.csr.csr_matrix'>
+    print type(y_train)  #<type 'numpy.ndarray'>
 
-    ### Create Train, Test Data
-    print "Creating Train and Test Data"
-    X_train, X_test, y_train, y_test = train_test_split(X_data[['banner_pos', 'C18']], X_data['click'], test_size=.4, random_state=1234)
 
     # Preprocess by Standardizing (data centered around 0 with a
     #    standard deviation of 1); this allows to compare different units (
     #    e.g. hours to miles), SGD is sensitive to feature scaling so its
     #    recommended to scale your data
-    scaler = StandardScaler()
-    scaler.fit(X_train)
-    X_train = scaler.transform(X_train)
-    X_test = scaler.transform(X_test)
+    #scaler = StandardScaler()
+    #scaler.fit(X_train)
+    #X_train = scaler.transform(X_train)
+    #X_test = scaler.transform(X_test)
 
-    print "Checking Train and Test Data after Scaler"
-    print X_train
-    print X_test
+    #print "Checking Train and Test Data after Scaler"
+    #print X_train
+    #print X_test
 
     ### Creating Model
     print "Fitting Model..."
 
     ### SGD is:
-    clf = SGDClassifier(loss='hinge', penalty='l2', random_state=1234, shuffle=True,
-            n_jobs=5)
+    clf = SGDClassifier(loss='log', penalty='l2', n_iter=10, random_state=1234, shuffle=True,
+            n_jobs=4)
     clf.fit(X_train, y_train)
-    clf.predict(Y_data)
-    print "The score is: ", clf.score(X_test,y_test)
+    y_pred = clf.predict(X_test)
+    print "The score is: ", clf.score(X_test, y_test)  #SCORE  0.830162741604
     print "The coef is: ", clf.coef_
     print "The intercept is: ", clf.intercept_
 
 
-    ### Logistic Regression is: 0.830202327687
-    '''clf = LogisticRegression()
-    clf.fit(X_train, y_train)  # Fit/Train the model
-    print "The score is: ", clf.score(X_test, y_test)'''
+    ### Logistic Regression is: 0.830156310571
+    #clf = LogisticRegression()
+    #clf.fit(X_train, y_train)  # Fit/Train the model
+    #y_pred = clf.predict(X_test)
+    #print "The score is: ", clf.score(X_test, y_test)
+
+    print "Cross validating ROC score:", np.mean(
+        cross_val_score(clf, X_test, y_test, scoring='roc_auc', cv=3))  # 0.606053636482
 
 
-    """
+"""
 
     ### Transform
     print "Convert Text into vectors of numerical values so we can do statistical analysis"
@@ -236,19 +269,4 @@ if __name__ == "__main__":
     #col_names = dv.get_feature_names()
     #print col_names
 
-    ### Plot Correlation Matrix
-    #print "Printing Correlation Matrix..."
-    #plt_corr_matrix(cat_matrix, col_names)
-
-    ### Create Train, Test Data
-    X_train, X_test, y_train, y_test = train_test_split(data[['banner_pos', 'C18']], data['click'], test_size=.6, random_state=0)
-
-    ### Create model
-    print "Creating model"
-    clf = LogisticRegression()
-    clf.fit(X_train, y_train)  # Train the model
-
-    ## Print the score
-    print "The score is: ", clf.score(X_test, y_test)
-    #print "Cross Validing: ", np.mean(cross_val_score(clf, X_test, y_test, scoring='roc_auc', cv=3))
-    """
+"""
