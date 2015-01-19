@@ -29,7 +29,7 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from sklearn.preprocessing import scale, OneHotEncoder, LabelEncoder
+from sklearn.preprocessing import scale, OneHotEncoder, LabelEncoder, StandardScaler
 from sklearn.cluster import KMeans
 from sklearn.feature_extraction import DictVectorizer
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -39,9 +39,20 @@ from sklearn.linear_model import SGDClassifier, LogisticRegression, LinearRegres
 from sklearn.cross_validation import cross_val_score, train_test_split, KFold
 from sklearn.naive_bayes import GaussianNB
 import statsmodels.api as sm
+#import pyprind as pp
+#import time
+
+
+### Get Path to files
+print "Getting path to files..."
+train_file = r'/Users/williamliu/Desktop/Kaggle_Avazu/train'
+test_file = r'/Users/williamliu/Desktop/Kaggle_Avazu/test'
+#small_train_file = r'/Users/williamliu/Desktop/Kaggle_Avazu/small_train'
+#sub_file = r'/Users/williamliu/Desktop/Kaggle_Avazu/submission_scikitlearn'
 
 
 def plt_corr_matrix(dataset, col_names):
+    print "Creating correlation matrix"
     # Plot out correlation
     corr_matrix = np.corrcoef(dataset.T)
 
@@ -52,28 +63,18 @@ def plt_corr_matrix(dataset, col_names):
     plt.show()
 
 
-if __name__ == "__main__":
+def peak_data(dataset):
+    """ Look at dataset """
+    print "Looking at dataset"
+    ### Look at data
+    print dataset.info()
+    print dataset.head()
+    print dataset.describe()
+    print dataset.dtypes
 
-    ### Get Path to files
-    print "Getting path to files..."
-    train_file = r'/Users/williamliu/Desktop/Kaggle_Avazu/train.csv'
-    small_train_file = r'/Users/williamliu/Desktop/Kaggle_Avazu/small_train.csv'
-    test_file = r'/Users/williamliu/Desktop/Kaggle_Avazu/test.csv'
-    submission_file = r'/Users/williamliu/Desktop/Kaggle_Avazu/submission_scikitlearn.csv'
 
-    # Load files to dataframes
-    print "Loading files into dataframes..."
-    #train_file = pd.DataFrame.from_csv(train_file)
-    train = pd.DataFrame.from_csv(path=train_file,
-            sep=",", parse_dates=True, infer_datetime_format=True)
-    test = pd.DataFrame.from_csv(test_file)
-
-    # Look at data
-    #print "Looking at data before conversion..."
-    #print train.info()
-    #print train.head()
-    #print train.describe()
-
+def convert_data(dataset):
+    """
     # Converting data into categories
     print "Converting datatypes..."
     train["click"] = pd.Categorical(train["click"], ordered=False)
@@ -98,6 +99,7 @@ if __name__ == "__main__":
     train["C19"] = pd.Categorical(train["C19"], ordered=False)
     train["C20"] = pd.Categorical(train["C20"], ordered=False)
     train["C21"] = pd.Categorical(train["C21"], ordered=False)
+    print train.dtypes
 
     #print "Looking at data after conversion..."
     #print train.dtypes
@@ -121,11 +123,112 @@ if __name__ == "__main__":
     print train["C19"].head()  # 68  [33, 34, 35, 38,]
     print train["C20"].head()  # 172  [-1, 100000, 100001,]
     print train["C21"].head()  # 60  [1, 13, 15, 16,]
+    """
 
-    # Transform
+def store_data(dataset, name):
+    """ Store data as either HDF5 or CPickle """
+
+    ### HDF5 - cannot store categoricals
+    #my_store = pd.HDFStore('my_store.h5')  # File Path
+    #my_store['train'] = train
+    #my_store['test'] = test
+    #print my_store
+    #my_store.close()
+
+    ### Setup CPickle
+    #print "Converting to Pickles"
+    #train.to_pickle('train.pk1')
+    #test.to_pickle('test.pk1')
+    #my_train = pd.read_pickle('train.pk1')
+
+
+if __name__ == "__main__":
+
+    ### LOADING DATA
+    # Load files to dataframes
+    print "Loading files into dataframes..."
+    train = pd.read_csv(filepath_or_buffer=train_file,
+            sep=",", parse_dates=True,
+            infer_datetime_format=True,
+            usecols=['click', 'banner_pos', 'C18'],
+            dtype={'click':np.int32,
+                   'banner_pos':pd.Categorical,
+                   'C18':pd.Categorical}
+            #converters={'id': str, 'click':pd.Categorical}
+            #low_memory=False
+            )
+    test = pd.read_csv(filepath_or_buffer=test_file, sep=",")
+    peak_data(train)  # Look at data types
+
+    X_data = train[['click', 'banner_pos', 'C18']]
+    Y_data = test[['banner_pos', 'C18']]
+
+    ### PREPROCESSING DATA
+    print "Preprocessing Data with LabelEncoder()"
+    enc = LabelEncoder()
+    X_data.banner_pos = enc.fit_transform(train[['banner_pos']])
+    X_data.C18 = enc.fit_transform(train[['C18']])
+
+    Y_data.banner_pos = enc.fit_transform(test[['banner_pos']])
+    Y_data.C18 = enc.fit_transform(test[['C18']])
+
+    # Preprocessing, how to handle missing values?
+
+    ### Preprocess Data with One Hot Encoding and Standardization
+    #print "Preprocessing with One-Hot-Encoder"
+    #enc = OneHotEncoder()
+    #enc.fit(X_data)
+    #print enc.n_values_
+    #print enc.feature_indices_
+
+    print "Checking data after encoder transform"
+    #print X_data
+    #print Y_data
+    #           click  banner_pos  C18
+    #0             0           0    0  # X_data
+    #4577461                   0    2  # Y_data (doesn't have click col)
+
+    ### Create Train, Test Data
+    print "Creating Train and Test Data"
+    X_train, X_test, y_train, y_test = train_test_split(X_data[['banner_pos', 'C18']], X_data['click'], test_size=.4, random_state=1234)
+
+    # Preprocess by Standardizing (data centered around 0 with a
+    #    standard deviation of 1); this allows to compare different units (
+    #    e.g. hours to miles), SGD is sensitive to feature scaling so its
+    #    recommended to scale your data
+    scaler = StandardScaler()
+    scaler.fit(X_train)
+    X_train = scaler.transform(X_train)
+    X_test = scaler.transform(X_test)
+
+    print "Checking Train and Test Data after Scaler"
+    print X_train
+    print X_test
+
+    ### Creating Model
+    print "Fitting Model..."
+
+    ### SGD is:
+    clf = SGDClassifier(loss='hinge', penalty='l2', random_state=1234, shuffle=True,
+            n_jobs=5)
+    clf.fit(X_train, y_train)
+    clf.predict(Y_data)
+    print "The score is: ", clf.score(X_test,y_test)
+    print "The coef is: ", clf.coef_
+    print "The intercept is: ", clf.intercept_
+
+
+    ### Logistic Regression is: 0.830202327687
+    '''clf = LogisticRegression()
+    clf.fit(X_train, y_train)  # Fit/Train the model
+    print "The score is: ", clf.score(X_test, y_test)'''
+
+
+    """
+
+    ### Transform
     print "Convert Text into vectors of numerical values so we can do statistical analysis"
-    data = train[["click", "banner_pos",
-            "C18"]]
+    data_train = train[["click", "banner_pos", "C18"]]
     #print data.info()
     dv = DictVectorizer()
     cat_matrix = dv.fit_transform(data.T.to_dict().values())
@@ -148,4 +251,4 @@ if __name__ == "__main__":
     ## Print the score
     print "The score is: ", clf.score(X_test, y_test)
     #print "Cross Validing: ", np.mean(cross_val_score(clf, X_test, y_test, scoring='roc_auc', cv=3))
-
+    """
