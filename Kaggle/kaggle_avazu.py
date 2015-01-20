@@ -27,11 +27,12 @@
 
 
 import numpy as np
+import datetime as dt
 import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import scale, OneHotEncoder, LabelEncoder, StandardScaler
 from sklearn.cluster import KMeans
-from sklearn.feature_extraction import DictVectorizer
+from sklearn.feature_extraction import DictVectorizer, FeatureHasher
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn import metrics  # For stats like
 from sklearn.neighbors import KNeighborsClassifier
@@ -78,6 +79,7 @@ def convert_data(dataset):
     # Converting data into categories
     print "Converting datatypes..."
     train["click"] = pd.Categorical(train["click"], ordered=False)
+    train["hour"] = pd.DateTime(train["hour"])
     train["C1"] = pd.Categorical(train["C1"], ordered=False)
     train["banner_pos"] = pd.Categorical(train["banner_pos"], ordered=False)
     train["site_id"] = pd.Categorical(train["site_id"], ordered=False)
@@ -125,6 +127,7 @@ def convert_data(dataset):
     print train["C21"].head()  # 60  [1, 13, 15, 16,]
     """
 
+
 def store_data(dataset, name):
     """ Store data as either HDF5 or CPickle """
 
@@ -142,31 +145,70 @@ def store_data(dataset, name):
     #my_train = pd.read_pickle('train.pk1')
 
 
-if __name__ == "__main__":
+def make_date(text):
+    """ Convert text format; e.g. from YYMMDDHH shows as 14091123, which
+    means 23:00 on Sept. 11, 2014 UTC.
+    """
+    return dt.datetime.strptime(text, "%y%m%d%H")
 
+
+def set_print_options():
+    pd.set_option('display.mpl_style', 'default')
+    pd.set_option('display.width', 2000)
+    pd.set_option('display.max_columns', 200)
+
+
+if __name__ == "__main__":
+    set_print_options()
     ### LOADING DATA - Load files to dataframes and do feature extraction
     # Note: I selected specific features based on correlation matrix for speed
     print "Loading files into dataframes..."
     train = pd.read_csv(filepath_or_buffer=train_file,
-            sep=",", parse_dates=True,
-            infer_datetime_format=True,
-            usecols=['click', 'banner_pos', 'C18'],  # Feature Extraction
-            dtype={'click':np.int32,
+            sep=",",
+            #usecols=['click', 'hour', 'banner_pos', 'C18'],  # Feature Extraction
+            dtype={
+                   'click':np.int32,
                    'banner_pos':pd.Categorical,
-                   'C18':pd.Categorical}
-            #converters={'id': str, 'click':pd.Categorical}
+                   'hour':np.str,
+                   'C18':pd.Categorical},
+            #converters={'hour':make_date},
+            #parse_dates=['hour']
             #low_memory=False
             )
-    test = pd.read_csv(filepath_or_buffer=test_file, sep=",")
-    peak_data(train)  # basically print everything about data
+    test = pd.read_csv(filepath_or_buffer=test_file,
+            sep=",",
+            #usecols=['hour', 'banner_pos', 'C18'],
+            dtype={
+                   'banner_pos':pd.Categorical,
+                   'hour':np.str,
+                   'C18':pd.Categorical},
+            #converters={'hour':make_date},
+            #parse_dates=['hour']
+            )
+    #peak_data(train)  # basically print everything about data
 
+    print "Training"
+    peak_data(train)
+
+    print "Test"
+    peak_data(test)
     ### Plot Correlation Matrix
     #print "Printing Correlation Matrix..."
     #plt_corr_matrix(train, ['banner_pos', 'C18'])
 
+    train['time_day'] = train['hour'].str[4:6]  # Days: 22-31
+    train['time_hour'] = train['hour'].str[6:8]  # Hours: 00-23
+
+    print train['time_day'].value_counts()
+    print train['time_hour'].value_counts()
+
+    print train.describe()
+
     ### Defining Training Model
     print "Training Model"
-    X_data = train[['banner_pos','C18']]  #.values  # May need to one col at a time, 'banner_pos', 'C18'
+    X_data = train[['time_day', 'time_hour', 'banner_pos', 'C1',
+                    'site_category', 'app_domain', 'app_category',
+                    'device_type', 'device_conn_type', 'C15', 'C16', 'C18']]
     y_data = train['click'].values
     print X_data
     print y_data
@@ -176,7 +218,9 @@ if __name__ == "__main__":
     ### PREPROCESSING DATA
     print "Preprocessing Data with OneHotEncoder()"
     enc = OneHotEncoder()
-    X_data = enc.fit_transform(train[['banner_pos', 'C18']])
+    X_data = enc.fit_transform(train[['time_day', 'time_hour', 'banner_pos', 'C1',
+                    'site_category', 'app_domain', 'app_category',
+                    'device_type', 'device_conn_type', 'C15', 'C16', 'C18']])
     print "X_data is: "
     print X_data
 
@@ -192,7 +236,7 @@ if __name__ == "__main__":
 
     ### Create Train, Test Data
     print "Creating Train and Test Data"
-    X_train, X_test, y_train, y_test = train_test_split(X_data, y_data, test_size=.2, random_state=1234)
+    X_train, X_test, y_train, y_test = train_test_split(X_data, y_data, test_size=.4, random_state=1234)
     print "X train shape is: ", X_train.shape, "  ", "X test shape is: ", X_test.shape
     print "y train shape is: ", y_train.shape, "  ", "y test shape is: ", y_test.shape
 
@@ -238,7 +282,9 @@ if __name__ == "__main__":
     print "Fitting Model..."
 
     ### SGD is:
-    clf = SGDClassifier(loss='log', penalty='l2', n_iter=10, random_state=1234, shuffle=True,
+    print "SGD Classifier"
+    clf = SGDClassifier(loss='log', penalty='l2', n_iter=10,
+            random_state=1234, shuffle=True,
             n_jobs=4)
     clf.fit(X_train, y_train)
     y_pred = clf.predict(X_test)
@@ -246,15 +292,12 @@ if __name__ == "__main__":
     print "The coef is: ", clf.coef_
     print "The intercept is: ", clf.intercept_
 
-
     ### Logistic Regression is: 0.830156310571
-    #clf = LogisticRegression()
-    #clf.fit(X_train, y_train)  # Fit/Train the model
-    #y_pred = clf.predict(X_test)
-    #print "The score is: ", clf.score(X_test, y_test)
-
-    print "Cross validating ROC score:", np.mean(
-        cross_val_score(clf, X_test, y_test, scoring='roc_auc', cv=3))  # 0.606053636482
+    print "Logistic Regression"
+    clf = LogisticRegression()
+    clf.fit(X_train, y_train)  # Fit/Train the model
+    y_pred = clf.predict(X_test)
+    print "The score is: ", clf.score(X_test, y_test)
 
 
 """
@@ -268,5 +311,48 @@ if __name__ == "__main__":
     cat_matrix = scale(cat_matrix.todense())
     #col_names = dv.get_feature_names()
     #print col_names
+
+    print "Cross validating ROC score:", np.mean(
+    #cross_val_score(clf, X_test, y_test, scoring='roc_auc', cv=10))
+    cross_val_score(clf, X_test, y_test, scoring='accuracy', cv=10))
+
+
+    Hour
+    0   845178
+    1   984784
+    2   1222672
+    3   1399001
+    4   1913348
+    5   1982179
+    6   1762743
+    7   1857712
+    8   2096264
+    9   2276401
+    10  2149763
+    11  2052023
+    12  2216583
+    13  2388730
+    14  2203519
+    15  2081422
+    16  2050425
+    17  2029527
+    18  1758382
+    19  1318225
+    20  1120647
+    21  992963
+    22  907705
+    23  818771
+
+    Day
+    Monday      21    4122995
+    Tuesday     22    5337126
+    Wednesday   23    3870752
+    Thursday    24    3335302
+    Friday      25    3363122
+    Saturday    26    3835892
+    Sunday      27    3225010
+    Monday      28    5287222
+    Tuesday     29    3832608
+    Wednesday   30    4218938
 
 """
