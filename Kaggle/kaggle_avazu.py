@@ -40,6 +40,7 @@ from sklearn.linear_model import SGDClassifier, LogisticRegression, LinearRegres
 from sklearn.cross_validation import cross_val_score, train_test_split, KFold
 from sklearn.naive_bayes import GaussianNB
 import statsmodels.api as sm
+import seaborn as sns
 #import pyprind as pp
 #import time
 
@@ -158,6 +159,13 @@ def set_print_options():
     pd.set_option('display.max_columns', 200)
 
 
+def create_submission(model, X_test, train):
+    predictions = pd.Series(x[1] for x in model.predict(X_test))
+    submission = pd.DataFrame({'id': train['id'], 'click': predictions})
+    #submission.sort_index(axis=1, inplace=True)
+    submission.to_csv(r'/Users/williamliu/Desktop/Kaggle_Avazu/will_solution.csv', index=False)
+
+
 if __name__ == "__main__":
     set_print_options()
     ### LOADING DATA - Load files to dataframes and do feature extraction
@@ -196,33 +204,38 @@ if __name__ == "__main__":
     #print "Printing Correlation Matrix..."
     #plt_corr_matrix(train, ['banner_pos', 'C18'])
 
-    train['time_day'] = train['hour'].str[4:6]  # Days: 22-31
-    train['time_hour'] = train['hour'].str[6:8]  # Hours: 00-23
+    # Make copies of raw data
+    train_data = train
+    test_data = test
 
-    print train['time_day'].value_counts()
-    print train['time_hour'].value_counts()
+    # Put Day and Hours
+    train_data['time_day'] = train_data['hour'].str[4:6]  # Days: 22-31
+    train_data['time_hour'] = train_data['hour'].str[6:8]  # Hours: 00-23
+    test_data['time_day'] = test_data['hour'].str[4:6]  # Days: 22-31
+    test_data['time_hour'] = test_data['hour'].str[6:8]  # Hours: 00-23
 
-    print train.describe()
 
-    ### Defining Training Model
-    print "Training Model"
-    X_data = train[['time_day', 'time_hour', 'banner_pos', 'C1',
-                    'site_category', 'app_domain', 'app_category',
-                    'device_type', 'device_conn_type', 'C15', 'C16', 'C18']]
-    y_data = train['click'].values
-    print X_data
-    print y_data
-    print type(X_data)
-    print type(y_data)
+    # Only get the fields we're interested in
+    train_data = train_data[['click', 'time_day', 'time_hour', 'banner_pos', 'C18']]
+    test_data = test_data[['time_day', 'time_hour', 'banner_pos', 'C18']]
+
+    # Change types
+    train_data.time_day = train_data.time_day.astype(np.int32)
+    train_data.time_hour = train_data.time_hour.astype(np.int32)
+    train_data.banner_pos = train_data.banner_pos.astype(np.int32)
+    train_data.C18 = train_data.C18.astype(np.int32)
+
+    test_data.time_day = test_data.time_day.astype(np.int32)
+    test_data.time_hour = test_data.time_hour.astype(np.int32)
+    test_data.banner_pos = test_data.banner_pos.astype(np.int32)
+    test_data.C18 = test_data.C18.astype(np.int32)
 
     ### PREPROCESSING DATA
     print "Preprocessing Data with OneHotEncoder()"
-    enc = OneHotEncoder()
-    X_data = enc.fit_transform(train[['time_day', 'time_hour', 'banner_pos', 'C1',
-                    'site_category', 'app_domain', 'app_category',
-                    'device_type', 'device_conn_type', 'C15', 'C16', 'C18']])
-    print "X_data is: "
-    print X_data
+    #enc = OneHotEncoder()
+    #X_data = enc.fit_transform(train[['time_day', 'time_hour', 'banner_pos', 'C18']])
+    #print "X_data is: "
+    #print X_data
 
     #print "Preprocessing Data with LabelEncoder()"
     #enc = LabelEncoder()
@@ -236,13 +249,9 @@ if __name__ == "__main__":
 
     ### Create Train, Test Data
     print "Creating Train and Test Data"
-    X_train, X_test, y_train, y_test = train_test_split(X_data, y_data, test_size=.4, random_state=1234)
+    X_train, X_test, y_train, y_test = train_test_split(train_data[['time_day', 'time_hour', 'banner_pos', 'C18']], train_data[['click']], train_size=.8)
     print "X train shape is: ", X_train.shape, "  ", "X test shape is: ", X_test.shape
     print "y train shape is: ", y_train.shape, "  ", "y test shape is: ", y_test.shape
-
-    print "Showing Training Data"
-    print X_train
-    print y_train
 
     #print "Showing Test Data"
     #print X_test
@@ -255,14 +264,14 @@ if __name__ == "__main__":
     #print enc.n_values_
     #print enc.feature_indices_
 
-    print "Checking data after encoder transform"
-    print X_train
-    print y_train
+    #print "Checking data after encoder transform"
+    #print X_train
+    #print y_train
     #           click  banner_pos  C18
     #0             0           0    0  # X_train
     #4577461                   0    2  # Y_train (doesn't have click col)
-    print type(X_train)  #<class 'scipy.sparse.csr.csr_matrix'>
-    print type(y_train)  #<type 'numpy.ndarray'>
+    #print type(X_train)  #<class 'scipy.sparse.csr.csr_matrix'>
+    #print type(y_train)  #<type 'numpy.ndarray'>
 
 
     # Preprocess by Standardizing (data centered around 0 with a
@@ -281,24 +290,46 @@ if __name__ == "__main__":
     ### Creating Model
     print "Fitting Model..."
 
+    ### Logistic Regression is: 0.830156310571
+    print "Logistic Regression"
+    clf = LogisticRegression()
+    clf.fit(X_train, y_train)  # Fit/Train the model
+    y_pred = clf.predict(X_test)
+    print "The score is: ", clf.score(X_test, y_pred)
+
+
     ### SGD is:
     print "SGD Classifier"
     clf = SGDClassifier(loss='log', penalty='l2', n_iter=10,
             random_state=1234, shuffle=True,
             n_jobs=4)
     clf.fit(X_train, y_train)
-    y_pred = clf.predict(X_test)
     print "The score is: ", clf.score(X_test, y_test)  #SCORE  0.830162741604
-    print "The coef is: ", clf.coef_
-    print "The intercept is: ", clf.intercept_
+    #print "The coef is: ", clf.coef_
+    #print "The intercept is: ", clf.intercept_
 
-    ### Logistic Regression is: 0.830156310571
-    print "Logistic Regression"
-    clf = LogisticRegression()
-    clf.fit(X_train, y_train)  # Fit/Train the model
-    y_pred = clf.predict(X_test)
-    print "The score is: ", clf.score(X_test, y_test)
+    #create_submission(clf, X_test, test)
 
+    # Create Results
+    results = clf.predict_proba(test_data)
+    click = ["%f" % x[1] for x in results]
+    id = test.id
+    submit = zip(id, click)
+    df_out = pd.DataFrame(data=submit, columns=['id', 'click'])
+    df_out = df_out.set_index('id')
+    df_out.to_csv(r'/Users/williamliu/Desktop/Kaggle_Avazu/will_submission.csv')
+
+'''
+    # Make guesses
+    submission = r'/Users/williamliu/Desktop/Kaggle_Avazu/will_solution.csv'  # path of to be outputted submission file
+    with open(submission, 'w') as outfile:
+        outfile.write('id,click\n')
+        for t, date, ID, x, y in data(test, D):
+            p = learner.predict(x)
+            outfile.write('%s,%s\n' % (ID, str(p)))
+    submission.to_csv('submission.txt', index = False)
+
+'''
 
 """
 
