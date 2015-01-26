@@ -10,7 +10,7 @@ import pandas as pd
 #import pylab
 
 
-loc = r'C:\Users\wliu\Documents\GitHub\data-analysis-examples\Python\LifelineChatsByTime\jan_chats.csv'
+loc = r'C:\Users\wliu\Documents\GitHub\data-analysis-examples\Python\LifelineChatVolByTime\jan_chats.csv'
 
 
 def trellis_plot_histogram(data):
@@ -25,10 +25,6 @@ def trellis_plot_histogram(data):
 
 if __name__ == '__main__':
 
-    ### Load data and peak
-    pd.set_option("display.width", 500)  # set width of display
-    pd.options.display.mpl_style = 'default'
-
     data = pd.read_csv(filepath_or_buffer=loc, sep=',')
 
     ### Format and Filter Data
@@ -38,8 +34,10 @@ if __name__ == '__main__':
     data = data.set_index('StartTime')  # Set Index
     data = data['20150101':'20150120']  # Filter daterange
 
-    print data.head()
-    print data.info()
+    #print data.head()
+    #ChatName, Queue, Account, Operator, Accepted, WaitTimeSeconds, PreChatSurveySkipped, TotalTimeInQ, CrisisCenterKey, count
+    #print data.info()
+
 
     """
     ### Resample
@@ -49,9 +47,12 @@ if __name__ == '__main__':
     y = df.Accepted
     """
 
-    ### Plotting
-    #trellis_plot_histogram(data)
+    # Setup plot
+    #plt.figure(figsize=(8,6), dpi=80)  # Create 8*6 inch figure
+    data.plot(kind='line', x=data.index, y='count')
 
+    plt.figure()
+    plt.show()
     #mydf = data[['WaitTimeSeconds', 'TotalTimeInQ', 'count']]
     #df = mydf.cumsum()
     #plt.figure()
@@ -66,9 +67,6 @@ if __name__ == '__main__':
     #df.plot()
 
     """
-
-
-
 
     ### Format Text
     plt.figure(figsize=(8,6), dpi=80)  # Create 8*6 inch figure
