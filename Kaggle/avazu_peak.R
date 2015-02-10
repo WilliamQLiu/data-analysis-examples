@@ -25,5 +25,3 @@ my_small_file <- read.csv(file="/Users/williamliu/Desktop/Kaggle_Avazu/small_tra
 View(my_small_file)  # peak at file, make sure everything is okay
 
 stat.desc(my_small_file)
-
-#format_data = factor(my_small_file, )
