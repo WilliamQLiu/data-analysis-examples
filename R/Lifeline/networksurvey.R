@@ -13,8 +13,8 @@ library(plyr)  # for renaming
 ### Load data locally from CSV
 #myfile <- read.csv(file="C:\\Users\\wliu\\Desktop\\LifelineSurvey\\survey_data.csv", sep=",", header=TRUE, stringsAsFactors=TRUE)
 myfile <- read.csv(file="/Users/williamliu/Dropbox/Lifeline/network_survey/survey_data.csv", header=TRUE)
-View(myfile)  # peak at file, make sure everything is okay
-View(myfile[,100:200])  # peak at file, make sure everything is okay
+#View(myfile)  # peak at file, make sure everything is okay
+#View(myfile[,100:200])  # peak at file, make sure everything is okay
 
 typeof(myfile)  # See what file type this field is
 
@@ -42,15 +42,20 @@ my_percent
 #write.table(my_percent, file='peek_percent.csv', sep=",", quote=TRUE)  # Write to file
 
 ### Plot with these colors
-my_graph <- ggplot(clean_data) + geom_bar(stat="bin", aes(x=ordered_value))
+my_graph <- ggplot(clean_data) + geom_bar(stat="bin", aes(x=ordered_value), fill="#C5E8C2")
 my_graph <- my_graph + xlab("Average Number of Calls per Month") + ylab("Number of Crisis Centers") +
-  ggtitle("Question 13") + 
+  ggtitle("Q13 - On average, how many calls per month do you receive on all your crisis center hotline(s) combined?") + 
   expand_limits(y=0)  # Force chart to go down to 0
-my_graph  # display graph
+#my_graph  # display graph
 
 # Try different themes
-my_graph <- my_graph + theme_fivethirtyeight()
-#my_graph <- my_graph + theme_hc()
+#my_graph <- my_graph + theme_fivethirtyeight() + scale_color_fivethirtyeight()  # Fivethirtyeight
+#my_graph <- my_graph + theme_tufte() # Edward Tufte
+my_graph <- my_graph + theme_hc() + scale_colour_hc()  # Highcharts
+#my_graph <- my_graph + theme_hc(bgcolor="darkunica") + scale_fill_hc("darkunica")  # Highcharts - Darkunica
+#my_graph <- my_graph + theme_few() + scale_colour_few()  # Stephen Few
+#my_graph <- my_graph + theme_economist() + scale_colour_economist()  # Economist
+my_graph
 
 # Formatting for legend
 #my_graph <- my_graph + theme(plot.title = element_text(size=18, face="bold")) + # title
@@ -60,7 +65,7 @@ my_graph <- my_graph + theme_fivethirtyeight()
 #  guides(colour = guide_legend(override.aes = list(size=7))) # legend appear larger
 #facet_wrap(~Year, nrow=1)  # split graphs by say Year
 
-my_graph  # Plot
+#my_graph  # Plot
 
 ### Question 22
 data <- myfile[, c("CrisisCenterKey", 
@@ -165,7 +170,7 @@ print(levels(ordered_value))  # "0 - 4%"      "5 - 10%"     "10 - 20%"    "20 - 
 my_freq <- table(ordered_value)  # Create table of frequencies for each categorical
 my_freq
 
-### Question 30
+### Question 30a
 data <- myfile[, c("CrisisCenterKey",
                    "Do.you.routinely.obtain.disposition.status.information.about.at.risk.crisis.hotline.callers.from.any.of.the.following.services.....Community.mental.health.center.or.outpatient.mental.health.clinic"
               )]  # Load Data
@@ -173,7 +178,7 @@ clean_data = melt(data, id=c("CrisisCenterKey"))  # Melt data so we can 'cast' i
 my_freq <- table(clean_data$value)  # Create table of frequencies for each categorical
 my_freq
 
-### Question 31
+### Question 30b
 data <- myfile[, c("CrisisCenterKey",
                    "Do.you.routinely.obtain.disposition.status.information.about.at.risk.crisis.hotline.callers.from.any.of.the.following.services.....Local.emergency.room"
               )]  # Load Data
@@ -181,7 +186,7 @@ clean_data = melt(data, id=c("CrisisCenterKey"))  # Melt data so we can 'cast' i
 my_freq <- table(clean_data$value)  # Create table of frequencies for each categorical
 my_freq
 
-### Question 32
+### Question 30c
 data <- myfile[, c("CrisisCenterKey",
                    "Do.you.routinely.obtain.disposition.status.information.about.at.risk.crisis.hotline.callers.from.any.of.the.following.services.....Mobile.crisis.team"
               )]  # Load Data
@@ -189,7 +194,7 @@ clean_data = melt(data, id=c("CrisisCenterKey"))  # Melt data so we can 'cast' i
 my_freq <- table(clean_data$value)  # Create table of frequencies for each categorical
 my_freq
 
-### Question 33
+### Question 30d
 data <- myfile[, c("CrisisCenterKey",
                    "Do.you.routinely.obtain.disposition.status.information.about.at.risk.crisis.hotline.callers.from.any.of.the.following.services.....Law.enforcement"
               )]  # Load Data
@@ -197,7 +202,7 @@ clean_data = melt(data, id=c("CrisisCenterKey"))  # Melt data so we can 'cast' i
 my_freq <- table(clean_data$value)  # Create table of frequencies for each categorical
 my_freq
 
-### Question 34
+### Question 30e
 data <- myfile[, c("CrisisCenterKey",
                    "Do.you.routinely.obtain.disposition.status.information.about.at.risk.crisis.hotline.callers.from.any.of.the.following.services.....Fire.and.rescue"
               )]  # Load Data
@@ -205,7 +210,7 @@ clean_data = melt(data, id=c("CrisisCenterKey"))  # Melt data so we can 'cast' i
 my_freq <- table(clean_data$value)  # Create table of frequencies for each categorical
 my_freq
 
-### Question 35
+### Question 30f
 data <- myfile[, c("CrisisCenterKey",
                    "Do.you.routinely.obtain.disposition.status.information.about.at.risk.crisis.hotline.callers.from.any.of.the.following.services.....Local.911"
                    )]  # Load Data
@@ -213,7 +218,7 @@ clean_data = melt(data, id=c("CrisisCenterKey"))  # Melt data so we can 'cast' i
 my_freq <- table(clean_data$value)  # Create table of frequencies for each categorical
 my_freq
 
-### Question 36
+### Question 30g
 data <- myfile[, c("CrisisCenterKey",
                    "Do.you.routinely.obtain.disposition.status.information.about.at.risk.crisis.hotline.callers.from.any.of.the.following.services.....Other.community.service"
                     )]  # Load Data
@@ -221,7 +226,7 @@ clean_data = melt(data, id=c("CrisisCenterKey"))  # Melt data so we can 'cast' i
 my_freq <- table(clean_data$value)  # Create table of frequencies for each categorical
 my_freq
 
-### Question
+### Question 31
 data <- myfile[, c("CrisisCenterKey",
                    "Does.your.crisis.center.provide.follow.up.services.to.callers."
                     )]  # Load Data
@@ -229,6 +234,7 @@ clean_data = melt(data, id=c("CrisisCenterKey"))  # Melt data so we can 'cast' i
 my_freq <- table(clean_data$value)  # Create table of frequencies for each categorical
 my_freq
 
+### Question 32
 data <- myfile[, c("CrisisCenterKey",
                    "If..Yes...how.do.you.support.them."
                     )]  # Load Data
@@ -236,11 +242,83 @@ clean_data = melt(data, id=c("CrisisCenterKey"))  # Melt data so we can 'cast' i
 my_freq <- table(clean_data$value)  # Create table of frequencies for each categorical
 my_freq
 
-
-### Question
+### Question 34
 data <- myfile[, c("CrisisCenterKey",
                    "Does.your.crisis.center.use.volunteers.as.telephone.workers.or.supervisors.on.your.crisis.hotlines."
                     )]  # Load Data
 clean_data = melt(data, id=c("CrisisCenterKey"))  # Melt data so we can 'cast' it into any shape
 my_freq <- table(clean_data$value)  # Create table of frequencies for each categorical
 my_freq
+
+### Question 35a
+data <- myfile[, c("CrisisCenterKey",
+                   "If..Yes...please.list.the.number.of.full.time.staff.and.the.number.of.part.time.staff....Number.of.full.time.volunteer.staff."
+)]  # Load Data
+clean_data = melt(data, id=c("CrisisCenterKey"))  # Melt data so we can 'cast' it into any shape
+my_freq <- table(clean_data$value)  # Create table of frequencies for each categorical
+my_freq
+
+### Question 35b
+data <- myfile[, c("CrisisCenterKey",
+                   "If..Yes...please.list.the.number.of.full.time.staff.and.the.number.of.part.time.staff....Number.of.part.time.volunteer.staff."
+)]  # Load Data
+clean_data = melt(data, id=c("CrisisCenterKey"))  # Melt data so we can 'cast' it into any shape
+my_freq <- table(clean_data$value)  # Create table of frequencies for each categorical
+my_freq
+
+### Question 36
+data <- myfile[, c("CrisisCenterKey",
+                   "Does.your.center.have.any.paid.staff.who.are.telephone.workers.or.supervisors.on.your.crisis.hotline.s.."
+)]  # Load Data
+clean_data = melt(data, id=c("CrisisCenterKey"))  # Melt data so we can 'cast' it into any shape
+my_freq <- table(clean_data$value)  # Create table of frequencies for each categorical
+my_freq
+
+### Question 37a
+data <- myfile[, c("CrisisCenterKey",
+                   "If..Yes...please.list.the.number.of.full.time.staff.and.the.number.of.part.time.staff....Number.of.full.time.paid.staff."
+)]  # Load Data
+clean_data = melt(data, id=c("CrisisCenterKey"))  # Melt data so we can 'cast' it into any shape
+my_freq <- table(clean_data$value)  # Create table of frequencies for each categorical
+my_freq
+
+### Question 37b
+data <- myfile[, c("CrisisCenterKey",
+                   "If..Yes...please.list.the.number.of.full.time.staff.and.the.number.of.part.time.staff....Number.of.part.time.paid.staff."
+)]  # Load Data
+clean_data = melt(data, id=c("CrisisCenterKey"))  # Melt data so we can 'cast' it into any shape
+my_freq <- table(clean_data$value)  # Create table of frequencies for each categorical
+my_freq
+
+### Question 38a
+data <- myfile[, c("CrisisCenterKey",
+                   "Approximately.what.percentage.of.your.hotline.staff.answers.calls.from.a.location.that.is.remote.to.your.center..e.g...from.their.home..etc......."
+)]  # Load Data
+clean_data = melt(data, id=c("CrisisCenterKey"))  # Melt data so we can 'cast' it into any shape
+my_freq <- table(clean_data$value)  # Create table of frequencies for each categorical
+my_freq
+
+### Question 39a
+data <- myfile[, c("CrisisCenterKey",
+                   "For.hotline.staff.volunteers.who.answer.crisis.calls..please.indicate.the.approximate.percentage.of.each.mental.health.related.degree......Has.a.degree.in.mental.health.or.related.field..e.g...BA..MA..PhD..etc...."
+)]  # Load Data
+clean_data = melt(data, id=c("CrisisCenterKey"))  # Melt data so we can 'cast' it into any shape
+my_freq <- table(clean_data$value)  # Create table of frequencies for each categorical
+my_freq
+
+### Question 39b
+data <- myfile[, c("CrisisCenterKey",
+                   "For.hotline.staff.volunteers.who.answer.crisis.calls..please.indicate.the.approximate.percentage.of.each.mental.health.related.degree......No.degree."
+)]  # Load Data
+clean_data = melt(data, id=c("CrisisCenterKey"))  # Melt data so we can 'cast' it into any shape
+my_freq <- table(clean_data$value)  # Create table of frequencies for each categorical
+my_freq
+
+### Question 40
+data <- myfile[, c("CrisisCenterKey",
+                   "Does.your.center.have.postvention.protocols.in.place.for.internal.staff.volunteers.and.or.the.community."
+)]  # Load Data
+clean_data = melt(data, id=c("CrisisCenterKey"))  # Melt data so we can 'cast' it into any shape
+my_freq <- table(clean_data$value)  # Create table of frequencies for each categorical
+my_freq
+
