@@ -10,7 +10,8 @@ library(ggthemes)  # for plotting themes
 library(plyr)  # for renaming
 
 ### Load data locally from CSV
-myfile <- read.csv(file="C:\\Users\\wliu\\Documents\\GitHub\\data-analysis-examples\\R\\SAMHSA_Snapshot\\summary.csv", sep=",", header=TRUE, stringsAsFactors=FALSE)
+#myfile <- read.csv(file="C:\\Users\\wliu\\Documents\\GitHub\\data-analysis-examples\\R\\SAMHSA_Snapshot\\summary.csv", sep=",", header=TRUE, stringsAsFactors=FALSE)
+myfile <- read.csv(file="/Users/williamliu/GitHub/data-analysis-examples/R/SAMHSA_Snapshot/summary.csv", sep=",", header=TRUE, stringsAsFactors=FALSE)
 #View(myfile)  # peak at file, make sure everything is okay
 
 ### Reshape the data, first by filtering data we want, renaming, then by melt
