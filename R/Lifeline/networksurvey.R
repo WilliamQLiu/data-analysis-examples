@@ -30,6 +30,7 @@ typeof(clean_data)
 ### Reorder to correct order
 print(levels(clean_data$value))  # Before ordering  "0 - 100"        "1,001 - 5,000"  "100 - 500"      "10001"          "5,001 - 10,000" "501 - 1,000" 
 ordered_value = factor(clean_data$value, levels(clean_data$value)[c(1,3,6,2,5,4)])  # Reorder the categorical order
+ordered_value = revalue(ordered_value, c("0 - 100"="0 - 99", "10001"="10001+"))  # Rename categories
 print(levels(ordered_value))  # "0 - 100"        "1,001 - 5,000"  "100 - 500"      "10001"          "5,001 - 10,000" "501 - 1,000"  # After ordering
 #qplot(ordered_value)  # Do a quick plot to double check order is correct
 
@@ -42,16 +43,21 @@ my_percent
 #write.table(my_percent, file='peek_percent.csv', sep=",", quote=TRUE)  # Write to file
 
 ### Plot with these colors
-my_graph <- ggplot(clean_data) + geom_bar(stat="bin", aes(x=ordered_value), fill="#C5E8C2")
-my_graph <- my_graph + xlab("Average Number of Calls per Month") + ylab("Number of Crisis Centers") +
+my_graph <- ggplot(clean_data) + geom_bar(stat="bin", aes(x=ordered_value, y=(..count..)/sum(..count..)), fill="#C5E8C2") + scale_y_continuous(labels=percent)
+my_graph <- my_graph + xlab("Average Number of Calls per Month") + ylab("Percent of Crisis Centers") +
   ggtitle("Q13 - On average, how many calls per month do you receive on all your crisis center hotline(s) combined?") + 
   expand_limits(y=0)  # Force chart to go down to 0
-#my_graph  # display graph
+my_graph  # display graph
 
 # Try different themes
 #my_graph <- my_graph + theme_fivethirtyeight() + scale_color_fivethirtyeight()  # Fivethirtyeight
 #my_graph <- my_graph + theme_tufte() # Edward Tufte
-my_graph <- my_graph + theme_hc() + scale_colour_hc()  # Highcharts
+my_graph <- my_graph + theme_hc() + scale_colour_hc() + # Highcharts
+  theme(axis.text.x=element_text(size=12)) +  # X text labels
+  theme(axis.text.y=element_text(size=12)) +  # Y text labels
+  theme(axis.title.x=element_text(size=14, face="bold")) +  # X title labels
+  theme(axis.title.y=element_text(size=14, face="bold")) +  # Y title labels
+  theme(axis.title = element_text(size=20))
 #my_graph <- my_graph + theme_hc(bgcolor="darkunica") + scale_fill_hc("darkunica")  # Highcharts - Darkunica
 #my_graph <- my_graph + theme_few() + scale_colour_few()  # Stephen Few
 #my_graph <- my_graph + theme_economist() + scale_colour_economist()  # Economist
