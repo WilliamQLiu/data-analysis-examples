@@ -2,18 +2,22 @@ install.packages("ggplot2")
 install.packages("ggthemes")
 install.packages("reshape")
 install.packages("plyr")
+install.packages("Rcmdr", dependencies=TRUE)
 
+library(Rcmdr)  # R Commander, graphical analysis
 library(reshape)
 library(ggplot2)  # for plotting
 library(scales)  # for formatting x and y labels
 library(ggthemes)  # for plotting themes
 library(plyr)  # for renaming
+library(stringr)  # for string wrap on text
+
 
 
 ### Load data locally from CSV
 #myfile <- read.csv(file="C:\\Users\\wliu\\Desktop\\LifelineSurvey\\survey_data.csv", sep=",", header=TRUE, stringsAsFactors=TRUE)
 myfile <- read.csv(file="/Users/williamliu/Dropbox/Lifeline/network_survey/survey_data.csv", header=TRUE)
-#View(myfile)  # peak at file, make sure everything is okay
+View(myfile)  # peak at file, make sure everything is okay
 #View(myfile[,100:200])  # peak at file, make sure everything is okay
 
 typeof(myfile)  # See what file type this field is
@@ -30,7 +34,7 @@ typeof(clean_data)
 ### Reorder to correct order
 print(levels(clean_data$value))  # Before ordering  "0 - 100"        "1,001 - 5,000"  "100 - 500"      "10001"          "5,001 - 10,000" "501 - 1,000" 
 ordered_value = factor(clean_data$value, levels(clean_data$value)[c(1,3,6,2,5,4)])  # Reorder the categorical order
-ordered_value = revalue(ordered_value, c("0 - 100"="0 - 99", "10001"="10001+"))  # Rename categories
+ordered_value = revalue(ordered_value, c("0 - 100"="0 - 99", "10001"="10,001+"))  # Rename categories
 print(levels(ordered_value))  # "0 - 100"        "1,001 - 5,000"  "100 - 500"      "10001"          "5,001 - 10,000" "501 - 1,000"  # After ordering
 #qplot(ordered_value)  # Do a quick plot to double check order is correct
 
@@ -58,6 +62,7 @@ my_graph <- my_graph + theme_hc() + scale_colour_hc() + # Highcharts
   theme(axis.title.x=element_text(size=14, face="bold")) +  # X title labels
   theme(axis.title.y=element_text(size=14, face="bold")) +  # Y title labels
   theme(axis.title = element_text(size=20))
+
 #my_graph <- my_graph + theme_hc(bgcolor="darkunica") + scale_fill_hc("darkunica")  # Highcharts - Darkunica
 #my_graph <- my_graph + theme_few() + scale_colour_few()  # Stephen Few
 #my_graph <- my_graph + theme_economist() + scale_colour_economist()  # Economist
@@ -72,6 +77,378 @@ my_graph
 #facet_wrap(~Year, nrow=1)  # split graphs by say Year
 
 #my_graph  # Plot
+
+### End Test Question
+
+### Question 6
+data <- myfile[, c("CrisisCenterKey", 
+                   "What.is.the.approximate.total.funding.devoted.specifically.to.support.your.crisis.center.hotline.operations.")]  # Load Data
+clean_data = melt(data, id=c("CrisisCenterKey"))  # Melt data so we can 'cast' it into any shape
+
+### Reorder to correct order
+ordered_value = factor(clean_data$value, levels(clean_data$value)[c(1,2,3,4,5,6,7)])  # Reorder the categorical order
+ordered_value = revalue(ordered_value, c("1000000"="1,000,000+"))  # Rename categories
+
+### Plot with these colors
+my_graph <- ggplot(clean_data) + geom_bar(stat="bin", aes(x=ordered_value, y=(..count..)/sum(..count..)), fill="#C5E8C2") + scale_y_continuous(labels=percent)
+my_graph <- my_graph + xlab("Approximate Total Funding (for Crisis Center Hotline Operations)") + ylab("Percent of Crisis Centers") +
+  ggtitle("Q6 - What is the approximate total funding devoted specifically to support \nyour crisis center hotline operations?  (n=134)") + 
+  expand_limits(y=0)  # Force chart to go down to 0
+my_graph <- my_graph + theme_hc() + scale_colour_hc() + # Highcharts
+  theme(axis.text.x=element_text(size=12)) +  # X text labels
+  theme(axis.text.y=element_text(size=12)) +  # Y text labels
+  theme(axis.title.x=element_text(size=14, face="bold")) +  # X title labels
+  theme(axis.title.y=element_text(size=14, face="bold")) +  # Y title labels
+  theme(axis.title = element_text(size=20)) +  # Title
+  scale_x_discrete(labels = function(x) str_wrap(x, width=14))  # Wrap x label text for being too long
+my_graph
+
+
+### Question 7 - Needs Data Cleaning
+
+### Question 8
+data <- myfile[, c("CrisisCenterKey", 
+                   "In.the.last.fiscal.year..July.1..2013.to.June.30..2014...have.you.experienced.changes.in.funding.")]  # Load Data
+clean_data = melt(data, id=c("CrisisCenterKey"))  # Melt data so we can 'cast' it into any shape
+### Reorder to correct order
+print(levels(clean_data$value))  # "Decrease"  "Increase"  "No Change"
+ordered_value = factor(clean_data$value, levels(clean_data$value)[c(1,3,2)])  # Reorder the categorical order
+
+### Plot with these colors
+my_graph <- ggplot(clean_data) + geom_bar(stat="bin", aes(x=ordered_value, y=(..count..)/sum(..count..)), fill="#C5E8C2") + scale_y_continuous(labels=percent)
+my_graph <- my_graph + xlab("Change in Funding Levels") + ylab("Percent of Crisis Centers") +
+  ggtitle("Q8 - Have you experienced changes in funding level during the past 12 months?  (n=134)") + 
+  expand_limits(y=0)  # Force chart to go down to 0
+my_graph <- my_graph + theme_hc() + scale_colour_hc() + # Highcharts
+  theme(axis.text.x=element_text(size=12)) +  # X text labels
+  theme(axis.text.y=element_text(size=12)) +  # Y text labels
+  theme(axis.title.x=element_text(size=14, face="bold")) +  # X title labels
+  theme(axis.title.y=element_text(size=14, face="bold")) +  # Y title labels
+  theme(axis.title = element_text(size=20)) +  # Title
+  scale_x_discrete(labels = function(x) str_wrap(x, width=14))  # Wrap x label text for being too long
+my_graph
+
+### Question 9 - Check all that apply
+### Question 10 - Check all that apply
+
+### Question 14
+data <- myfile[, c("CrisisCenterKey", 
+                   "In.the.last.fiscal.year..July.1..2013.to.June.30..2014...please.check.which.best.describes.your.center.s.call.volume.trends.")]  # Load Data
+clean_data = melt(data, id=c("CrisisCenterKey"))  # Melt data so we can 'cast' it into any shape
+### Reorder to correct order
+print(levels(clean_data$value))  # "Decrease"  "Increase"  "No Change"
+ordered_value = factor(clean_data$value, levels(clean_data$value)[c(1,7,3,4,5,6,2)])  # Reorder the categorical order
+
+### Plot with these colors
+my_graph <- ggplot(clean_data) + geom_bar(stat="bin", aes(x=ordered_value, y=(..count..)/sum(..count..)), fill="#C5E8C2") + scale_y_continuous(labels=percent)
+my_graph <- my_graph + xlab("Call Volume Trends") + ylab("Percent of Crisis Centers") +
+  ggtitle("Q14 - In the last Fiscal Year (7/2013 - 6/2014), \n what best describes your center's call volume trends?  (n=134)") + 
+  expand_limits(y=0)  # Force chart to go down to 0
+my_graph <- my_graph + theme_hc() + scale_colour_hc() + # Highcharts
+  theme(axis.text.x=element_text(size=12)) +  # X text labels
+  theme(axis.text.y=element_text(size=12)) +  # Y text labels
+  theme(axis.title.x=element_text(size=14, face="bold")) +  # X title labels
+  theme(axis.title.y=element_text(size=14, face="bold")) +  # Y title labels
+  theme(axis.title = element_text(size=20)) +  # Title
+  scale_x_discrete(labels = function(x) str_wrap(x, width=14))  # Wrap x label text for being too long
+my_graph
+
+
+### Question 15 - Numerical
+data <- myfile[, c("CrisisCenterKey", 
+                   "Approximately.what.percentage.of.your.center.s.calls.are.Lifeline.calls......")]  # Load Data
+clean_data = melt(data, id=c("CrisisCenterKey"))  # Melt data so we can 'cast' it into any shape
+### Reorder to correct order
+#print(levels(clean_data$value))  # "Decrease"  "Increase"  "No Change"
+#ordered_value = factor(clean_data$value, levels(clean_data$value)[c(1,7,3,4,5,6,2)])  # Reorder the categorical order
+
+### Plot with these colors
+#my_graph <- ggplot(clean_data, aes(x=value)) + geom_histogram()  #(aes(x=clean_data, y=(..count..)/sum(..count..)), fill="#C5E8C2") + scale_y_continuous(labels=percent)
+my_graph <- ggplot(clean_data, aes(x=value, y=(..count..)/sum(..count..)), fill="#C5E8C2") + geom_histogram(fill="#C5E8C2", binwidth=1) + scale_y_continuous(labels=percent) #+ geom_density()
+my_graph <- my_graph + xlab("Lifeline Specific Calls") + ylab("Percent of Crisis Centers") +
+  ggtitle("Q15 - Approximately what percent of your center's calls are Lifeline calls?  (n=133)") + 
+  expand_limits(y=0)  # Force chart to go down to 0
+#my_graph
+my_graph <- my_graph + theme_hc() + scale_colour_hc() + # Highcharts
+  theme(axis.text.x=element_text(size=14)) +  # X text labels
+  #theme(axis.text.x=element_text(size=8, angle=45)) +  # X text labels
+  #theme(axis.ticks.x=2) + 
+  theme(axis.text.y=element_text(size=14)) +  # Y text labels
+  theme(axis.title.x=element_text(size=14, face="bold")) +  # X title labels
+  theme(axis.title.y=element_text(size=14, face="bold")) +  # Y title labels
+  theme(axis.title = element_text(size=20))
+  #+ scale_x_discrete(labels = function(x) str_wrap(x, width=14))  # Wrap x label text for being too long
+my_graph
+
+
+### Question 16 - Categorical and Numerical, requires data cleaning
+
+### Question 22 - Check all
+
+### Question 23 - Check all
+
+### Question 24 - Check all
+
+### Question 25 - Check all
+
+### Question 26 - Check all
+
+### Question 27
+data <- myfile[, c("CrisisCenterKey", 
+                   "What.percentage.of.Lifeline.calls.require.that.rescue.be.dispatched.")]  # Load Data
+clean_data = melt(data, id=c("CrisisCenterKey"))  # Melt data so we can 'cast' it into any shape
+### Reorder to correct order
+print(levels(clean_data$value))  # "0 - 2%"   "11 - 15%" "16% +"    "3 - 6%"   "7 - 10%"
+ordered_value = factor(clean_data$value, levels(clean_data$value)[c(1,4,5,2,3)])  # Reorder the categorical order
+print(levels(ordered_value))  # "0 - 2%"   "11 - 15%" "16% +"    "3 - 6%"   "7 - 10%"
+
+### Plot with these colors
+my_graph <- ggplot(clean_data) + geom_bar(stat="bin", aes(x=ordered_value, y=(..count..)/sum(..count..)), fill="#C5E8C2") + scale_y_continuous(labels=percent)
+my_graph <- my_graph + xlab("Percentage of Lifeline Calls require rescue to be dispatched") + ylab("Percent of Crisis Centers") +
+  ggtitle("Q27 - What percentage of Lifeline calls require rescue to be dispatched?  (n=134)") + 
+  expand_limits(y=0)  # Force chart to go down to 0
+my_graph <- my_graph + theme_hc() + scale_colour_hc() + # Highcharts
+  theme(axis.text.x=element_text(size=12)) +  # X text labels
+  theme(axis.text.y=element_text(size=12)) +  # Y text labels
+  theme(axis.title.x=element_text(size=14, face="bold")) +  # X title labels
+  theme(axis.title.y=element_text(size=14, face="bold")) +  # Y title labels
+  theme(axis.title = element_text(size=20)) +  # Title
+  scale_x_discrete(labels = function(x) str_wrap(x, width=14))  # Wrap x label text for being too long
+my_graph
+
+### Question 31
+data <- myfile[, c("CrisisCenterKey", 
+                   "Does.your.crisis.center.provide.follow.up.services.to.callers."
+                   )]  # Load Data
+clean_data = melt(data, id=c("CrisisCenterKey"))  # Melt data so we can 'cast' it into any shape
+
+### Plot with these colors
+my_graph <- ggplot(clean_data) + geom_bar(stat="bin", aes(x=value, y=(..count..)/sum(..count..)), fill="#C5E8C2") + scale_y_continuous(labels=percent)
+my_graph <- my_graph + xlab("Provide follow up services to callers?") + ylab("Percent of Crisis Centers") +
+  ggtitle("Q31 - Does your crisis center provide follow up services to callers?  (n=134)") + 
+  expand_limits(y=0)  # Force chart to go down to 0
+my_graph <- my_graph + theme_hc() + scale_colour_hc() + # Highcharts
+  theme(axis.text.x=element_text(size=12)) +  # X text labels
+  theme(axis.text.y=element_text(size=12)) +  # Y text labels
+  theme(axis.title.x=element_text(size=14, face="bold")) +  # X title labels
+  theme(axis.title.y=element_text(size=14, face="bold")) +  # Y title labels
+  theme(axis.title = element_text(size=20)) +  # Title
+  scale_x_discrete(labels = function(x) str_wrap(x, width=14))  # Wrap x label text for being too long
+my_graph
+
+
+### Question 32
+data <- myfile[, c("CrisisCenterKey", 
+                   "If..Yes...how.do.you.support.them."
+)]  # Load Data
+clean_data = melt(data, id=c("CrisisCenterKey"))  # Melt data so we can 'cast' it into any shape
+
+print(levels(clean_data$value))
+ordered_value = factor(clean_data$value, exclude=is.na(clean_data$value), levels(clean_data$value)[c(2,3,4)])  # Reorder the categorical order#ordered_value = revalue(ordered_value, c(""="N/A"))  # Rename categories
+print(levels(ordered_value))
+#qplot(ordered_value)  # Do a quick plot to double check order is correct
+
+### Plot with these colors
+my_graph <- ggplot(clean_data) + geom_bar(stat="bin", aes(x=ordered_value, y=(..count..)/sum(..count..)), fill="#C5E8C2") + scale_y_continuous(labels=percent)
+my_graph <- my_graph + xlab("How are follow up services funded?") + ylab("Percent of Crisis Centers") +
+  ggtitle("Q32 - If there are follow up services, how are they funded?  (n=121)") + 
+  expand_limits(y=0)  # Force chart to go down to 0
+my_graph <- my_graph + theme_hc() + scale_colour_hc() + # Highcharts
+  theme(axis.text.x=element_text(size=12)) +  # X text labels
+  theme(axis.text.y=element_text(size=12)) +  # Y text labels
+  theme(axis.title.x=element_text(size=14, face="bold")) +  # X title labels
+  theme(axis.title.y=element_text(size=14, face="bold")) +  # Y title labels
+  theme(axis.title = element_text(size=20)) +  # Title
+  scale_x_discrete(labels = function(x) str_wrap(x, width=25))  # Wrap x label text for being too long
+my_graph
+
+
+### Question 34
+data <- myfile[, c("CrisisCenterKey", 
+                   "Does.your.crisis.center.use.volunteers.as.telephone.workers.or.supervisors.on.your.crisis.hotlines."
+)]  # Load Data
+clean_data = melt(data, id=c("CrisisCenterKey"))  # Melt data so we can 'cast' it into any shape
+
+### Plot with these colors
+my_graph <- ggplot(clean_data) + geom_bar(stat="bin", aes(x=value, y=(..count..)/sum(..count..)), fill="#C5E8C2") + scale_y_continuous(labels=percent)
+my_graph <- my_graph + xlab("Do you have volunteers working on the crisis line?") + ylab("Percent of Crisis Centers") +
+  ggtitle("Q34 - Are volunteers working on the crisis line?  (n=134)") + 
+  expand_limits(y=0)  # Force chart to go down to 0
+my_graph <- my_graph + theme_hc() + scale_colour_hc() + # Highcharts
+  theme(axis.text.x=element_text(size=12)) +  # X text labels
+  theme(axis.text.y=element_text(size=12)) +  # Y text labels
+  theme(axis.title.x=element_text(size=14, face="bold")) +  # X title labels
+  theme(axis.title.y=element_text(size=14, face="bold")) +  # Y title labels
+  theme(axis.title = element_text(size=20)) +  # Title
+  scale_x_discrete(labels = function(x) str_wrap(x, width=14))  # Wrap x label text for being too long
+my_graph
+
+
+### Question 36
+data <- myfile[, c("CrisisCenterKey", 
+                   "Does.your.center.have.any.paid.staff.who.are.telephone.workers.or.supervisors.on.your.crisis.hotline.s.."
+)]  # Load Data
+clean_data = melt(data, id=c("CrisisCenterKey"))  # Melt data so we can 'cast' it into any shape
+
+### Plot with these colors
+my_graph <- ggplot(clean_data) + geom_bar(stat="bin", aes(x=value, y=(..count..)/sum(..count..)), fill="#C5E8C2") + scale_y_continuous(labels=percent)
+my_graph <- my_graph + xlab("Do you have paid staff working on the crisis line?") + ylab("Percent of Crisis Centers") +
+  ggtitle("Q36 - Are paid staff working on the crisis line?  (n=134)") + 
+  expand_limits(y=0)  # Force chart to go down to 0
+my_graph <- my_graph + theme_hc() + scale_colour_hc() + # Highcharts
+  theme(axis.text.x=element_text(size=12)) +  # X text labels
+  theme(axis.text.y=element_text(size=12)) +  # Y text labels
+  theme(axis.title.x=element_text(size=14, face="bold")) +  # X title labels
+  theme(axis.title.y=element_text(size=14, face="bold")) +  # Y title labels
+  theme(axis.title = element_text(size=20)) +  # Title
+  scale_x_discrete(labels = function(x) str_wrap(x, width=14))  # Wrap x label text for being too long
+my_graph
+
+### Question 40
+data <- myfile[, c("CrisisCenterKey", 
+                   "Does.your.center.have.postvention.protocols.in.place.for.internal.staff.volunteers.and.or.the.community."
+)]  # Load Data
+clean_data = melt(data, id=c("CrisisCenterKey"))  # Melt data so we can 'cast' it into any shape
+
+### Plot with these colors
+my_graph <- ggplot(clean_data) + geom_bar(stat="bin", aes(x=value, y=(..count..)/sum(..count..)), fill="#C5E8C2") + scale_y_continuous(labels=percent)
+my_graph <- my_graph + xlab("Do you have postvention protocols in place?") + ylab("Percent of Crisis Centers") +
+  ggtitle("Q40 - Does your center have postvention protocols in place for \ninternal staff/volunteers and/or the community?  (n=134)") + 
+  expand_limits(y=0)  # Force chart to go down to 0
+my_graph <- my_graph + theme_hc() + scale_colour_hc() + # Highcharts
+  theme(axis.text.x=element_text(size=12)) +  # X text labels
+  theme(axis.text.y=element_text(size=12)) +  # Y text labels
+  theme(axis.title.x=element_text(size=14, face="bold")) +  # X title labels
+  theme(axis.title.y=element_text(size=14, face="bold")) +  # Y title labels
+  theme(axis.title = element_text(size=20)) +  # Title
+  scale_x_discrete(labels = function(x) str_wrap(x, width=14))  # Wrap x label text for being too long
+my_graph
+
+
+### Question 41 - Numerical
+data <- myfile[, c("CrisisCenterKey", 
+                   "Please.specify.the.total.number.of.hotline.clinical.training.hours.required.before.a.hotline.staff.volunteer.can.independently.answer.calls.on.your.crisis.center.hotline.s.....Open.Ended.Response")]  # Load Data
+clean_data = melt(data, id=c("CrisisCenterKey"))  # Melt data so we can 'cast' it into any shape
+
+### Plot with these colors
+my_graph <- ggplot(clean_data, aes(x=value, y=(..count..)/sum(..count..)), fill="#C5E8C2") + geom_histogram(fill="#C5E8C2", binwidth=5) + scale_y_continuous(labels=percent) + geom_density()
+my_graph <- my_graph + xlab("Clinical Training Hours before independently answering calls") + ylab("Percent of Crisis Centers") +
+  ggtitle("Q41 - Please specify the total number of hotline/clinical training hours required before \na hotline staff/volunteer can independently answer calls on your crisis center hotline(s)  (n=134)") + 
+  expand_limits(y=0)  # Force chart to go down to 0
+#my_graph
+my_graph <- my_graph + theme_hc() + scale_colour_hc() + # Highcharts
+  theme(axis.text.x=element_text(size=14)) +  # X text labels
+  #theme(axis.text.x=element_text(size=8, angle=45)) +  # X text labels
+  #theme(axis.ticks.x=2) + 
+  theme(axis.text.y=element_text(size=14)) +  # Y text labels
+  theme(axis.title.x=element_text(size=14, face="bold")) +  # X title labels
+  theme(axis.title.y=element_text(size=14, face="bold")) +  # Y title labels
+  theme(axis.title = element_text(size=20))
+#+ scale_x_discrete(labels = function(x) str_wrap(x, width=14))  # Wrap x label text for being too long
+my_graph
+
+### Question 42 - Numerical
+data <- myfile[, c("CrisisCenterKey", 
+                   "Of.the.total.number.of.training.hours.listed.above..how.many.hours.specifically.address.suicide.prevention....Open.Ended.Response")]  # Load Data
+clean_data = melt(data, id=c("CrisisCenterKey"))  # Melt data so we can 'cast' it into any shape
+
+### Plot with these colors
+my_graph <- ggplot(clean_data, aes(x=value, y=(..count..)/sum(..count..)), fill="#C5E8C2") + geom_histogram(fill="#C5E8C2", binwidth=1) + scale_y_continuous(labels=percent) + geom_density()
+my_graph <- my_graph + xlab("Training Hours (Suicide specific) before independently answering calls") + ylab("Percent of Crisis Centers") +
+  ggtitle("Q42 - Please specify the total number of hotline/clinical training hours (suicide specific) required \n before a hotline staff/volunteer can independently answer calls on a hotline(s)  (n=134)") + 
+  expand_limits(y=0)  # Force chart to go down to 0
+#my_graph
+my_graph <- my_graph + theme_hc() + scale_colour_hc() + # Highcharts
+  theme(axis.text.x=element_text(size=14)) +  # X text labels
+  #theme(axis.text.x=element_text(size=8, angle=45)) +  # X text labels
+  #theme(axis.ticks.x=2) + 
+  theme(axis.text.y=element_text(size=14)) +  # Y text labels
+  theme(axis.title.x=element_text(size=14, face="bold")) +  # X title labels
+  theme(axis.title.y=element_text(size=14, face="bold")) +  # Y title labels
+  theme(axis.title = element_text(size=20))
+#+ scale_x_discrete(labels = function(x) str_wrap(x, width=14))  # Wrap x label text for being too long
+my_graph
+
+
+### Question 48 - Categorical
+data <- myfile[, c("CrisisCenterKey", 
+                   "How.often.are.hotline.staff.volunteers.provided.feedback.based.on.monitoring.results."
+)]  # Load Data
+clean_data = melt(data, id=c("CrisisCenterKey"))  # Melt data so we can 'cast' it into any shape
+
+print(levels(clean_data$value))
+ordered_value = factor(clean_data$value, levels(clean_data$value)[c(1,3,5,6,4,2)])  # Reorder the categorical order#ordered_value = revalue(ordered_value, c(""="N/A"))  # Rename categories
+print(levels(ordered_value))
+
+### Plot with these colors
+my_graph <- ggplot(clean_data) + geom_bar(stat="bin", aes(x=ordered_value, y=(..count..)/sum(..count..)), fill="#C5E8C2") + scale_y_continuous(labels=percent)
+my_graph <- my_graph + xlab("How often is monitoring results feedback provided?") + ylab("Percent of Crisis Centers") +
+  ggtitle("Q48 - How often are hotline staff/volunteers provided feedback based on monitoring results?  (n=134)") + 
+  expand_limits(y=0)  # Force chart to go down to 0
+my_graph <- my_graph + theme_hc() + scale_colour_hc() + # Highcharts
+  theme(axis.text.x=element_text(size=12)) +  # X text labels
+  theme(axis.text.y=element_text(size=12)) +  # Y text labels
+  theme(axis.title.x=element_text(size=14, face="bold")) +  # X title labels
+  theme(axis.title.y=element_text(size=14, face="bold")) +  # Y title labels
+  theme(axis.title = element_text(size=20)) +  # Title
+  scale_x_discrete(labels = function(x) str_wrap(x, width=14))  # Wrap x label text for being too long
+my_graph
+
+### Question 52 - Check all
+
+### Question 54 - Check all
+
+### Question 55
+data <- myfile[, c("CrisisCenterKey", 
+                   "How.active.is.your.crisis.center.on.Social.Media."
+)]  # Load Data
+clean_data = melt(data, id=c("CrisisCenterKey"))  # Melt data so we can 'cast' it into any shape
+print(levels(clean_data$value))
+ordered_value = factor(clean_data$value, levels(clean_data$value)[c(3,1,2,4)])  # Reorder the categorical order#ordered_value = revalue(ordered_value, c(""="N/A"))  # Rename categories
+print(levels(ordered_value))
+
+### Plot with these colors
+my_graph <- ggplot(clean_data) + geom_bar(stat="bin", aes(x=ordered_value, y=(..count..)/sum(..count..)), fill="#C5E8C2") + scale_y_continuous(labels=percent)
+my_graph <- my_graph + xlab("How active on Social Media") + ylab("Percent of Crisis Centers") +
+  ggtitle("Q55 - How active is your crisis center on Social Media?  (n=134)") + 
+  expand_limits(y=0)  # Force chart to go down to 0
+my_graph <- my_graph + theme_hc() + scale_colour_hc() + # Highcharts
+  theme(axis.text.x=element_text(size=12)) +  # X text labels
+  theme(axis.text.y=element_text(size=12)) +  # Y text labels
+  theme(axis.title.x=element_text(size=14, face="bold")) +  # X title labels
+  theme(axis.title.y=element_text(size=14, face="bold")) +  # Y title labels
+  theme(axis.title = element_text(size=20)) +  # Title
+  scale_x_discrete(labels = function(x) str_wrap(x, width=14))  # Wrap x label text for being too long
+my_graph
+
+
+### Question 57
+data <- myfile[, c("CrisisCenterKey", 
+                   "How.strong.is.your.relationship.with.your.local.VA.Suicide.Prevention.Coordinator."
+)]  # Load Data
+clean_data = melt(data, id=c("CrisisCenterKey"))  # Melt data so we can 'cast' it into any shape
+print(levels(clean_data$value))
+ordered_value = factor(clean_data$value, levels(clean_data$value)[c(2,5,1,3,4)])  # Reorder the categorical order#ordered_value = revalue(ordered_value, c(""="N/A"))  # Rename categories
+print(levels(ordered_value))
+
+### Plot with these colors
+my_graph <- ggplot(clean_data) + geom_bar(stat="bin", aes(x=ordered_value, y=(..count..)/sum(..count..)), fill="#C5E8C2") + scale_y_continuous(labels=percent)
+my_graph <- my_graph + xlab("Relationship with VA Suicide Prevention Coordinator") + ylab("Percent of Crisis Centers") +
+  ggtitle("Q57 - How strong is your relationship with your local VA Suicide Prevention Coordinator?  (n=134)") + 
+  expand_limits(y=0)  # Force chart to go down to 0
+my_graph <- my_graph + theme_hc() + scale_colour_hc() + # Highcharts
+  theme(axis.text.x=element_text(size=12)) +  # X text labels
+  theme(axis.text.y=element_text(size=12)) +  # Y text labels
+  theme(axis.title.x=element_text(size=14, face="bold")) +  # X title labels
+  theme(axis.title.y=element_text(size=14, face="bold")) +  # Y title labels
+  theme(axis.title = element_text(size=20)) +  # Title
+  scale_x_discrete(labels = function(x) str_wrap(x, width=14))  # Wrap x label text for being too long
+my_graph
+
+
+
+
+### Looking around at frequencies and percentages
 
 ### Question 22
 data <- myfile[, c("CrisisCenterKey", 
@@ -328,3 +705,5 @@ clean_data = melt(data, id=c("CrisisCenterKey"))  # Melt data so we can 'cast' i
 my_freq <- table(clean_data$value)  # Create table of frequencies for each categorical
 my_freq
 
+
+### Doing Analysis
