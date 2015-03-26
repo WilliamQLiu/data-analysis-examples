@@ -707,3 +707,49 @@ my_freq
 
 
 ### Doing Analysis
+
+### Q13 and Q19
+
+data_1 <- myfile[, c("CrisisCenterKey", 
+                   "On.average..how.many.calls.per.month.do.you.receive.on.all.your.crisis.center.hotline.s..combined..."
+                   #"In.the.last.fiscal.year..July.1..2013.to.June.30..2014...please.check.which.best.describes.your.center.s.call.volume.trends.",
+                   #"Does.your.crisis.center.have.set.call.metrics.in.place.such.as.service.levels..calls.answered...average.speed.to.answer..and.abandonment.rates."
+                   #"Does.your.crisis.center.use.a.call.tracking.software.to.log.and.document.calls."
+                   )]  # Load Data
+data_2 <- myfile[, c("CrisisCenterKey", 
+                     "Does.your.crisis.center.have.set.call.metrics.in.place.such.as.service.levels..calls.answered...average.speed.to.answer..and.abandonment.rates."
+                     #"Does.your.crisis.center.use.a.call.tracking.software.to.log.and.document.calls."
+)]  # Load Data
+
+clean_data = melt(data_1, id=c("CrisisCenterKey"))  # Melt data so we can 'cast' it into any shape
+### Correct order of categoricals
+#print(levels(clean_data$value))  # Before ordering
+#ordered_value = factor(clean_data$value, levels(clean_data$value)[c(1,3,6,2,5,4)])  # Reorder the categorical order
+#ordered_value = revalue(ordered_value, c("0 - 100"="0 - 99", "10001"="10,001+"))  # Rename categories
+#print(levels(ordered_value))  # After ordering
+#qplot(ordered_value)  # Do a quick plot to double check order is correct
+
+a <- data_1$On.average..how.many.calls.per.month.do.you.receive.on.all.your.crisis.center.hotline.s..combined...
+print(levels(data_1$On.average..how.many.calls.per.month.do.you.receive.on.all.your.crisis.center.hotline.s..combined...))  # Before ordering
+ordered_value = factor(a, levels(a)[c(1,3,6,2,5,4)])  # Reorder the categorical order
+print(levels(ordered_value))
+a <- ordered_value
+b <- as.numeric(a)
+avg_calls_month <- b
+
+a <- data_2$Does.your.crisis.center.have.set.call.metrics.in.place.such.as.service.levels..calls.answered...average.speed.to.answer..and.abandonment.rates.
+b <- as.numeric(a)
+call_metrics <- b
+
+#b <- as.numeric(levels(a))[a]
+#call_metrics <- as.numeric(factor(data_1$Does.your.crisis.center.have.set.call.metrics.in.place.such.as.service.levels..calls.answered...average.speed.to.answer..and.abandonment.rates., levels=c("No", "Yes")))
+#avg_calls_month <- as.numeric(factor(data_2$In.the.last.fiscal.year..July.1..2013.to.June.30..2014...please.check.which.best.describes.your.center.s.call.volume.trends., levels=c("0 - 100", "100 - 500", "501 - 1,000", "1,001 - 5,000", "5,001 - 10,000")))
+m <- cbind(call_metrics, avg_calls_month)
+cor(m, method='kendall', use="pairwise")  # Kendall's Tau
+cor.test(call_metrics, avg_calls_month, method='kendall')
+
+plot(avg_calls_month, call_metrics)  # Plot it
+abline(lm(avg_calls_month~call_metrics), col="red") # regression line (y~x) 
+lines(lowess(avg_calls_month,call_metrics), col="blue") # lowess line (x,y)
+
+### Q8 and Q19

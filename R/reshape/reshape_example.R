@@ -3,7 +3,8 @@ library(reshape)
 
 
 ### Load Data
-data <- read.csv("C:\\Users\\wliu\\Documents\\GitHub\\data-analysis-examples\\R\\reshape\\sales.csv", header=TRUE)
+#data <- read.csv("C:\\Users\\wliu\\Documents\\GitHub\\data-analysis-examples\\R\\reshape\\sales.csv", header=TRUE)
+data <- read.csv("/Users/williamliu/GitHub/data-analysis-examples/R/reshape/sales.csv", header=TRUE)
 head(data)
 
 
@@ -62,7 +63,7 @@ data.e  # shows final column '(all)'
 #10       (all)   1228327.40
 
 # cast and show grand totals, filter too
-data.f <- cast(data.m, Salesperson ~ variable, sum, margins=c("grand_row", subset=(Country=="USA")))
+data.f <- cast(data.m, Salesperson ~ variable, sum, margins=c("grand_row"), subset=(Country=="USA"))
 #    Salesperson Order.Amount
 # 1     Buchanan     68792.25
 #10       (all)   1228327.40
