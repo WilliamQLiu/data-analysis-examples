@@ -17,8 +17,8 @@ library(stringr)  # for string wrap on text
 ### Load data locally from CSV
 #myfile <- read.csv(file="C:\\Users\\wliu\\Desktop\\LifelineSurvey\\survey_data.csv", sep=",", header=TRUE, stringsAsFactors=TRUE)
 myfile <- read.csv(file="/Users/williamliu/Dropbox/Lifeline/network_survey/survey_data.csv", header=TRUE)
-View(myfile)  # peak at file, make sure everything is okay
-#View(myfile[,100:200])  # peak at file, make sure everything is okay
+#View(myfile)  # peak at file, make sure everything is okay
+View(myfile[,175:203])  # peak at file, make sure everything is okay
 
 typeof(myfile)  # See what file type this field is
 
@@ -708,20 +708,15 @@ my_freq
 
 ### Doing Analysis
 
-### Q13 and Q19
-
-data_1 <- myfile[, c("CrisisCenterKey", 
-                   "On.average..how.many.calls.per.month.do.you.receive.on.all.your.crisis.center.hotline.s..combined..."
+### Q13 and Q19 - large effect: .460736
+data <- myfile[, c("CrisisCenterKey", 
+                   "On.average..how.many.calls.per.month.do.you.receive.on.all.your.crisis.center.hotline.s..combined...",
                    #"In.the.last.fiscal.year..July.1..2013.to.June.30..2014...please.check.which.best.describes.your.center.s.call.volume.trends.",
-                   #"Does.your.crisis.center.have.set.call.metrics.in.place.such.as.service.levels..calls.answered...average.speed.to.answer..and.abandonment.rates."
+                   "Does.your.crisis.center.have.set.call.metrics.in.place.such.as.service.levels..calls.answered...average.speed.to.answer..and.abandonment.rates."
                    #"Does.your.crisis.center.use.a.call.tracking.software.to.log.and.document.calls."
                    )]  # Load Data
-data_2 <- myfile[, c("CrisisCenterKey", 
-                     "Does.your.crisis.center.have.set.call.metrics.in.place.such.as.service.levels..calls.answered...average.speed.to.answer..and.abandonment.rates."
-                     #"Does.your.crisis.center.use.a.call.tracking.software.to.log.and.document.calls."
-)]  # Load Data
 
-clean_data = melt(data_1, id=c("CrisisCenterKey"))  # Melt data so we can 'cast' it into any shape
+clean_data = melt(data, id=c("CrisisCenterKey"))  # Melt data so we can 'cast' it into any shape
 ### Correct order of categoricals
 #print(levels(clean_data$value))  # Before ordering
 #ordered_value = factor(clean_data$value, levels(clean_data$value)[c(1,3,6,2,5,4)])  # Reorder the categorical order
@@ -729,15 +724,15 @@ clean_data = melt(data_1, id=c("CrisisCenterKey"))  # Melt data so we can 'cast'
 #print(levels(ordered_value))  # After ordering
 #qplot(ordered_value)  # Do a quick plot to double check order is correct
 
-a <- data_1$On.average..how.many.calls.per.month.do.you.receive.on.all.your.crisis.center.hotline.s..combined...
-print(levels(data_1$On.average..how.many.calls.per.month.do.you.receive.on.all.your.crisis.center.hotline.s..combined...))  # Before ordering
+a <- data$On.average..how.many.calls.per.month.do.you.receive.on.all.your.crisis.center.hotline.s..combined...
+print(levels(data$On.average..how.many.calls.per.month.do.you.receive.on.all.your.crisis.center.hotline.s..combined...))  # Before ordering
 ordered_value = factor(a, levels(a)[c(1,3,6,2,5,4)])  # Reorder the categorical order
 print(levels(ordered_value))
 a <- ordered_value
 b <- as.numeric(a)
 avg_calls_month <- b
 
-a <- data_2$Does.your.crisis.center.have.set.call.metrics.in.place.such.as.service.levels..calls.answered...average.speed.to.answer..and.abandonment.rates.
+a <- data$Does.your.crisis.center.have.set.call.metrics.in.place.such.as.service.levels..calls.answered...average.speed.to.answer..and.abandonment.rates.
 b <- as.numeric(a)
 call_metrics <- b
 
@@ -752,4 +747,281 @@ plot(avg_calls_month, call_metrics)  # Plot it
 abline(lm(avg_calls_month~call_metrics), col="red") # regression line (y~x) 
 lines(lowess(avg_calls_month,call_metrics), col="blue") # lowess line (x,y)
 
-### Q8 and Q19
+
+### Q8 and Q19, small effect: -.126
+data <- myfile[, c("CrisisCenterKey", 
+                   "In.the.last.fiscal.year..July.1..2013.to.June.30..2014...please.check.which.best.describes.your.center.s.call.volume.trends.",
+                   "Does.your.crisis.center.have.set.call.metrics.in.place.such.as.service.levels..calls.answered...average.speed.to.answer..and.abandonment.rates."
+                   #"Does.your.crisis.center.use.a.call.tracking.software.to.log.and.document.calls."
+)]  # Load Data
+
+clean_data = melt(data, id=c("CrisisCenterKey"))  # Melt data so we can 'cast' it into any shape
+### Correct order of categoricals
+print(levels(clean_data$value))  # Before ordering
+#ordered_value = factor(clean_data$value, levels(clean_data$value)[c(1,3,6,2,5,4)])  # Reorder the categorical order
+#ordered_value = revalue(ordered_value, c("0 - 100"="0 - 99", "10001"="10,001+"))  # Rename categories
+#print(levels(ordered_value))  # After ordering
+#qplot(ordered_value)  # Do a quick plot to double check order is correct
+
+a <- data$In.the.last.fiscal.year..July.1..2013.to.June.30..2014...please.check.which.best.describes.your.center.s.call.volume.trends.
+print(levels(data$In.the.last.fiscal.year..July.1..2013.to.June.30..2014...please.check.which.best.describes.your.center.s.call.volume.trends.))  # Before ordering
+ordered_value = factor(a, levels(a)[c(1,7,3,4,5,6,2)])  # Reorder the categorical order
+print(levels(ordered_value))
+a <- ordered_value
+b <- as.numeric(a)
+call_trends <- b
+
+a <- data$Does.your.crisis.center.have.set.call.metrics.in.place.such.as.service.levels..calls.answered...average.speed.to.answer..and.abandonment.rates.
+b <- as.numeric(a)
+call_metrics <- b
+
+m <- cbind(call_trends, call_metrics)
+cor(m, method='kendall', use="pairwise")  # Kendall's Tau
+cor.test(call_trends, call_metrics, method='kendall')
+
+plot(call_trends, call_metrics)  # Plot it
+abline(lm(call_trends~call_metrics), col="red") # regression line (y~x) 
+lines(lowess(call_trends, call_metrics), col="blue") # lowess line (x,y)
+
+
+### Q6 and Q19, medium effect: 3223154
+data <- myfile[, c("CrisisCenterKey",
+                   "What.is.the.approximate.total.funding.devoted.specifically.to.support.your.crisis.center.hotline.operations.",
+                   "Does.your.crisis.center.have.set.call.metrics.in.place.such.as.service.levels..calls.answered...average.speed.to.answer..and.abandonment.rates."
+                   #"Does.your.crisis.center.use.a.call.tracking.software.to.log.and.document.calls."
+)]  # Load Data
+
+clean_data = melt(data, id=c("CrisisCenterKey"))  # Melt data so we can 'cast' it into any shape
+### Correct order of categoricals
+print(levels(clean_data$value))  # Before ordering
+#ordered_value = factor(clean_data$value, levels(clean_data$value)[c(1,3,6,2,5,4)])  # Reorder the categorical order
+#ordered_value = revalue(ordered_value, c("0 - 100"="0 - 99", "10001"="10,001+"))  # Rename categories
+#print(levels(ordered_value))  # After ordering
+#qplot(ordered_value)  # Do a quick plot to double check order is correct
+
+a <- data$What.is.the.approximate.total.funding.devoted.specifically.to.support.your.crisis.center.hotline.operations.
+print(levels(data$What.is.the.approximate.total.funding.devoted.specifically.to.support.your.crisis.center.hotline.operations.))  # Before ordering
+ordered_value = factor(a, levels(a)[c(1,2,3,4,5,6,7)])  # Reorder the categorical order
+print(levels(ordered_value))
+a <- ordered_value
+b <- as.numeric(a)
+funding <- b
+
+a <- data$Does.your.crisis.center.have.set.call.metrics.in.place.such.as.service.levels..calls.answered...average.speed.to.answer..and.abandonment.rates.
+b <- as.numeric(a)
+call_metrics <- b
+
+m <- cbind(funding, call_metrics)
+cor(m, method='kendall', use="pairwise")  # Kendall's Tau
+cor.test(funding, call_metrics, method='kendall')
+
+plot(funding, call_metrics)  # Plot it
+abline(lm(funding~call_metrics), col="red") # regression line (y~x) 
+lines(lowess(funding, call_metrics), col="blue") # lowess line (x,y)
+
+
+### Q8 and Q6 - No effect, .001
+data <- myfile[, c("CrisisCenterKey",
+                   "What.is.the.approximate.total.funding.devoted.specifically.to.support.your.crisis.center.hotline.operations.",
+                   "In.the.last.fiscal.year..July.1..2013.to.June.30..2014...please.check.which.best.describes.your.center.s.call.volume.trends."
+                   #"Does.your.crisis.center.use.a.call.tracking.software.to.log.and.document.calls."
+)]  # Load Data
+
+clean_data = melt(data, id=c("CrisisCenterKey"))  # Melt data so we can 'cast' it into any shape
+### Correct order of categoricals
+print(levels(clean_data$value))  # Before ordering
+#ordered_value = factor(clean_data$value, levels(clean_data$value)[c(1,3,6,2,5,4)])  # Reorder the categorical order
+#ordered_value = revalue(ordered_value, c("0 - 100"="0 - 99", "10001"="10,001+"))  # Rename categories
+#print(levels(ordered_value))  # After ordering
+#qplot(ordered_value)  # Do a quick plot to double check order is correct
+
+a <- data$What.is.the.approximate.total.funding.devoted.specifically.to.support.your.crisis.center.hotline.operations.
+print(levels(data$What.is.the.approximate.total.funding.devoted.specifically.to.support.your.crisis.center.hotline.operations.))  # Before ordering
+ordered_value = factor(a, levels(a)[c(1,2,3,4,5,6,7)])  # Reorder the categorical order
+print(levels(ordered_value))
+a <- ordered_value
+b <- as.numeric(a)
+funding <- b
+
+a <- data$In.the.last.fiscal.year..July.1..2013.to.June.30..2014...please.check.which.best.describes.your.center.s.call.volume.trends.
+print(levels(data$In.the.last.fiscal.year..July.1..2013.to.June.30..2014...please.check.which.best.describes.your.center.s.call.volume.trends.))  # Before ordering
+ordered_value = factor(a, levels(a)[c(1,7,3,4,5,6,2)])  # Reorder the categorical order
+print(levels(ordered_value))
+a <- ordered_value
+b <- as.numeric(a)
+call_trend <- b
+
+m <- cbind(funding, call_trend)
+cor(m, method='kendall', use="pairwise")  # Kendall's Tau
+cor.test(funding, call_trend, method='kendall')
+
+plot(funding, call_trend)  # Plot it
+abline(lm(funding~call_trend), col="red") # regression line (y~x) 
+lines(lowess(funding, call_trend), col="blue") # lowess line (x,y)
+
+
+
+### Q6 and Q13, large effect: .508
+data <- myfile[, c("CrisisCenterKey",
+                   "What.is.the.approximate.total.funding.devoted.specifically.to.support.your.crisis.center.hotline.operations.",
+                   "On.average..how.many.calls.per.month.do.you.receive.on.all.your.crisis.center.hotline.s..combined..."
+                   #"Does.your.crisis.center.use.a.call.tracking.software.to.log.and.document.calls."
+)]  # Load Data
+
+clean_data = melt(data, id=c("CrisisCenterKey"))  # Melt data so we can 'cast' it into any shape
+### Correct order of categoricals
+print(levels(clean_data$value))  # Look at our variables
+
+a <- data$What.is.the.approximate.total.funding.devoted.specifically.to.support.your.crisis.center.hotline.operations.
+print(levels(data$What.is.the.approximate.total.funding.devoted.specifically.to.support.your.crisis.center.hotline.operations.))  # Before ordering
+ordered_value = factor(a, levels(a)[c(1,2,3,4,5,6,7)])  # Reorder the categorical order
+print(levels(ordered_value))
+a <- ordered_value
+b <- as.numeric(a)
+funding <- b
+
+a <- data$On.average..how.many.calls.per.month.do.you.receive.on.all.your.crisis.center.hotline.s..combined...
+print(levels(data$On.average..how.many.calls.per.month.do.you.receive.on.all.your.crisis.center.hotline.s..combined...))  # Before ordering
+ordered_value = factor(a, levels(a)[c(1,3,6,2,5,4)])  # Reorder the categorical order
+print(levels(ordered_value))
+a <- ordered_value
+b <- as.numeric(a)
+call_trend <- b
+
+m <- cbind(funding, call_trend)
+cor(m, method='kendall', use="pairwise")  # Kendall's Tau
+cor.test(funding, call_trend, method='kendall')
+
+plot(funding, call_trend)  # Plot it
+abline(lm(funding~call_trend), col="red") # regression line (y~x) 
+lines(lowess(funding, call_trend), col="blue") # lowess line (x,y)
+
+
+
+### Q8 and Q14, almost none: .051
+data <- myfile[, c("CrisisCenterKey",
+                   "In.the.last.fiscal.year..July.1..2013.to.June.30..2014...have.you.experienced.changes.in.funding.",
+                   "In.the.last.fiscal.year..July.1..2013.to.June.30..2014...please.check.which.best.describes.your.center.s.call.volume.trends."
+)]  # Load Data
+
+clean_data = melt(data, id=c("CrisisCenterKey"))  # Melt data so we can 'cast' it into any shape
+### Correct order of categoricals
+print(levels(clean_data$value))  # Look at our variables
+
+a <- data$In.the.last.fiscal.year..July.1..2013.to.June.30..2014...have.you.experienced.changes.in.funding.
+print(levels(data$In.the.last.fiscal.year..July.1..2013.to.June.30..2014...have.you.experienced.changes.in.funding.))  # Before ordering
+ordered_value = factor(a, levels(a)[c(1,3,2)])  # Reorder the categorical order
+print(levels(ordered_value))
+a <- ordered_value
+b <- as.numeric(a)
+funding <- b
+
+a <- data$In.the.last.fiscal.year..July.1..2013.to.June.30..2014...please.check.which.best.describes.your.center.s.call.volume.trends.
+print(levels(data$In.the.last.fiscal.year..July.1..2013.to.June.30..2014...please.check.which.best.describes.your.center.s.call.volume.trends.))  # Before ordering
+ordered_value = factor(a, levels(a)[c(1,7,3,4,5,6,2)])  # Reorder the categorical order
+print(levels(ordered_value))
+a <- ordered_value
+b <- as.numeric(a)
+call_trend <- b
+
+m <- cbind(funding, call_trend)
+cor(m, method='kendall', use="pairwise")  # Kendall's Tau
+cor.test(funding, call_trend, method='kendall')
+
+plot(funding, call_trend)  # Plot it
+abline(lm(funding~call_trend), col="red") # regression line (y~x) 
+lines(lowess(funding, call_trend), col="blue") # lowess line (x,y)
+
+
+
+### Q8 and Q13, medium effect: .228
+data <- myfile[, c("CrisisCenterKey",
+                   "In.the.last.fiscal.year..July.1..2013.to.June.30..2014...have.you.experienced.changes.in.funding.",
+                   "On.average..how.many.calls.per.month.do.you.receive.on.all.your.crisis.center.hotline.s..combined..."
+)]  # Load Data
+
+clean_data = melt(data, id=c("CrisisCenterKey"))  # Melt data so we can 'cast' it into any shape
+### Correct order of categoricals
+print(levels(clean_data$value))  # Look at our variables
+
+a <- data$In.the.last.fiscal.year..July.1..2013.to.June.30..2014...have.you.experienced.changes.in.funding.
+print(levels(data$In.the.last.fiscal.year..July.1..2013.to.June.30..2014...have.you.experienced.changes.in.funding.))  # Before ordering
+ordered_value = factor(a, levels(a)[c(1,3,2)])  # Reorder the categorical order
+print(levels(ordered_value))
+a <- ordered_value
+b <- as.numeric(a)
+funding <- b
+
+a <- data$On.average..how.many.calls.per.month.do.you.receive.on.all.your.crisis.center.hotline.s..combined...
+print(levels(data$On.average..how.many.calls.per.month.do.you.receive.on.all.your.crisis.center.hotline.s..combined...))  # Before ordering
+ordered_value = factor(a, levels(a)[c(1,3,6,2,5,4)])  # Reorder the categorical order
+print(levels(ordered_value))
+a <- ordered_value
+b <- as.numeric(a)
+total_calls <- b
+
+m <- cbind(funding, total_calls)
+cor(m, method='kendall', use="pairwise")  # Kendall's Tau
+cor.test(funding, total_calls, method='kendall')
+
+plot(funding, total_calls)  # Plot it
+abline(lm(funding~total_calls), col="red") # regression line (y~x) 
+lines(lowess(funding, total_calls), col="blue") # lowess line (x,y)
+
+
+### Q64 - Likert Scale
+
+require(devtools)
+require(likert)
+
+data <- myfile[, c(#"CrisisCenterKey",
+                   #"Overall..how.satisfied.are.you.with.your.Lifeline.membership.",
+                   #"How.likely.would.you.be.to.recommend.that.another.crisis.center.join.the.Lifeline.",
+                   "In.your.opinion..how.valuable.do.you.find.the.following.Lifeline.benefits....Access.to.Best.Practices",
+                   "In.your.opinion..how.valuable.do.you.find.the.following.Lifeline.benefits....Credibility.with.Funders",
+                   "In.your.opinion..how.valuable.do.you.find.the.following.Lifeline.benefits....Access.to.Federal.State.funding.opportunities.for.Lifeline.members",
+                   "In.your.opinion..how.valuable.do.you.find.the.following.Lifeline.benefits....Availability.of.Resources.on.the.Network.Resource.Center",
+                   "In.your.opinion..how.valuable.do.you.find.the.following.Lifeline.benefits....ASIST.Training",
+                   "In.your.opinion..how.valuable.do.you.find.the.following.Lifeline.benefits....Simulation.Training",
+                   "In.your.opinion..how.valuable.do.you.find.the.following.Lifeline.benefits....Part.or.full.payment.of.Accreditation.expenses",
+                   "In.your.opinion..how.valuable.do.you.find.the.following.Lifeline.benefits....Annual.Stipend",
+                   "In.your.opinion..how.valuable.do.you.find.the.following.Lifeline.benefits....Support.advocacy.Letters",
+                   "In.your.opinion..how.valuable.do.you.find.the.following.Lifeline.benefits....National.evaluations",
+                   "In.your.opinion..how.valuable.do.you.find.the.following.Lifeline.benefits....Clinical.consultation",
+                   "In.your.opinion..how.valuable.do.you.find.the.following.Lifeline.benefits....Attempt.survivor.resources",
+                   "In.your.opinion..how.valuable.do.you.find.the.following.Lifeline.benefits....Veterans.help.resources",
+                   "In.your.opinion..how.valuable.do.you.find.the.following.Lifeline.benefits....Data.reports"
+)]  # Load Data
+
+clean_data <- rename(data, c(In.your.opinion..how.valuable.do.you.find.the.following.Lifeline.benefits....Access.to.Best.Practices = "Access to Best Practices", 
+                             In.your.opinion..how.valuable.do.you.find.the.following.Lifeline.benefits....Credibility.with.Funders = "Credibility with Funders", 
+                             In.your.opinion..how.valuable.do.you.find.the.following.Lifeline.benefits....Access.to.Federal.State.funding.opportunities.for.Lifeline.members = "Access to Federal State funding opportunities for Lifeline members",
+                             In.your.opinion..how.valuable.do.you.find.the.following.Lifeline.benefits....Availability.of.Resources.on.the.Network.Resource.Center = "Availability of Resources on the Network Resource Center",
+                             In.your.opinion..how.valuable.do.you.find.the.following.Lifeline.benefits....ASIST.Training = "ASIST Training",
+                             In.your.opinion..how.valuable.do.you.find.the.following.Lifeline.benefits....Simulation.Training = "Simulation Training",
+                             In.your.opinion..how.valuable.do.you.find.the.following.Lifeline.benefits....Part.or.full.payment.of.Accreditation.expenses = "Part or Full payment of Accreditation expenses",
+                             In.your.opinion..how.valuable.do.you.find.the.following.Lifeline.benefits....Annual.Stipend = "Annual Stipend",
+                             In.your.opinion..how.valuable.do.you.find.the.following.Lifeline.benefits....Support.advocacy.Letters = "Support Advocacy Letters",
+                             In.your.opinion..how.valuable.do.you.find.the.following.Lifeline.benefits....National.evaluations = "National evaluations",
+                             In.your.opinion..how.valuable.do.you.find.the.following.Lifeline.benefits....Clinical.consultation = "Clinical consultation",
+                             In.your.opinion..how.valuable.do.you.find.the.following.Lifeline.benefits....Attempt.survivor.resources = "Attempt Survivor Resources",
+                             In.your.opinion..how.valuable.do.you.find.the.following.Lifeline.benefits....Veterans.help.resources = "Veterans Help Resources",
+                             In.your.opinion..how.valuable.do.you.find.the.following.Lifeline.benefits....Data.reports = "Data Reports"
+                             ))
+
+#drop.levels(clean_data$"Access to Best Practices", reorder=TRUE)
+levels(clean_data$"Access to Best Practices")
+test <- factor(as.character(clean_data$"Access to Best Practices", levels=c("Not Valuable", "Our center has not used this resource", "Somewhat Valuable", "Valuable", "Extremely Valuable")))
+levels(test)
+
+test <- reorder(clean_data$"Access to Best Practices", new.order=c("", "Not Valuable", "Our center has not used this resource", "Somewhat Valuable", "Valuable", "Extremely Valuable"))
+
+#ordered_value = factor(temp, levels(temp)[c(3,4,1,5,6,5)])  # Reorder the categorical order
+#print(levels(ordered_value))
+
+# Plot
+title <- "In your opinion, how valuable do you find the following Lifeline benefits"
+View(clean_data)
+q64 <- likert(clean_data)
+summary(q64)
+plot(q64) + ggtitle(title)
