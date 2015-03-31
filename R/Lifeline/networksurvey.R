@@ -17,7 +17,7 @@ library(stringr)  # for string wrap on text
 ### Load data locally from CSV
 #myfile <- read.csv(file="C:\\Users\\wliu\\Desktop\\LifelineSurvey\\survey_data.csv", sep=",", header=TRUE, stringsAsFactors=TRUE)
 myfile <- read.csv(file="/Users/williamliu/Dropbox/Lifeline/network_survey/survey_data.csv", header=TRUE)
-#View(myfile)  # peak at file, make sure everything is okay
+View(myfile)  # peak at file, make sure everything is okay
 View(myfile[,175:203])  # peak at file, make sure everything is okay
 
 typeof(myfile)  # See what file type this field is
@@ -1009,19 +1009,137 @@ clean_data <- rename(data, c(In.your.opinion..how.valuable.do.you.find.the.follo
                              In.your.opinion..how.valuable.do.you.find.the.following.Lifeline.benefits....Data.reports = "Data Reports"
                              ))
 
-#drop.levels(clean_data$"Access to Best Practices", reorder=TRUE)
-levels(clean_data$"Access to Best Practices")
-test <- factor(as.character(clean_data$"Access to Best Practices", levels=c("Not Valuable", "Our center has not used this resource", "Somewhat Valuable", "Valuable", "Extremely Valuable")))
-levels(test)
+clean_data
 
-test <- reorder(clean_data$"Access to Best Practices", new.order=c("", "Not Valuable", "Our center has not used this resource", "Somewhat Valuable", "Valuable", "Extremely Valuable"))
+# Change first level of "" to text of No Answer
+na_text = "Missing"
+levels(clean_data$"Access to Best Practices")[1] <- na_text
+levels(clean_data$"Credibility with Funders")[1] <- na_text
+levels(clean_data$"Access to Federal State funding opportunities for Lifeline members")[1] <- na_text
+levels(clean_data$"Availability of Resources on the Network Resource Center")[1] <- na_text
+levels(clean_data$"ASIST Training")[1] <- na_text
+levels(clean_data$"Simulation Training")[1] <- na_text
+levels(clean_data$"Part or Full payment of Accreditation expenses")[1] <- na_text
+levels(clean_data$"Annual Stipend")[1] <- na_text
+levels(clean_data$"Support Advocacy Letters")[1] <- na_text
+levels(clean_data$"National evaluations")[1] <- na_text
+levels(clean_data$"Clinical consultation")[1] <- na_text
+levels(clean_data$"Attempt Survivor Resources")[1] <- na_text
+levels(clean_data$"Veterans Help Resources")[1] <- na_text
+levels(clean_data$"Data Reports")[1] <- na_text
+
+#drop.levels(clean_data$"Access to Best Practices", reorder=TRUE)
+
+#test <- reorder(clean_data$"Access to Best Practices", new.order=c("Missing", "Not Valuable", "Our center has not used this resource", "Somewhat Valuable", "Valuable", "Extremely Valuable"))
+levels(clean_data$"Access to Best Practices")  # Missing, Extremely Valuable, Not Valuable, Out center has not used this resource, Somewhat valuable, Valuable
+
+temp = clean_data$"Access to Best Practices"
+temp
+clean_data$"Access to Best Practices" = factor(temp, levels(temp)[c(3,4,1,5,6,2)], ordered=TRUE)  # Reorder the categorical order
+clean_data$"Access to Best Practices"
+clean_data
+levels(clean_data$"Access to Best Practices")  # Missing, Extremely Valuable, Not Valuable, Out center has not used this resource, Somewhat valuable, Valuable
+
+temp = clean_data$"Credibility with Funders"
+clean_data$"Credibility with Funders" = factor(temp, levels(temp)[c(3,4,1,5,6,2)], ordered=TRUE)  # Reorder the categorical order
+
+#clean_data
+
+temp = clean_data$"Access to Federal State funding opportunities for Lifeline members"
+temp  # Not valuable, Our center has not used this resource, Missing, Somewhat valuable, Valuable, Extremely Valuable
+clean_data$"Access to Federal State funding opportunities for Lifeline members" = factor(temp, levels(temp)[c(3,4,1,5,6,2)], ordered=TRUE)  # Reorder the categorical order
+
+temp = clean_data$"Annual Stipend"
+clean_data$"Annual Stipend" = factor(temp, levels(temp)[c(3,4,1,5,6,2)], ordered=TRUE)  # Reorder the categorical order
+
+temp = clean_data$"ASIST Training"
+clean_data$"ASIST Training" = factor(temp, levels(temp)[c(3,4,1,5,6,2)], ordered=TRUE)  # Reorder the categorical order
+
+temp = clean_data$"Attempt Survivor Resources"
+clean_data$"Attempt Survivor Resources" = factor(temp, levels(temp)[c(3,4,1,5,6,2)], ordered=TRUE)  # Reorder the categorical order
+
+temp = clean_data$"Availability of Resources on the Network Resource Center"
+clean_data$"Availability of Resources on the Network Resource Center" = factor(temp, levels(temp)[c(3,4,1,5,6,2)], ordered=TRUE)  # Reorder the categorical order
+
+temp = clean_data$"Clinical consultation"
+clean_data$"Clinical consultation" = factor(temp, levels(temp)[c(3,4,1,5,6,2)], ordered=TRUE)  # Reorder the categorical order
+
+temp = clean_data$"Data Reports"
+clean_data$"Data Reports" = factor(temp, levels(temp)[c(3,4,1,5,6,2)], ordered=TRUE)  # Reorder the categorical order
+
+temp = clean_data$"National evaluations"
+clean_data$"National evaluations" = factor(temp, levels(temp)[c(3,4,1,5,6,2)], ordered=TRUE)  # Reorder the categorical order
+
+temp = clean_data$"Part or Full payment of Accreditation expenses"
+clean_data$"Part or Full payment of Accreditation expenses" = factor(temp, levels(temp)[c(3,4,1,5,6,2)], ordered=TRUE)  # Reorder the categorical order
+
+temp = clean_data$"Simulation Training"
+clean_data$"Simulation Training" = factor(temp, levels(temp)[c(3,4,1,5,6,2)])  # Reorder the categorical order
+
+temp = clean_data$"Support Advocacy Letters"
+clean_data$"Support Advocacy Letters" = factor(temp, levels(temp)[c(3,4,1,5,6,2)], ordered=TRUE)  # Reorder the categorical order
+
+temp = clean_data$"Veterans Help Resources"
+clean_data$"Veterans Help Resources" = factor(temp, levels(temp)[c(3,4,1,5,6,2)], ordered=TRUE)  # Reorder the categorical order
+
+levels(clean_data$"Data Reports")
+
+#ordered_value = factor(temp, levels(temp)[c(3,4,1,5,6,2)])  # Reorder the categorical order
+
+#test <- reorder(clean_data$"Access to Best Practices", new.order=c("", "Not Valuable", "Our center has not used this resource", "Somewhat Valuable", "Valuable", "Extremely Valuable"))
 
 #ordered_value = factor(temp, levels(temp)[c(3,4,1,5,6,5)])  # Reorder the categorical order
 #print(levels(ordered_value))
 
 # Plot
 title <- "In your opinion, how valuable do you find the following Lifeline benefits"
-View(clean_data)
+#View(clean_data)
 q64 <- likert(clean_data)
 summary(q64)
 plot(q64) + ggtitle(title)
+png('likert.png')
+dev.off()
+
+
+###
+
+myfile <- read.csv(file="/Users/williamliu/Dropbox/Lifeline/network_survey/survey_data.csv", header=TRUE) # , stringsAsFactors=TRUE)
+
+data <- myfile[, c(
+  "CrisisCenterKey",
+  "What.is.the.approximate.total.funding.devoted.specifically.to.support.your.crisis.center.hotline.operations.",
+  "What.are.the.primary.funding.sources.for.your.crisis.center.hotline.operations..Provide.its.approximate.percentage.of.your.total.funding......Private..non.government..grants.donations",
+  "What.are.the.primary.funding.sources.for.your.crisis.center.hotline.operations..Provide.its.approximate.percentage.of.your.total.funding......Public..government."
+)]  # Load Data
+
+rename_data <- rename(data, c(What.is.the.approximate.total.funding.devoted.specifically.to.support.your.crisis.center.hotline.operations. = "TotalFunding",
+                             What.are.the.primary.funding.sources.for.your.crisis.center.hotline.operations..Provide.its.approximate.percentage.of.your.total.funding......Private..non.government..grants.donations = "Private", 
+                             What.are.the.primary.funding.sources.for.your.crisis.center.hotline.operations..Provide.its.approximate.percentage.of.your.total.funding......Public..government. = "Public"
+))
+
+summary(rename_data)
+
+clean_data = melt(rename_data, id=c("CrisisCenterKey", "TotalFunding"))  # Melt data so we can 'cast' it into any shape
+
+
+#data.frame(clean_data)
+clean_data
+
+#plot(clean_data$"Public Funding", clean_data$"Private Funding")
+my_graph <- ggplot(clean_data, aes(x=variable, y=value, fill=variable)) + geom_bar(stat="identity") #+ facet_wrap(~ TotalFunding, ncol=7) #+ geom_dotplot(binaxis="y", stackdir="center", position="dodge")  #+ geom_jitter() #+ facet_grid(~ TotalFunding)
+
+#my_graph <- ggplot(clean_data, aes(x=variable, y=(..count..)/sum(..count..), fill=factor(variable))) + geom_bar() + scale_y_continuous(labels=percent) + facet_wrap(~ TotalFunding, ncol=7)
+
+my_graph <- my_graph + xlab("Type of Funding") + ylab("Count of Crisis Centers") +
+  ggtitle("Funding Amounts and Type of Funding") + 
+  expand_limits(y=0)  # Force chart to go down to 0
+my_graph <- my_graph + scale_color_fivethirtyeight()
+  theme(axis.text.x=element_text(size=12)) +  # X text labels
+  theme(axis.text.y=element_text(size=12)) +  # Y text labels
+  theme(axis.title.x=element_text(size=14, face="bold")) +  # X title labels
+  theme(axis.title.y=element_text(size=14, face="bold")) +  # Y title labels
+  theme(axis.title = element_text(size=20)) +  # Title
+  scale_x_discrete(labels = function(x) str_wrap(x, width=14))  # Wrap x label text for being too long
+my_graph
+
+#theme_fivethirtyeight() + scale_color_fivethirtyeight()  # Fivethirtyeight
